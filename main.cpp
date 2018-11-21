@@ -6,17 +6,49 @@
 	Структуры
 *************************************************************/
 
-#include <tchar.h>
+//#include <tchar.h>
 #include <iostream>
 //#include <cstdio>
 #include "other.h"
 
 
-#define	  stop __asm nop
+#define	  stop __asm("nop")
+
+struct user
+{
+public:
+    user(std::string n, int a)
+    {
+        name = n; age = a;
+    }
+    void move()
+    {
+        std::cout << name << " is moving" << std::endl;
+    }
+    void setAge(int a)
+    {
+        if (a > 0 && a < 100) age = a;
+    }
+    std::string getName()
+    {
+        return name;
+    }
+    int getAge()
+    {
+        return age;
+    }
+private:
+    std::string name;
+    int age;
+
+};
 
 int main()
 {
-    std::cout << "Hello World" << std::endl;
+    user tom("Tom", 22);
+    std::cout << "Name: " << tom.getName() << "\tAge: " << tom.getAge() << std::endl;
+    tom.setAge(31);
+    std::cout << "Name: " << tom.getName() << "\tAge: " << tom.getAge() << std::endl;
 
 	//Тема "Старые" потоковые функции стандартной библиотеки
 	//Задание 1. С помощью функции scanf сформирйуте три коэффициента: A,B,C
