@@ -27,7 +27,7 @@ void SwapInt(void* p1, void* p2)
 
 int CmpInt(void* p1, void* p2)
 {
-	int nResult;
+	int nResult = 0;
 
 
 

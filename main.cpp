@@ -5,13 +5,14 @@
 	Указатели на функции
 	Структуры
 *************************************************************/
-//#include <tchar.h>
+
+#include <tchar.h>
 #include <iostream>
 //#include <cstdio>
 #include "other.h"
 
 
-#define	stop __asm("nop")
+#define	  stop __asm nop
 
 int main()
 {
@@ -169,6 +170,6 @@ int main()
 	//должен выбирать из существующих, цена не может быть отрицательной...
 
 
-	return 0;
+return 0;
 }//main
 
