@@ -106,13 +106,19 @@ void fillBookFields(BOOK &book) {
 			usleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
 			continue;
 		}
-		if (book.getBookCategory(category) == -1) {
+
+		std::printf("Input category: %s\n", category.c_str());
+		std::printf("Get category number: %d\n", book.getBookCategory(category));
+
+		BookCategoryEnum bookCategoryEnum = book.getBookCategory(category);
+		if (bookCategoryEnum == BOOK_CATEGORY_ERROR) {
 			std::fprintf(stderr, "The field 'bookCategory' may contain only next values "
 						"('hist','mideval', 'detect', 'action', 'travel')"
 						"!\n");
 			usleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
 			continue;
 		}
+		book.bookCategory = bookCategoryEnum;
 		break;
 	}
 	std::cout << std::endl;
