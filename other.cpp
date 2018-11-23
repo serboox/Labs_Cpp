@@ -1,6 +1,7 @@
 #include "iostream"
 #include "other.h"
-#include <unistd.h>
+#include <stdlib.h>
+#include <string>
 
 ///////////////////////////////////////////////////
 
@@ -41,10 +42,11 @@ void fillBookFields(BOOK &book) {
 	std::fprintf(stdout, "Please enter fields\n");
 	while(true) {
 		std::fprintf(stdout, "authorFirstName (string): ");
+
 		std::getline(std::cin, book.authorFirstName);
 		if (book.authorFirstName.size() == 0) {
 			std::fprintf(stderr, "The field 'authorFirstName' can not be empty!\n");
-			usleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
 			continue;
 		}
 		break;
@@ -55,7 +57,7 @@ void fillBookFields(BOOK &book) {
 		std::getline(std::cin, book.authorLastName);
 		if (book.authorLastName.size() == 0) {
 			std::fprintf(stderr, "The field 'authorLastName' can not be empty!\n");
-			usleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
 			continue;
 		}
 		break;
@@ -66,7 +68,7 @@ void fillBookFields(BOOK &book) {
 		std::getline(std::cin, book.bookTitle);
 		if (book.bookTitle.size() == 0) {
 			std::fprintf(stderr, "The field 'bookTitle' can not be empty!\n");
-			usleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
 			continue;
 		}
 		break;
@@ -79,7 +81,7 @@ void fillBookFields(BOOK &book) {
 		if (book.bookYear < YEAR_OF_WRITING) {
 			std::fprintf(stderr, "The date of writing the book can not be less "
 						"than %d!\n",YEAR_OF_WRITING);
-			usleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
 			continue;
 		}
 		break;
@@ -91,7 +93,7 @@ void fillBookFields(BOOK &book) {
 		std::cin.ignore();
 		if (book.bookPrice < 0) {
 			std::fprintf(stderr, "The cost of the book can not be less than %d!\n",0);
-			usleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
 			continue;
 		}
 		break;
@@ -103,7 +105,7 @@ void fillBookFields(BOOK &book) {
 		std::getline(std::cin, category);
 		if (category.size() == 0) {
 			std::fprintf(stderr, "The field 'bookCategory' can not be empty!\n");
-			usleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
 			continue;
 		}
 
@@ -115,7 +117,7 @@ void fillBookFields(BOOK &book) {
 			std::fprintf(stderr, "The field 'bookCategory' may contain only next values "
 						"('hist','mideval', 'detect', 'action', 'travel')"
 						"!\n");
-			usleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
 			continue;
 		}
 		book.bookCategory = bookCategoryEnum;

@@ -29,14 +29,13 @@ enum BookCategoryEnum {
 
 struct BOOK {
 public:
-    std::string authorFirstName; // 24 bytes
-    std::string authorLastName; // 24 bytes
-    std::string bookTitle; // 24 bytes
+    std::string authorFirstName; // 28 bytes
+    std::string authorLastName; // 28 bytes
+    std::string bookTitle; // 28 bytes
     short int bookYear; // 2 bytes
     /* 2 padding byte */
     float bookPrice; // 4 bytes
     BookCategoryEnum bookCategory; // 4 bytes
-    /* 4 padding byte */
 
     std::string getBookCategory() {
         std::string category = BOOK_CATEGORY_ERROR_STRING;

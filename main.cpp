@@ -8,11 +8,12 @@
 
 //#include <tchar.h>
 #include <iostream>
+#include <string>
 //#include <cstdio>
 #include "cmath"
 #include "other.h"
 
-#define      stop __asm("nop")
+#define      stop __asm nop
 
 BOOK book_global;
 
@@ -51,39 +52,38 @@ int main() {
     tom.setAge(31);
     std::cout << "Name: " << tom.getName() << "\tAge: " << tom.getAge() << std::endl;
 
-    /*{
+    {
         //Тема "Старые" потоковые функции стандартной библиотеки
         //Задание 1. С помощью функции scanf сформирйуте три коэффициента: A,B,C
         unsigned int A = 9, B = 10, C = 11;
         std::printf("Please enter A: ");
         std::scanf("%d", &A);
-        std::printf("A=%.1d\n", A);
         std::printf("Please enter B: ");
         std::scanf("%d", &B);
-        std::printf("B=%.1d\n", B);
         std::printf("Please enter C: ");
         std::scanf("%d", &C);
-        std::printf("C=%.1d\n", C);
 
         //Задание 2. Выведите (красиво!) таблицу значений y=A*x*x + B*x + C
         //при изменении x в диапазоне -2 до +2 с шагом 0.5
 
         float x = 0, y = 0;
+		// Находим из скольки символов максимум может состоять число х
         int sizeX = (int) log10(std::numeric_limits<float>::max()) + 2;
-        int sizeY = (int) log10(std::numeric_limits<float>::max()) + 2;
+		// Находим из скольки символов максимум может состоять число y
+		int sizeY = (int) log10(std::numeric_limits<float>::max()) + 2;
 
         std::printf("Max size x: %d\n", sizeX);
         std::printf("Max size y: %d\n", sizeY);
 
-        std::cout << "┌";
+        std::cout << "-";
         for (int i = 1; i <= sizeX; i++) {
             std::cout << "-";
         }
-        std::cout << "┬";
+        std::cout << "-";
         for (int i = 1; i <= sizeY; i++) {
             std::cout << "-";
         }
-        std::cout << "┐\n";
+        std::cout << "-\n";
 
         std::cout << "|";
         for (int i = 2; i <= sizeX / 2; i++) {
@@ -104,15 +104,15 @@ int main() {
         }
         std::cout << "|\n";
 
-        std::cout << "├-";
+        std::cout << "|-";
         for (int i = 2; i <= sizeX; i++) {
             std::cout << "-";
         }
-        std::cout << "┼";
+        std::cout << "-";
         for (int i = 1; i <= sizeY; i++) {
             std::cout << "-";
         }
-        std::cout << "┤\n";
+        std::cout << "|\n";
 
         for (x = -2; x <= 2; x += 0.5) {
 
@@ -166,17 +166,17 @@ int main() {
             }
             std::cout << "|\n";
         }
-        std::cout << "└";
+        std::cout << "-";
         for (int i = 1; i <= sizeX; i++) {
             std::cout << "-";
         }
-        std::cout << "┴";
+        std::cout << "-";
         for (int i = 1; i <= sizeY; i++) {
             std::cout << "-";
         }
-        std::cout << "┘\n";
-
-    }*/
+        std::cout << "-\n";
+    }
+	stop;
 
 ///////////////////////////////////////////////////////////////////
     //Тема Указатели на функции
@@ -300,28 +300,28 @@ int main() {
         std::printf("Task_2________________________________________________\n");
 
         //При глобальном создании экземпляра структуры
-        std::printf("\nGlobal size: %d\n", (int) sizeof(book_global)); //104 bytes
+        std::printf("\nGlobal size: %d\n", (int) sizeof(book_global)); //96 bytes
 
         //При локальном создании экземпляра структуры
         struct {
-            std::string authorFirstName; // 24 bytes
-            std::string authorLastName; // 24 bytes
+            std::string authorFirstName; // 28 bytes
+            std::string authorLastName; // 28 bytes
 
-            std::string bookTitle; // 24 bytes
+            std::string bookTitle; // 28 bytes
             short int bookYear; // 2 bytes
             /* 2 padding byte */
             float bookPrice; // 4 bytes
             BookCategoryEnum bookCategory; // 4 bytes
         } book_local;
-        std::printf("Local size: %d\n", (int) sizeof(book_local)); //88 bytes
+        std::printf("Local size: %d\n", (int) sizeof(book_local)); //96 bytes
 
         //При статическом создании экземпляра структуры
         BOOK static_book;
-        std::printf("Static size: %d\n", (int) sizeof(static_book)); //88 bytes
+        std::printf("Static size: %d\n", (int) sizeof(static_book)); //96 bytes
 
         //При динамическом создании экземпляра структуры
         BOOK *dynamic_book = new(BOOK);
-        std::printf("Dynamic size: %d\n", (int) sizeof(*dynamic_book)); //88 bytes
+        std::printf("Dynamic size: %d\n", (int) sizeof(*dynamic_book)); //96 bytes
         delete dynamic_book;
 
         std::printf("\nBook authorFirstName size: %d\n", (int) sizeof(static_book.authorFirstName));
@@ -335,15 +335,13 @@ int main() {
         //     1       2       3       4      5       6       7       8
         //+-------+-------+-------+-------+-------+-------+-------+-------+
         //|        authorFirstName
-        //+-------+-------+-------+-------+-------+-------+-------+-------+ ... 24
+        //+-------+-------+-------+-------+-------+-------+-------+-------+ ... 28
         //|        authorLastName
-        //+-------+-------+-------+-------+-------+-------+-------+-------+ ... 24
+        //+-------+-------+-------+-------+-------+-------+-------+-------+ ... 28
         //|           bookTitle
-        //+-------+-------+-------+-------+-------+-------+-------+-------+ ... 24
-        //|    bookYear   | 2 padding byte|
-        //+-------+-------+-------+-------+
-        //|           bookPrice           |
-        //+-------+-------+-------+-------+
+        //+-------+-------+-------+-------+-------+-------+-------+-------+ ... 28
+        //|    bookYear   | 2 padding byte|           bookPrice           |
+        //+-------+-------+-------+-------+-------+-------+-------+-------+
         //|          bookCategory         |
         //+-------+-------+-------+-------+
 
@@ -359,8 +357,8 @@ int main() {
                     static_book.authorFirstName.c_str(), //""
                     static_book.authorLastName.c_str(), //""
                     static_book.bookTitle.c_str(), //""
-                    static_book.bookYear, //18641
-                    static_book.bookPrice, //0.000000
+                    static_book.bookYear, //52428
+                    static_book.bookPrice, //-107374176.000000
                     static_book.getBookCategory().c_str()); //""
 
         // Размер выделяемой памяти под структуру зависит от многих факторов.
@@ -420,6 +418,7 @@ int main() {
         static_book.print();
     }
 
+	stop;
     return 0;
 }//main
 
