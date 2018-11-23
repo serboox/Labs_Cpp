@@ -1,4 +1,6 @@
-//#include "other.h"
+#include "iostream"
+#include "other.h"
+#include <unistd.h>
 
 ///////////////////////////////////////////////////
 
@@ -31,4 +33,87 @@ int CmpInt(void* p1, void* p2)
 
 
 	return nResult;
+}
+
+void fillBookFields(BOOK &book) {
+	const int YEAR_OF_WRITING = 988;
+
+	std::fprintf(stdout, "Please enter fields\n");
+	while(true) {
+		std::fprintf(stdout, "authorFirstName (string): ");
+		std::getline(std::cin, book.authorFirstName);
+		if (book.authorFirstName.size() == 0) {
+			std::fprintf(stderr, "The field 'authorFirstName' can not be empty!\n");
+			usleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+			continue;
+		}
+		break;
+	}
+
+	while(true) {
+		std::fprintf(stdout, "authorLastName (string): ");
+		std::getline(std::cin, book.authorLastName);
+		if (book.authorLastName.size() == 0) {
+			std::fprintf(stderr, "The field 'authorLastName' can not be empty!\n");
+			usleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+			continue;
+		}
+		break;
+	}
+
+	while(true) {
+		std::fprintf(stdout, "bookTitle (string): ");
+		std::getline(std::cin, book.bookTitle);
+		if (book.bookTitle.size() == 0) {
+			std::fprintf(stderr, "The field 'bookTitle' can not be empty!\n");
+			usleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+			continue;
+		}
+		break;
+	}
+
+	while(true) {
+		std::fprintf(stdout, "bookYear (short int): ");
+		std::scanf("%hu", &book.bookYear);
+		std::cin.ignore();
+		if (book.bookYear < YEAR_OF_WRITING) {
+			std::fprintf(stderr, "The date of writing the book can not be less "
+						"than %d!\n",YEAR_OF_WRITING);
+			usleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+			continue;
+		}
+		break;
+	}
+
+	while(true) {
+		std::fprintf(stdout, "bookPrice (float): ");
+		std::scanf("%f", &book.bookPrice);
+		std::cin.ignore();
+		if (book.bookPrice < 0) {
+			std::fprintf(stderr, "The cost of the book can not be less than %d!\n",0);
+			usleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+			continue;
+		}
+		break;
+	}
+
+	while(true) {
+		std::fprintf(stdout, "bookCategory (strings): ");
+		std::string category;
+		std::getline(std::cin, category);
+		if (category.size() == 0) {
+			std::fprintf(stderr, "The field 'bookCategory' can not be empty!\n");
+			usleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+			continue;
+		}
+		if (book.getBookCategory(category) == -1) {
+			std::fprintf(stderr, "The field 'bookCategory' may contain only next values "
+						"('hist','mideval', 'detect', 'action', 'travel')"
+						"!\n");
+			usleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+			continue;
+		}
+		break;
+	}
+	std::cout << std::endl;
 }
