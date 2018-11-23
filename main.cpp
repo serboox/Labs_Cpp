@@ -314,7 +314,7 @@ int main() {
         std::printf("Local size: %d\n", sizeof(book_local)); //104 bytes
 
         //При статическом создании экземпляра структуры
-        static BOOK static_book;
+        BOOK static_book;
         std::printf("Static size: %d\n", sizeof(static_book)); //104 bytes
 
         //При динамическом создании экземпляра структуры
@@ -352,8 +352,7 @@ int main() {
                     static_book.bookTitle.c_str(), //""
                     static_book.bookYear, //0
                     static_book.bookPrice, //0.000000
-                    static_book.bookCategory.c_str(), //""
-        );
+                    static_book.bookCategory.c_str()); //""
 
         // Размер выделяемой памяти под структуру зависит от многих факторов.
         // В основном все выливается в размер базовых типов данных и тем как они будут расположенны в оперативной памяти.
@@ -366,15 +365,24 @@ int main() {
         //Задание 3. Заполните поля созданных объектов.
         //Замечание: если для хранения строки используется массив, необходимо
         //предусмотреть "защиту" от выхода за границы массива.
-
-
+        std::printf("Please enter fields:\nauthorFirstName: ");
+        std::getline(std::cin, static_book.authorFirstName);
+        std::printf("authorLastName: ");
+        std::getline(std::cin, static_book.authorLastName);
+        std::printf("bookTitle: ");
+        std::getline(std::cin, static_book.bookTitle);
+        std::printf("bookYear: ");
+        std::scanf("%hu", static_book.bookYear);
+        std::printf("bookPrice: ");
+        std::scanf("%f", static_book.bookPrice);
+        std::printf("bookCategory: ");
+        std::getline(std::cin, static_book.bookCategory);
 
         //Задание 4. Напишите функцию, выводящую на экран реквизиты книги.
         //Подумайте: как эффективнее передавать экземпляр BOOK в функцию.
         //Для вывода на консоль используйте функцию стандартной библиотеки
         //printf
-
-
+        static_book.print();
 
         //Задание 5. Напишите функцию для формирования полей структуры.
         //Для ввода используйте функцию стандартной библиотеки scanf
