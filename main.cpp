@@ -159,167 +159,168 @@ int main() {
 	//const char* GetString2();
 	//		...., каждая из функций возвращает указатель на свою строку
 	//(подумайте - какой адрес Вы имеете право возвращать из функции)
-
-	//Объявите и проинициализируйте массив указателей на функции
-	//GetString1,GetString2...
-	const char* (*getString[])() = { GetString0,GetString1, GetString2, GetString3, GetString4, GetString5 };
-
-	// получаем длину массива
-	int length = sizeof(getString) / sizeof(getString[0]);
-	while (true) {
-		//Введите номер функции, которую Вы хотите вызвать:
-		int n = 0;
-		std::printf("Please enter print function number:\n=> ");
-		std::cin >> n;
-		std::cin.ignore();
-		std::cin.clear();
-		if (n >= length || n < 0) {
-			std::printf("Number mast be 0<=%d<=%d!\n", n, length - 1);
-			continue;
-		}
-		//Вызовите функцию
-		const char* res = getString[n]();
-		//Распечатайте результат
-		std::printf("Result string: '%s'\n", res);
-	}
-
-//////////////////////////////////////////////////////////////////////////////////////
 	/*{
-		//Тема. Структуры С.
-		//Задание 1. Объявите структуру BOOK, описывающую книгу
-		//(автор, заглавие, год издания, цена, категория…).
-		//Подумайте: какого типа могут быть поля структуры.
-		//Подсказка: объявление структуры рекомендуется выносить
-		//в заголовочный файл.
+		//Объявите и проинициализируйте массив указателей на функции
+		//GetString1,GetString2...
+		const char* (*getString[])() = { GetString0,GetString1, GetString2, GetString3, GetString4, GetString5 };
 
-		// INFO: Объявление структуры находится в файле other.h
-
-		//Задание 2. Создайте разными способами (глобальный, локальный, статический,
-		//динамический) экземпляры (объекты) типа BOOK (без инициализации).
-		//Определите - сколько памяти отводит компилятор под каждый
-		//такой объект. Как инициализируются (или не инициализируются) поля
-		//структуры. Подумайте: от чего зависит объем выделяемой памяти?
-
-		std::printf("Task_2________________________________________________\n");
-
-		//При глобальном создании экземпляра структуры
-		std::printf("\nGlobal size: %d\n", (int) sizeof(book_global)); //96 bytes
-
-		//При локальном создании экземпляра структуры
-		struct {
-			std::string authorFirstName; // 28 bytes
-			std::string authorLastName; // 28 bytes
-
-			std::string bookTitle; // 28 bytes
-			short int bookYear; // 2 bytes
-			// 2 padding byte
-			float bookPrice; // 4 bytes
-			BookCategoryEnum bookCategory; // 4 bytes
-		} book_local;
-		std::printf("Local size: %d\n", (int) sizeof(book_local)); //96 bytes
-
-		//При статическом создании экземпляра структуры
-		BOOK static_book;
-		std::printf("Static size: %d\n", (int) sizeof(static_book)); //96 bytes
-
-		//При динамическом создании экземпляра структуры
-		BOOK *dynamic_book = new BOOK();
-		std::printf("Dynamic size: %d\n", (int) sizeof(*dynamic_book)); //96 bytes
-		delete dynamic_book;
-
-		std::printf("\nBook authorFirstName size: %d\n", (int) sizeof(static_book.authorFirstName));
-		std::printf("Book authorLastName size: %d\n", (int) sizeof(static_book.authorLastName));
-		std::printf("Book bookTitle size: %d\n", (int) sizeof(static_book.bookTitle));
-		std::printf("Book bookYear size: %d\n", (int) sizeof(static_book.bookYear));
-		std::printf("Book bookPrice size: %d\n", (int) sizeof(static_book.bookPrice));
-		std::printf("Book bookCategory size: %d\n\n", (int) sizeof(static_book.bookCategory));
-
-		//Во всех случаях компилятор отводит под структуру 88 байта
-		//     1       2       3       4      5       6       7       8
-		//+-------+-------+-------+-------+-------+-------+-------+-------+
-		//|        authorFirstName
-		//+-------+-------+-------+-------+-------+-------+-------+-------+ ... 28
-		//|        authorLastName
-		//+-------+-------+-------+-------+-------+-------+-------+-------+ ... 28
-		//|           bookTitle
-		//+-------+-------+-------+-------+-------+-------+-------+-------+ ... 28
-		//|    bookYear   | 2 padding byte|           bookPrice           |
-		//+-------+-------+-------+-------+-------+-------+-------+-------+
-		//|          bookCategory         |
-		//+-------+-------+-------+-------+
-
-		// Поля структуры инициализируются и заполняются значениями по умолчанию для
-		// каждого из используемых типов
-		std::printf("Books{\n"
-					"\tauthorFirstName (default):%s\n"
-					"\tauthorLastName (default): %s\n"
-					"\tbookTitle (default): %s\n"
-					"\tbookYear (default): %hu\n"
-					"\tbookPrice (default): %f\n"
-					"\tbookCategory (default): %s\n}\n",
-					static_book.authorFirstName.c_str(), //""
-					static_book.authorLastName.c_str(), //""
-					static_book.bookTitle.c_str(), //""
-					static_book.bookYear, //52428
-					static_book.bookPrice, //-107374176.000000
-					static_book.getBookCategory().c_str()); //""
-
-		// Размер выделяемой памяти под структуру зависит от многих факторов.
-		// В основном все выливается в размер базовых типов данных и тем как они будут расположенны в оперативной памяти.
-		// Процессор, операционная система и компилятор могут в совокупоности предоставлять различные размеры для (int, char, double), вполоть до того, того что все типы могут быть одного размера.
-
-		// Ссылки на используемые ресурсы
-		// http://qaru.site/questions/147/why-isnt-sizeof-for-a-struct-equal-to-the-sum-of-sizeof-of-each-member
-		// https://habr.com/post/90580/
-
-		//Задание 3. Заполните поля созданных объектов.
-		//Замечание: если для хранения строки используется массив, необходимо
-		//предусмотреть "защиту" от выхода за границы массива.
-
-		std::printf("Task_3________________________________________________\n");
-
-		std::printf("Please enter fields \nauthorFirstName (string): ");
-		std::getline(std::cin, static_book.authorFirstName);
-
-		std::printf("authorLastName (string): ");
-		std::getline(std::cin, static_book.authorLastName);
-
-		std::printf("bookTitle (string): ");
-		std::getline(std::cin, static_book.bookTitle);
-
-		std::printf("bookYear (short int): ");
-		std::scanf("%hu", &static_book.bookYear);
-		std::cin.ignore();
-
-		std::printf("bookPrice (float): ");
-		std::scanf("%f", &static_book.bookPrice);
-		std::cin.ignore();
-
-		std::printf("bookCategory (strings): ");
-		std::string category;
-		std::getline(std::cin, category, '\n');
-		static_book.bookCategory = static_book.getBookCategory(category);
-		std::cout << std::endl;
-
-		//Задание 4. Напишите функцию, выводящую на экран реквизиты книги.
-		//Подумайте: как эффективнее передавать экземпляр BOOK в функцию.
-		//Для вывода на консоль используйте функцию стандартной библиотеки
-		//printf
-
-		std::printf("Task_4________________________________________________\n");
-		static_book.print();
-
-		//Задание 5. Напишите функцию для формирования полей структуры.
-		//Для ввода используйте функцию стандартной библиотеки scanf
-		//Замечание: неплохо заложить в такую функцию возможность проверки
-		//корректности введенного значения, например, год издания не может быть
-		//меьше, чем... (год появления письменности), категорию ползователь
-		//должен выбирать из существующих, цена не может быть отрицательной...
-
-		std::printf("Task_5________________________________________________\n");
-		fillBookFields(static_book);
-		static_book.print();
+		// получаем длину массива
+		int length = sizeof(getString) / sizeof(getString[0]);
+		while (true) {
+			//Введите номер функции, которую Вы хотите вызвать:
+			int n = 0;
+			std::printf("Please enter print function number:\n=> ");
+			std::cin >> n;
+			std::cin.ignore();
+			std::cin.clear();
+			if (n >= length || n < 0) {
+				std::printf("Number mast be 0<=%d<=%d!\n", n, length - 1);
+				continue;
+			}
+			//Вызовите функцию
+			const char* res = getString[n]();
+			//Распечатайте результат
+			std::printf("Result string: '%s'\n", res);
+		}
 	}*/
+
+	//////////////////////////////////////////////////////////////////////////////////////
+		/*{
+			//Тема. Структуры С.
+			//Задание 1. Объявите структуру BOOK, описывающую книгу
+			//(автор, заглавие, год издания, цена, категория…).
+			//Подумайте: какого типа могут быть поля структуры.
+			//Подсказка: объявление структуры рекомендуется выносить
+			//в заголовочный файл.
+
+			// INFO: Объявление структуры находится в файле other.h
+
+			//Задание 2. Создайте разными способами (глобальный, локальный, статический,
+			//динамический) экземпляры (объекты) типа BOOK (без инициализации).
+			//Определите - сколько памяти отводит компилятор под каждый
+			//такой объект. Как инициализируются (или не инициализируются) поля
+			//структуры. Подумайте: от чего зависит объем выделяемой памяти?
+
+			std::printf("Task_2________________________________________________\n");
+
+			//При глобальном создании экземпляра структуры
+			std::printf("\nGlobal size: %d\n", (int) sizeof(book_global)); //96 bytes
+
+			//При локальном создании экземпляра структуры
+			struct {
+				std::string authorFirstName; // 28 bytes
+				std::string authorLastName; // 28 bytes
+
+				std::string bookTitle; // 28 bytes
+				short int bookYear; // 2 bytes
+				// 2 padding byte
+				float bookPrice; // 4 bytes
+				BookCategoryEnum bookCategory; // 4 bytes
+			} book_local;
+			std::printf("Local size: %d\n", (int) sizeof(book_local)); //96 bytes
+
+			//При статическом создании экземпляра структуры
+			BOOK static_book;
+			std::printf("Static size: %d\n", (int) sizeof(static_book)); //96 bytes
+
+			//При динамическом создании экземпляра структуры
+			BOOK *dynamic_book = new BOOK();
+			std::printf("Dynamic size: %d\n", (int) sizeof(*dynamic_book)); //96 bytes
+			delete dynamic_book;
+
+			std::printf("\nBook authorFirstName size: %d\n", (int) sizeof(static_book.authorFirstName));
+			std::printf("Book authorLastName size: %d\n", (int) sizeof(static_book.authorLastName));
+			std::printf("Book bookTitle size: %d\n", (int) sizeof(static_book.bookTitle));
+			std::printf("Book bookYear size: %d\n", (int) sizeof(static_book.bookYear));
+			std::printf("Book bookPrice size: %d\n", (int) sizeof(static_book.bookPrice));
+			std::printf("Book bookCategory size: %d\n\n", (int) sizeof(static_book.bookCategory));
+
+			//Во всех случаях компилятор отводит под структуру 88 байта
+			//     1       2       3       4      5       6       7       8
+			//+-------+-------+-------+-------+-------+-------+-------+-------+
+			//|        authorFirstName
+			//+-------+-------+-------+-------+-------+-------+-------+-------+ ... 28
+			//|        authorLastName
+			//+-------+-------+-------+-------+-------+-------+-------+-------+ ... 28
+			//|           bookTitle
+			//+-------+-------+-------+-------+-------+-------+-------+-------+ ... 28
+			//|    bookYear   | 2 padding byte|           bookPrice           |
+			//+-------+-------+-------+-------+-------+-------+-------+-------+
+			//|          bookCategory         |
+			//+-------+-------+-------+-------+
+
+			// Поля структуры инициализируются и заполняются значениями по умолчанию для
+			// каждого из используемых типов
+			std::printf("Books{\n"
+						"\tauthorFirstName (default):%s\n"
+						"\tauthorLastName (default): %s\n"
+						"\tbookTitle (default): %s\n"
+						"\tbookYear (default): %hu\n"
+						"\tbookPrice (default): %f\n"
+						"\tbookCategory (default): %s\n}\n",
+						static_book.authorFirstName.c_str(), //""
+						static_book.authorLastName.c_str(), //""
+						static_book.bookTitle.c_str(), //""
+						static_book.bookYear, //52428
+						static_book.bookPrice, //-107374176.000000
+						static_book.getBookCategory().c_str()); //""
+
+			// Размер выделяемой памяти под структуру зависит от многих факторов.
+			// В основном все выливается в размер базовых типов данных и тем как они будут расположенны в оперативной памяти.
+			// Процессор, операционная система и компилятор могут в совокупоности предоставлять различные размеры для (int, char, double), вполоть до того, того что все типы могут быть одного размера.
+
+			// Ссылки на используемые ресурсы
+			// http://qaru.site/questions/147/why-isnt-sizeof-for-a-struct-equal-to-the-sum-of-sizeof-of-each-member
+			// https://habr.com/post/90580/
+
+			//Задание 3. Заполните поля созданных объектов.
+			//Замечание: если для хранения строки используется массив, необходимо
+			//предусмотреть "защиту" от выхода за границы массива.
+
+			std::printf("Task_3________________________________________________\n");
+
+			std::printf("Please enter fields \nauthorFirstName (string): ");
+			std::getline(std::cin, static_book.authorFirstName);
+
+			std::printf("authorLastName (string): ");
+			std::getline(std::cin, static_book.authorLastName);
+
+			std::printf("bookTitle (string): ");
+			std::getline(std::cin, static_book.bookTitle);
+
+			std::printf("bookYear (short int): ");
+			std::scanf("%hu", &static_book.bookYear);
+			std::cin.ignore();
+
+			std::printf("bookPrice (float): ");
+			std::scanf("%f", &static_book.bookPrice);
+			std::cin.ignore();
+
+			std::printf("bookCategory (strings): ");
+			std::string category;
+			std::getline(std::cin, category, '\n');
+			static_book.bookCategory = static_book.getBookCategory(category);
+			std::cout << std::endl;
+
+			//Задание 4. Напишите функцию, выводящую на экран реквизиты книги.
+			//Подумайте: как эффективнее передавать экземпляр BOOK в функцию.
+			//Для вывода на консоль используйте функцию стандартной библиотеки
+			//printf
+
+			std::printf("Task_4________________________________________________\n");
+			static_book.print();
+
+			//Задание 5. Напишите функцию для формирования полей структуры.
+			//Для ввода используйте функцию стандартной библиотеки scanf
+			//Замечание: неплохо заложить в такую функцию возможность проверки
+			//корректности введенного значения, например, год издания не может быть
+			//меьше, чем... (год появления письменности), категорию ползователь
+			//должен выбирать из существующих, цена не может быть отрицательной...
+
+			std::printf("Task_5________________________________________________\n");
+			fillBookFields(static_book);
+			static_book.print();
+		}*/
 	stop;
 	return 0;
 }//main
