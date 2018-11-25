@@ -1,14 +1,14 @@
 #include "iostream"
-#include "other.h"
-#include <stdlib.h>
 #include <string>
 #include <cmath>
+#include <stdlib.h>
+#include "other.h"
 
 ///////////////////////////////////////////////////
 
 void printEquation(int A, int B, int C,
 	float from, float to, float step, float(*callback)(int A, int B, int C, float x)) {
-	
+
 	float x = 0, y = 0;
 	// Находим из скольки символов максимум может состоять число х
 	int sizeX = (int)log10(std::numeric_limits<float>::max()) + 2;
@@ -195,7 +195,7 @@ void calculator() {
 			std::cin.clear();
 			break;
 		}
-		
+
 		//std::printf("X(string): %s\n", buffX.c_str());
 		//std::printf("Y(string): %s\n", buffY.c_str());
 		//std::printf("OperationChar (symbol): %c\n", operationChar);
@@ -246,7 +246,7 @@ void calculator() {
 
 		//std::printf("X(double): %lf\n", x);
 		//std::printf("Y(double): %lf\n", y);
-		
+
 		std::printf("Result: %lf\n", (*operation)(x, y));
 	}
 }
@@ -260,26 +260,157 @@ void Sort(char* pcFirst, int nNumber, int size,
 		{
 			char* pCurrent = pcFirst + j * size;
 			char* pPrevious = pcFirst + (j - 1)*size;
-			if ((*Compare)(pPrevious, pCurrent) > 0)//требуется переставить
+			if ((*Compare)(pPrevious, pCurrent) > 0) //требуется переставить
 				(*Swap)(pPrevious, pCurrent);
 		}
 }
 
 void SwapInt(void* p1, void* p2)
 {
-
-
+	int *p1Int = static_cast<int*>(p1);
+	int *p2Int = static_cast<int*>(p2);
+	int buff = *p2Int;
+	*p2Int = *p1Int;
+	*p1Int = buff;
 }
 
 int CmpInt(void* p1, void* p2)
 {
-	int nResult = 0;
-
-
-
-
-	return nResult;
+	int *p1Int = static_cast<int*>(p1);
+	int *p2Int = static_cast<int*>(p2);
+	if (*p1Int < *p2Int) {
+		return -1;
+	}
+	else if (*p1Int == *p2Int) {
+		return 0;
+	}
+	return 1;
 }
+
+void SwapDouble(void * p1, void * p2)
+{
+	double *p1Double = static_cast<double*>(p1);
+	double *p2Double = static_cast<double*>(p2);
+	double buff = *p2Double;
+	*p2Double = *p1Double;
+	*p1Double = buff;
+}
+
+int CmpDouble(void * p1, void * p2)
+{
+	double *p1Double = static_cast<double*>(p1);
+	double *p2Double = static_cast<double*>(p2);
+	if (*p1Double < *p2Double) {
+		return -1;
+	}
+	else if (*p1Double == *p2Double) {
+		return 0;
+	}
+	return 1;
+}
+
+void SwapChar(void *p1, void *p2)
+{
+	char **p1Char = static_cast<char**>(p1);
+	char **p2Char = static_cast<char**>(p2);
+	char *buff = *p1Char;
+	*p1Char = *p2Char;
+	*p2Char = buff;
+}
+
+int CmpChar(void * p1, void * p2)
+{
+	char *p1Char = *static_cast<char**>(p1);
+	char *p2Char = *static_cast<char**>(p2);
+	
+	// Для проверки можно использовать
+	//return std::strcmp(p1Char, p2Char);
+
+	size_t size1 = sizeof(p1Char) / sizeof(p1Char[0]);
+	size_t size2 = sizeof(p2Char) / sizeof(p2Char[0]);
+	size_t max = size1;
+	if (size2 > max) {
+		max = size2;
+	}
+	
+	int res = 0;
+	for (size_t i = 0; i < max;i++) {
+		if ((i+1) > size1) {
+			res = -1;
+			break;
+		}
+		if ((i+1) > size2) {
+			res = 1;
+			break;
+		}
+		if (p1Char[i] < p2Char[i]) {
+			res = -1;
+			break;
+		}
+		if (p1Char[i] > p2Char[i]) {
+			res = 1;
+			break;
+		}
+	}
+	return res;
+}
+
+std::string BOOK::getBookCategory() {
+	std::string category = BOOK_CATEGORY_ERROR_STRING;
+	switch (bookCategory) {
+	case BOOK_CATEGORY_HIST:
+		category = BOOK_CATEGORY_HIST_STRING;
+		break;
+	case BOOK_CATEGORY_MIDEVAL:
+		category = BOOK_CATEGORY_MIDEVAL_STRING;
+		break;
+	case BOOK_CATEGORY_DETECT:
+		category = BOOK_CATEGORY_DETECT_STRING;
+		break;
+	case BOOK_CATEGORY_ACTION:
+		category = BOOK_CATEGORY_ACTION_STRING;
+		break;
+	case BOOK_CATEGORY_TRAVEL:
+		category = BOOK_CATEGORY_TRAVEL_STRING;
+		break;
+	}
+	return category;
+}
+
+BookCategoryEnum BOOK::getBookCategory(std::string category) {
+	if (!category.compare(BOOK_CATEGORY_HIST_STRING)) {
+		return BOOK_CATEGORY_HIST;
+	}
+	else if (!category.compare(BOOK_CATEGORY_MIDEVAL_STRING)) {
+		return BOOK_CATEGORY_MIDEVAL;
+	}
+	else if (!category.compare(BOOK_CATEGORY_DETECT_STRING)) {
+		return BOOK_CATEGORY_DETECT;
+	}
+	else if (!category.compare(BOOK_CATEGORY_ACTION_STRING)) {
+		return BOOK_CATEGORY_ACTION;
+	}
+	else if (!category.compare(BOOK_CATEGORY_TRAVEL_STRING)) {
+		return BOOK_CATEGORY_TRAVEL;
+	}
+	return BOOK_CATEGORY_ERROR;
+}
+
+void BOOK::print() {
+	std::printf("Books{\n"
+		"\tauthorFirstName (string):%s\n"
+		"\tauthorLastName (string): %s\n"
+		"\tbookTitle (string): %s\n"
+		"\tbookYear (short int): %d\n"
+		"\tbookPrice (float): %f\n"
+		"\tbookCategory (enum): %s\n}\n",
+		this->authorFirstName.c_str(),
+		this->authorLastName.c_str(),
+		this->bookTitle.c_str(),
+		this->bookYear,
+		this->bookPrice,
+		this->getBookCategory().c_str());
+};
 
 void fillBookFields(BOOK &book) {
 	const int YEAR_OF_WRITING = 988;
@@ -369,4 +500,23 @@ void fillBookFields(BOOK &book) {
 		break;
 	}
 	std::cout << std::endl;
+}
+
+MyBook::MyBook(std::string authorFirstName,
+	std::string authorLastName,
+	std::string bookTitle,
+	short int bookYear,
+	float bookPrice,
+	BookCategoryEnum bookCategory) {
+
+	this->authorFirstName = authorFirstName;
+	this->authorLastName = authorLastName;
+	this->bookTitle = bookTitle;
+	this->bookYear = bookYear;
+	this->bookPrice = bookPrice;
+	this->bookCategory = bookCategory;
+}
+
+void MyBook::print() {
+	super::print();
 }

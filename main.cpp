@@ -69,8 +69,8 @@ int main() {
 	//соответствующей Вашей функции по указателю.
 	//Предусмотрите возможность ввода непредусмотренного знака операции
 
-	//calculator();
-	//stop;
+	/*calculator();
+	stop;*/
 
 	//Задание 2. Указатель на функцию в качестве аргумента.
 	//Дана заготовка функции сортировки любых объектов - Sort.
@@ -91,32 +91,66 @@ int main() {
 	//<0 - первый элемент меньше, чем второй
 	//=0 - равны
 	//>0 - первый элемент больше, чем второй
-/*
-	int nAr[]=...	//массив для сортировки
+	/*{
+		int nAr[] = {2,4,3,57,10,9,7,12,15,18,77,57};	//массив для сортировки
+		int nTotal = sizeof(nAr) / sizeof(nAr[0]);	//количество элементов в массиве
 
-	//Печать исходного массива
+		//Печать исходного массива
+		printOneDimArray(nAr, nTotal);
 
-	//Вызов сортировки
-	int nTotal=...			//количество элементов в массиве
-	Sort(reinterpret_cast<char*>(&nAr[0]), nTotal, sizeof(int), SwapInt, CmpInt);
+		//Вызов сортировки
+		// https://ravesli.com/urok-92-ukazateli-tipa-void/
+		Sort(reinterpret_cast<char*>(&nAr[0]), nTotal, sizeof(int), SwapInt, CmpInt);
 
-	//Печать результатов сортировки
+		//Печать результатов сортировки
+		printOneDimArray(nAr, nTotal);
+		stop;
+	}*/
 
-	stop
-*/
-/*
+
 	//Задание 2б. По аналогии с 8а создайте вспомогательные
 	//функции - SwapDouble и CmpDouble и вызовите функцию Sort
 	//для сортировки массива вещественных значений.
-*/
-/*
+	/*{
+		double nAr[] = {2.1,4.2,3.3,57.4,10.5,9.6,7.7,12.8,15.9,18.10,77.11,57.12};	//массив для сортировки
+		int nTotal = sizeof(nAr) / sizeof(nAr[0]);	//количество элементов в массиве
+
+		//Печать исходного массива
+		printOneDimArray(nAr, nTotal);
+
+		//Вызов сортировки
+		// https://ravesli.com/urok-92-ukazateli-tipa-void/
+		Sort(reinterpret_cast<char*>(&nAr[0]), nTotal, sizeof(double), SwapDouble, CmpDouble);
+
+		//Печать результатов сортировки
+		printOneDimArray(nAr, nTotal);
+		stop;
+	}*/
+
+
 	//Задание 2в*. По аналогии с 8а создайте вспомогательные
 	//функции - SwapStr и CmpStr и вызовите функцию Sort
 	//для сортировки массива указателей на строки.
-	char s[] = "QWERTY";
-	char* arStr[] = {"WWW", "SDF", "ABC", s, ...};
+	{
+		char s[] = "QWERTY";
+		char* arStr[] = { "WWW", "SDF", "ABC", s, "A","C","B","M","UNO","R","Z","H"};
 
-*/
+		int nTotal = sizeof(arStr) / sizeof(arStr[0]);	//количество элементов в массиве
+		
+		std::cout << "Size: " << nTotal << std::endl;
+
+		//Печать исходного массива
+		printOneDimArray(arStr, nTotal);
+
+		//Вызов сортировки
+		// https://ravesli.com/urok-92-ukazateli-tipa-void/
+		std::cout << "firstValue: " << arStr[0] << std::endl;
+		Sort(reinterpret_cast<char*>(&arStr[0]), nTotal, sizeof(char*), SwapChar, CmpChar);
+
+		//Печать результатов сортировки
+		printOneDimArray(arStr, nTotal);
+		stop;
+	}
 
 /*
 	//Задание 3. Массивы указателей на функцию.
@@ -156,7 +190,7 @@ int main() {
 	//Распечатайте результат
 
 
-*/
+
 //////////////////////////////////////////////////////////////////////////////////////
 	/*{
 		//Тема. Структуры С.
@@ -298,3 +332,34 @@ int main() {
 	return 0;
 }//main
 
+template<typename T>
+void printOneDimArray(const T arr, size_t values) {
+	std::cout << "/ -----" << " Print one-dimensional Array with";
+	std::cout << " Values: " << values << std::endl << "[";
+	for (size_t i = 0; i < values; i++) {
+		std::cout << arr[i];
+		if (i != (values - 1)) {
+			std::cout << " ";
+		}
+	}
+	std::cout << "]" << std::endl;
+	std::cout << "/ -----" << std::endl;
+}
+
+template<typename T>
+void printTwoDimArray(const T arr, size_t rows, size_t columns) {
+	std::cout << "/ -----" << " Print two-dimensional Array with";
+	std::cout << " Rows: " << rows << " Columns: " << columns << std::endl;
+	for (size_t i = 0; i < rows; i++) {
+		for (size_t j = 0; j < columns; j++) {
+			if (j == 0) {
+				std::cout << "/ ";
+			}
+			std::cout << arr[i][j];
+			if (j == (columns - 1)) {
+				std::cout << " /" << std::endl;
+			}
+		}
+	}
+	std::cout << "/ -----" << std::endl;
+}
