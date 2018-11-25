@@ -49,6 +49,19 @@ void SwapChar(void *p1, void *p2);
 //>0 - первый элемент больше, чем второй
 int CmpChar(void *p1, void *p2);
 
+// GetString0, возвращает строку
+const char* GetString0();
+// GetString1, возвращает строку
+const char* GetString1();
+// GetString2, возвращает строку
+const char* GetString2();
+// GetString3, возвращает строку
+const char* GetString3();
+// GetString4, возвращает строку
+const char* GetString4();
+// GetString5, возвращает строку
+const char* GetString5();
+
 // Перечисляем строковые константы категорий у книги 
 const char
 BOOK_CATEGORY_ERROR_STRING[] = "",

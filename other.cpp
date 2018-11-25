@@ -355,6 +355,36 @@ int CmpChar(void * p1, void * p2)
 	return res;
 }
 
+const char * GetString0()
+{
+	return "Zero";
+}
+
+const char * GetString1()
+{
+	return "One";
+}
+
+const char * GetString2()
+{
+	return "Two";
+}
+
+const char * GetString3()
+{
+	return "Three";
+}
+
+const char * GetString4()
+{
+	return "Four";
+}
+
+const char * GetString5()
+{
+	return "Five";
+}
+
 std::string BOOK::getBookCategory() {
 	std::string category = BOOK_CATEGORY_ERROR_STRING;
 	switch (bookCategory) {

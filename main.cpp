@@ -131,12 +131,12 @@ int main() {
 	//Задание 2в*. По аналогии с 8а создайте вспомогательные
 	//функции - SwapStr и CmpStr и вызовите функцию Sort
 	//для сортировки массива указателей на строки.
-	{
+	/*{
 		char s[] = "QWERTY";
 		char* arStr[] = { "WWW", "SDF", "ABC", s, "A","C","B","M","UNO","R","Z","H"};
 
 		int nTotal = sizeof(arStr) / sizeof(arStr[0]);	//количество элементов в массиве
-		
+
 		std::cout << "Size: " << nTotal << std::endl;
 
 		//Печать исходного массива
@@ -150,9 +150,9 @@ int main() {
 		//Печать результатов сортировки
 		printOneDimArray(arStr, nTotal);
 		stop;
-	}
+	}*/
 
-/*
+
 	//Задание 3. Массивы указателей на функцию.
 	//Напишите несколько функций вида
 	//const char* GetString1();
@@ -160,36 +160,28 @@ int main() {
 	//		...., каждая из функций возвращает указатель на свою строку
 	//(подумайте - какой адрес Вы имеете право возвращать из функции)
 
-	/*int a = 10;
-	int b = 5;
-	void (*operations[3])(int, int) = {add, subtract, multiply};
-
-	// получаем длину массива
-	int length = sizeof(operations)/sizeof(operations[0]);
-
-	for(int i=0; i < length;i++)
-	{
-		operations[i](a, b);    // вызов функции по указателю
-	}*/
-
-
 	//Объявите и проинициализируйте массив указателей на функции
 	//GetString1,GetString2...
+	const char* (*getString[])() = { GetString0,GetString1, GetString2, GetString3, GetString4, GetString5 };
 
-
-
-	//Введите номер функции, которую Вы хотите вызвать:
-	int n;
-
-
-
-	//Вызовите функцию
-
-
-
-	//Распечатайте результат
-
-
+	// получаем длину массива
+	int length = sizeof(getString) / sizeof(getString[0]);
+	while (true) {
+		//Введите номер функции, которую Вы хотите вызвать:
+		int n = 0;
+		std::printf("Please enter print function number:\n=> ");
+		std::cin >> n;
+		std::cin.ignore();
+		std::cin.clear();
+		if (n >= length || n < 0) {
+			std::printf("Number mast be 0<=%d<=%d!\n", n, length - 1);
+			continue;
+		}
+		//Вызовите функцию
+		const char* res = getString[n]();
+		//Распечатайте результат
+		std::printf("Result string: '%s'\n", res);
+	}
 
 //////////////////////////////////////////////////////////////////////////////////////
 	/*{
