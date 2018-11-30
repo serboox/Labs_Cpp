@@ -9,3 +9,9 @@ int arraySum(int * arr, int n, int m);
 void sortByChoice(int *&p, int n, int m);
 
 double * columnAverage(int * p, int n, int m);
+
+void arrayAppend(int * arr, int size
+
+) {
+
+}

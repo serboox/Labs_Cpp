@@ -119,7 +119,7 @@ int main()
 	//и time() (<ctime>).
 	//Функция srand() осуществляет «привязку» начала генерации к указанному в качестве параметра значению.
 	//Функция time() задает эту точку отсчета, считывая текущее время
-	{
+	/*{
 		srand(time(0));
 		int N = 3;
 		int M = 4;
@@ -153,44 +153,44 @@ int main()
 		delete[]p2;
 		p2 = nullptr;
 		stop
-	}
+	}*/
 
 	/////////////////////////////////////////////////////////////////////
 	//Задание 3. а) Напишите фрагмент кода, который вводит NN целых чисел с помощью
 	//потока ввода в объявленный Вами встроенный одномерный массив, каждый раз
-//упорядочивая полученное значение по возрастанию
-//{	
-//	int NN, arraySize = 1;
-//	int* myArray = (int*)malloc(arraySize *sizeof(int));// Выделяю блок памяти на массив.
-//	int i = 0;
-//	while (true) {
-//		std::cout << "Enter number: ";
-//		std::cin >> NN;
-//		if (i==0) {
-//			myArray[i] = NN;
-//			i++;
-//			continue;
-//		}
-//		if (arraySize< i+1) {
-//			arraySize *= 2;
-//			myArray = (int*)realloc(myArray, arraySize * sizeof(int));
-//		}
-//		myArray[i] = NN;
-//		bool notSorted = true;
-//		while (notSorted){
-//			notSorted = false;
-//			for (size_t j = 0; j < i; j++) {
-//				if (myArray[j] > myArray[j+1]) {
-//					myArray[j] ^= myArray[j + 1] ^= myArray[j] ^= myArray[j + 1];
-//					notSorted = true;
-//				}
-//			}
-//		}
-//		printOneDimArray(myArray, i+1);
-//		i++;
-//	}
-//}
-//stop
+	//упорядочивая полученное значение по возрастанию
+	{	
+		int NN, arraySize = 1;
+		int* myArray = (int*)malloc(arraySize *sizeof(int));// Выделяю блок памяти на массив.
+		int i = 0;
+		while (true) {
+			std::cout << "Enter number: ";
+			std::cin >> NN;
+			if (i==0) {
+				myArray[i] = NN;
+				i++;
+				continue;
+			}
+			if (arraySize< i+1) {
+				arraySize *= 2;
+				myArray = (int*)realloc(myArray, arraySize * sizeof(int));
+			}
+			myArray[i] = NN;
+			bool notSorted = true;
+			while (notSorted){
+				notSorted = false;
+				for (size_t j = 0; j < i; j++) {
+					if (myArray[j] > myArray[j+1]) {
+						myArray[j] ^= myArray[j + 1] ^= myArray[j] ^= myArray[j + 1];
+						notSorted = true;
+					}
+				}
+			}
+			printOneDimArray(myArray, i+1);
+			i++;
+		}
+	}
+	stop;
 
 //б) Простой поиск.
 //Модифицируйте предыдущее задание следующим образом:очередное значение
