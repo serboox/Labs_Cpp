@@ -159,14 +159,15 @@ int main()
 	//Задание 3. а) Напишите фрагмент кода, который вводит NN целых чисел с помощью
 	//потока ввода в объявленный Вами встроенный одномерный массив, каждый раз
 	//упорядочивая полученное значение по возрастанию
-	{	
+	{
 		int NN, arraySize = 1;
-		int* myArray = (int*)malloc(arraySize *sizeof(int));// Выделяю блок памяти на массив.
+		int* myArray = (int*)malloc(arraySize * sizeof(int));// Выделяю блок памяти на массив.
 		int i = 0;
 		while (true) {
 			std::cout << "Enter number: ";
 			std::cin >> NN;
-			if (i==0) {
+			arrayAppend(myArray, NN, i, arraySize);
+			/*if (i==0) {
 				myArray[i] = NN;
 				i++;
 				continue;
@@ -175,89 +176,90 @@ int main()
 				arraySize *= 2;
 				myArray = (int*)realloc(myArray, arraySize * sizeof(int));
 			}
-			myArray[i] = NN;
+			myArray[i] = NN;*/
+
 			bool notSorted = true;
-			while (notSorted){
+			while (notSorted) {
 				notSorted = false;
 				for (size_t j = 0; j < i; j++) {
-					if (myArray[j] > myArray[j+1]) {
+					if (myArray[j] > myArray[j + 1]) {
 						myArray[j] ^= myArray[j + 1] ^= myArray[j] ^= myArray[j + 1];
 						notSorted = true;
 					}
 				}
 			}
-			printOneDimArray(myArray, i+1);
+			printOneDimArray(myArray, i + 1);
 			i++;
 		}
 	}
 	stop;
 
-//б) Простой поиск.
-//Модифицируйте предыдущее задание следующим образом:очередное значение
-//вводится в массив только при условии, что там еще такого нет (то есть 
-//дубли игнорируются
-//{
-//	int NN, arraySize = 1;
-//	int* myArray = (int*)malloc(arraySize * sizeof(int));// Выделяю блок памяти на массив.
-//	int i = 0;
-//	while (true) {
-//		std::cout << "Enter number: ";
-//		std::cin >> NN;
-//		if (i == 0) {
-//			myArray[i] = NN;
-//			i++;
-//			continue;
-//		}
-//		bool numberIsExist = false;
-//		for (size_t j = 0; j < i; j++) {
-//			if (myArray[j] == NN) {
-//				numberIsExist = true;
-//				std::cout << "This number is exist" << std::endl;
-//				break;
-//			}
-//		}
-//		if (numberIsExist) {
-//			continue;
-//		}
-//		if (arraySize < i + 1) {
-//			arraySize *= 2;
-//			myArray = (int*)realloc(myArray, arraySize * sizeof(int));
-//		}
-//		myArray[i] = NN;
-//		bool notSorted = true;
-//		while (notSorted) {
-//			notSorted = false;
-//			for (size_t j = 0; j < i; j++) {
-//				if (myArray[j] > myArray[j + 1]) {
-//					myArray[j] ^= myArray[j + 1] ^= myArray[j] ^= myArray[j + 1];
-//					notSorted = true;
-//				}
-//			}
-//		}
-//		printOneDimArray(myArray, i + 1);
-//		i++;
-//	}
-//}
-//	stop
+	//б) Простой поиск.
+	//Модифицируйте предыдущее задание следующим образом:очередное значение
+	//вводится в массив только при условии, что там еще такого нет (то есть 
+	//дубли игнорируются
+	//{
+	//	int NN, arraySize = 1;
+	//	int* myArray = (int*)malloc(arraySize * sizeof(int));// Выделяю блок памяти на массив.
+	//	int i = 0;
+	//	while (true) {
+	//		std::cout << "Enter number: ";
+	//		std::cin >> NN;
+	//		if (i == 0) {
+	//			myArray[i] = NN;
+	//			i++;
+	//			continue;
+	//		}
+	//		bool numberIsExist = false;
+	//		for (size_t j = 0; j < i; j++) {
+	//			if (myArray[j] == NN) {
+	//				numberIsExist = true;
+	//				std::cout << "This number is exist" << std::endl;
+	//				break;
+	//			}
+	//		}
+	//		if (numberIsExist) {
+	//			continue;
+	//		}
+	//		if (arraySize < i + 1) {
+	//			arraySize *= 2;
+	//			myArray = (int*)realloc(myArray, arraySize * sizeof(int));
+	//		}
+	//		myArray[i] = NN;
+	//		bool notSorted = true;
+	//		while (notSorted) {
+	//			notSorted = false;
+	//			for (size_t j = 0; j < i; j++) {
+	//				if (myArray[j] > myArray[j + 1]) {
+	//					myArray[j] ^= myArray[j + 1] ^= myArray[j] ^= myArray[j + 1];
+	//					notSorted = true;
+	//				}
+	//			}
+	//		}
+	//		printOneDimArray(myArray, i + 1);
+	//		i++;
+	//	}
+	//}
+	//	stop
 
 
-/*
-	///////////////////////////////////////////////////////////////////////////
-	//Задание 4.С помощью данной заготовки напишите программу,
-	//которая:
-	//вводит строки с клавиатуры с помощью cin>>...
-	//в объявленный Вами двухмерный встроенный массив 5*80 элементов типа char;
-	//признаком конца ввода является символ * (то есть строка - "*") или
-	//заполнение массива (больше свободных строк нет);
-	//сортировка строк в алфавитном порядке. Пояснение: крайне
-	//не рекомендуется для сортировки сложных объектов физически
-	//перемещать их в памяти. Намного эффективнее завести массив
-	//указателей на соответствующие строки и перемещать только
-	//указатели.
+	/*
+		///////////////////////////////////////////////////////////////////////////
+		//Задание 4.С помощью данной заготовки напишите программу,
+		//которая:
+		//вводит строки с клавиатуры с помощью cin>>...
+		//в объявленный Вами двухмерный встроенный массив 5*80 элементов типа char;
+		//признаком конца ввода является символ * (то есть строка - "*") или
+		//заполнение массива (больше свободных строк нет);
+		//сортировка строк в алфавитном порядке. Пояснение: крайне
+		//не рекомендуется для сортировки сложных объектов физически
+		//перемещать их в памяти. Намного эффективнее завести массив
+		//указателей на соответствующие строки и перемещать только
+		//указатели.
 
-	//Подсказка: для лексиграфического сравнения строк пользуйтесь
-	//функцией стандартной библиотеки strcmp(...), заголовочный файл <string>.
-*/
+		//Подсказка: для лексиграфического сравнения строк пользуйтесь
+		//функцией стандартной библиотеки strcmp(...), заголовочный файл <string>.
+	*/
 	{
 		//Определите необходимые значения как константы
 		//STOP_STRING  -  "*"	//признак "прекратить ввод"

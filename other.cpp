@@ -2,8 +2,6 @@
 #include <iostream>
 #include "other.h"
 
-
-
 int arraySum(int * arr, int n, int m)
 {
 	int sum = 0;
@@ -17,7 +15,7 @@ void sortByChoice(int *&arr, int n, int m)
 {
 	for (size_t i = 0; i < (n*m) - 1; i++) {
 		int intMax = arr[i], intIndex = i;
-		for (int j = 1; (i+j)%m > 0; j++) {
+		for (int j = 1; (i + j) % m > 0; j++) {
 			//std::cout << "i: " << i << " j: " << j << "| " << arr[i+j] << " < " << intMax << std::endl;
 			if (arr[i + j] > intMax) {
 				//std::cout << "i: " << i << " j: " << j << "| " << arr[i + j] << " > " << intMax << std::endl;
@@ -50,4 +48,20 @@ double * columnAverage(int * p, int n, int m)
 		//std::cout << std::endl << "Row average: " << resArr[i] << std::endl;
 	}
 	return resArr;
+}
+
+void arrayAppend(int * &arr, int num, int &pos, int &size) {
+
+	std::cout << "Positin: " << pos << std::endl;
+
+	if (pos == 0) {
+		arr[0] = num;
+		pos++;
+		return;
+	}
+	if (size < pos + 1) {
+		size *= 2;
+		arr = (int*)realloc(arr, size * sizeof(int));
+	}
+	arr[pos] = num;
 }
