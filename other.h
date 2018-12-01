@@ -11,3 +11,4 @@ void sortByChoice(int *&p, int n, int m);
 double * columnAverage(int * p, int n, int m);
 
 void arrayAppend(int * &arr, int num, int &pos, int &size);
+void sortByBubble(int * &arr, int size);

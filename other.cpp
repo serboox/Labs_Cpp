@@ -50,18 +50,25 @@ double * columnAverage(int * p, int n, int m)
 	return resArr;
 }
 
-void arrayAppend(int * &arr, int num, int &pos, int &size) {
-
-	std::cout << "Positin: " << pos << std::endl;
-
-	if (pos == 0) {
-		arr[0] = num;
-		pos++;
-		return;
-	}
+void arrayAppend(int * &arr, int num, int &pos, int &size)
+{
 	if (size < pos + 1) {
 		size *= 2;
 		arr = (int*)realloc(arr, size * sizeof(int));
 	}
 	arr[pos] = num;
+}
+
+void sortByBubble(int * &arr, int size)
+{
+	bool notSorted = true;
+	while (notSorted) {
+		notSorted = false;
+		for (size_t j = 0; j < size; j++) {
+			if (arr[j] > arr[j + 1]) {
+				arr[j] ^= arr[j + 1] ^= arr[j] ^= arr[j + 1];
+				notSorted = true;
+			}
+		}
+	}
 }

@@ -166,28 +166,13 @@ int main()
 		while (true) {
 			std::cout << "Enter number: ";
 			std::cin >> NN;
-			arrayAppend(myArray, NN, i, arraySize);
-			/*if (i==0) {
-				myArray[i] = NN;
+			if (i == 0) {
+				arrayAppend(myArray, NN, i, arraySize);
 				i++;
 				continue;
 			}
-			if (arraySize< i+1) {
-				arraySize *= 2;
-				myArray = (int*)realloc(myArray, arraySize * sizeof(int));
-			}
-			myArray[i] = NN;*/
-
-			bool notSorted = true;
-			while (notSorted) {
-				notSorted = false;
-				for (size_t j = 0; j < i; j++) {
-					if (myArray[j] > myArray[j + 1]) {
-						myArray[j] ^= myArray[j + 1] ^= myArray[j] ^= myArray[j + 1];
-						notSorted = true;
-					}
-				}
-			}
+			arrayAppend(myArray, NN, i, arraySize);
+			sortByBubble(myArray, i);
 			printOneDimArray(myArray, i + 1);
 			i++;
 		}
