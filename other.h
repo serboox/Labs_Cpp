@@ -10,6 +10,10 @@ const size_t N6 = 4;
 const size_t M6 = 3;
 const size_t P6 = 3;
 
+// Константы для задания номер 7
+const size_t N7 = 10;
+const size_t M7 = 50;
+
 // printOneDimArray, печатает одноуровневый массив
 template<typename T>
 void printOneDimArray(const T arr, size_t rows);
@@ -47,3 +51,9 @@ void fillDynamicArrayThroughCin(char **&arr, int rows, size_t *&strLen);
 // swapEvenMatrices, меняет четные и не четные матрицы местами
 // в качестве аргумента фкнуция принимает 3-х мерный статический массив
 void swapEvenMatrices(double arr[N6][M6][P6]);
+// fillRandomArray, заполняет двумерный статический массив в соучайном порядке двумя типами символов
+void fillRandomArray(char arr[N7][M7], char mainSym, char sizeSym);
+// moveMainSymbolsToLeft, переменщает все главные символы в левую часть массива
+void moveMainSymbolsToLeft(char arr[N7][M7], char mainSym, char sizeSym);
+// moveMainSymbolsToLeft, переменщает все главные символы в ниждюю часть массива
+void moveMainSymbolsToDown(char arr[N7][M7], char mainSym, char sizeSym);

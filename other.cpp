@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <ctime>
 #include "other.h"
 
 int arraySum(int * arr, int n, int m)
@@ -237,6 +238,52 @@ void swapEvenMatrices(double arr[N6][M6][P6])
 				buff[j][k] = arr[i][j][k];
 				arr[i][j][k] = arr[i + 1][j][k];
 				arr[i + 1][j][k] = buff[j][k];
+			}
+		}
+	}
+}
+
+void fillRandomArray(char arr[N7][M7], char mainSym, char sideSym)
+{
+	srand(time(0));
+	for (size_t i = 0; i < N7; i++) {
+		for (size_t j = 0; j < M7; j++) {
+			arr[i][j] = (char)rand() % 2 ? mainSym : sideSym;
+		}
+	}
+}
+
+void moveMainSymbolsToLeft(char arr[N7][M7], char mainSym, char sideSym)
+{
+	for (size_t i = 0; i < N7; i++) {
+		bool notSorted = true;
+		while (notSorted) {
+			notSorted = false;
+			for (size_t j = 0; j < (M7 - 1); j++) {
+				//std::cout << arr[i][j] << " - " << arr[i][j + 1] << " <- ";
+				//std::cout << (arr[i][j] == sideSym && arr[i][j + 1] == mainSym) << std::endl;
+				if (arr[i][j] == sideSym && arr[i][j + 1] == mainSym) {
+					arr[i][j] ^= arr[i][j + 1] ^= arr[i][j] ^= arr[i][j + 1];
+					notSorted = true;
+				}
+			}
+		}
+	}
+}
+
+void moveMainSymbolsToDown(char arr[N7][M7], char mainSym, char sideSym)
+{
+	for (size_t j = 0; j < M7; j++) {
+		bool notSorted = true;
+		while (notSorted) {
+			notSorted = false;
+			for (size_t i = 0; i < (N7 - 1); i++) {
+				//std::cout << arr[i][j] << " - " << arr[i+1][j] << " <- ";
+				//std::cout << (arr[i][j] == mainSym && arr[i+1][j] == sideSym) << std::endl;
+				if (arr[i][j] == mainSym && arr[i + 1][j] == sideSym) {
+					arr[i][j] ^= arr[i + 1][j] ^= arr[i][j] ^= arr[i + 1][j];
+					notSorted = true;
+				}
 			}
 		}
 	}

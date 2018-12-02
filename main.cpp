@@ -400,67 +400,27 @@ int main()
 	//было - '*' '_' '_' '*' '*' '_' '*' '_' '*' '_'
 	//стало: '*' '*' '*' '*' '*' '_' '_' '_' '_' '_'
 	//и распечатайте массив по строкам - "постройте распределение"
-	{
-		srand(time(0));
-		const int N = 10, M = 50;
-		char myArray[N][M];
-		for (size_t i = 0; i < N; i++) {
-			for (size_t j = 0; j < M; j++) {
-				myArray[i][j] = (char)rand() % 2 ? '_' : '*';
-			}
-		}
-		printTwoDimArray(myArray, N, M);
-		for (size_t i = 0; i < N; i++) {
-			bool notSorted = true;
-			while (notSorted) {
-				notSorted = false;
-				for (size_t j = 0; j < (M - 1); j++) {
-					//std::cout << myArray[i][j] << " - " << myArray[i][j + 1] << " <- ";
-					//std::cout << (myArray[i][j] == '_' && myArray[i][j + 1] == '*') << std::endl;
-					if (myArray[i][j] == '_' && myArray[i][j + 1] == '*') {
-						myArray[i][j] ^= myArray[i][j + 1] ^= myArray[i][j] ^= myArray[i][j + 1];
-						notSorted = true;
-					}
-				}
-			}
-		}
-		printTwoDimArray(myArray, N, M);
-		//stop
-	}
+	/*{
+		
+		char myArray[N7][M7];
+		fillRandomArray(myArray, '*', '_');
+		printTwoDimArray(myArray, N7, M7);
+		moveMainSymbolsToLeft(myArray, '*', '_');
+		printTwoDimArray(myArray, N7, M7);
+		stop;
+	}*/
 	// 7б. Модифицируйте предыдущее задание следующим способом:
 	//После заполнения массива с помощью генератора случайных чисел
 	//"сдвиньте" звездочки по столбцам вниз и распечатайте полученное
 	//"распределение"
-	{
-		srand(time(0));
-		const int N = 10, M = 50;
-		char myArray[N][M];
-		for (size_t i = 0; i < N; i++) {
-			for (size_t j = 0; j < M; j++) {
-				myArray[i][j] = (char)rand() % 2 ? '_' : '*';
-			}
-		}
-		printTwoDimArray(myArray, N, M);
-
-		for (size_t j = 0; j < M; j++) {
-			bool notSorted = true;
-			while (notSorted) {
-				notSorted = false;
-				for (size_t i = 0; i < (N - 1); i++) {
-					//std::cout << myArray[i][j] << " - " << myArray[i+1][j] << " <- ";
-					//std::cout << (myArray[i][j] == '*' && myArray[i+1][j] == '_') << std::endl;
-					if (myArray[i][j] == '*' && myArray[i + 1][j] == '_') {
-						myArray[i][j] ^= myArray[i + 1][j] ^= myArray[i][j] ^= myArray[i + 1][j];
-						notSorted = true;
-					}
-				}
-				//printTwoDimArray(myArray, N, M);
-				//stop
-			}
-		}
-		printTwoDimArray(myArray, N, M);
+	/*{
+		char myArray[N7][M7];
+		fillRandomArray(myArray, '*', '_');
+		printTwoDimArray(myArray, N7, M7);
+		moveMainSymbolsToDown(myArray, '*', '_');
+		printTwoDimArray(myArray, N7, M7);
 		stop
-	}
+	}*/
 	return 0;
 }
 
