@@ -243,7 +243,7 @@ int main()
 		unsigned int rows = sizeof(cBuffer) / sizeof(cBuffer[0]);
 		unsigned int columns = sizeof(cBuffer[0]) / sizeof(cBuffer[0][0]);
 
-		fillArrayThroughCin(cBuffer, rows, columns);
+		fillStaticArrayThroughCin(cBuffer, rows, columns);
 
 		//Присвойте элементу массива cPointers с индексом nIndex
 		//указатель на строку с номером nIndex в массиве cBuffer
@@ -257,7 +257,7 @@ int main()
 		//Теперь сортируем строки:
 
 		//Цикл сортировки строк по методу "всплывающего пузырька" в
-		//порядке возрастания. На каждой итерации - промежуточная печать 
+		//порядке возрастания. На каждой итерации - промежуточная печать
 		//отсортированных строк
 
 		printTwoDimArray(cPointers, N, M);
@@ -272,7 +272,7 @@ int main()
 	//При этом необходимые параметры (количество строк
 	// сформируйте с помощью потока ввода
 	//int nStringNumber;
-	{
+	/*{
 		//Определите необходимые значения как константы
 		//STOP_STRING  -  "*"	//признак "прекратить ввод"
 
@@ -287,55 +287,21 @@ int main()
 		//Объявите двухмерный динамический массив с именем cBuffer типа char
 		char **cBuffer = (char**)malloc(nStringNumber * sizeof(char));
 		for (size_t i = 0; i < nStringNumber; i++)
-			cBuffer[i] = (char*)malloc(INITIALISATION_SIZE * sizeof(char));
+			cBuffer[i] = (char*)malloc(1 * sizeof(char));
 
 		//Объявите динамический массив (с именем cPointers) указателей на строки
 		//размерностью N
 		char **cPointers = (char**)malloc(nStringNumber * sizeof(char));
 
-		//Цикл ввода строк:
+		// Объявляем массив хранящий длины вводимых строк
+		size_t *cBuffStrLen = (size_t*)malloc(nStringNumber * sizeof(size_t));
+
+		fillDynamicArrayThroughCin(cBuffer, nStringNumber, cBuffStrLen);
+
+		std::cout << "Strlen array______" << std::endl;
+		printOneDimArray(cBuffStrLen, nStringNumber);
+
 		for (size_t nIndex = 0; nIndex < nStringNumber; nIndex++) {
-			//а) выведите приглашение для ввода
-			std::cout << "Please enter string " << nIndex + 1 << ": " << std::endl;
-			std::cout << "=> ";
-			//б) пока не введена строка STOP_STRING или не заполнен весь массив
-			size_t mIndex = 0;
-			char strBuff[] = { " " };
-			size_t dinBuffSize = INITIALISATION_SIZE;
-			char *dinBuff = (char*)malloc(dinBuffSize * sizeof(char));
-			while (strcmp(strBuff, STOP_STRING)) {
-				//ввод строки в массив cBuffer:
-				std::cin.read(strBuff, 1);
-				//если в из потока вывода приходит знак переноса строки переходим к следующей итерации
-				if (!strcmp(strBuff, END_LINE)) {
-					continue;
-				}
-				//если введена строка - признак окончания, то выйти из цикла
-				if (!strcmp(strBuff, STOP_STRING)) {
-					std::cout << "Record in cBuffer[" << nIndex << "]: " << mIndex << " symbols." << std::endl;
-					if (INITIALISATION_SIZE < mIndex) {
-						// изменяем размер блока выделенной памяти так чтобы хватало ровно под строку
-						cBuffer[nIndex] = (char*)realloc(cBuffer[nIndex], mIndex * sizeof(char));
-					}
-					// записываем введенные символы в память
-					for (size_t k = 0; k < mIndex; k++) {
-						cBuffer[nIndex][k] = dinBuff[k];
-					}
-					break;
-				}
-				//если блока памяти выделенного для массива недостаточно, увеличиваем его вдвое
-				if (dinBuffSize <= (mIndex + 1)) {
-					std::cout << "Size dinBuff " << dinBuffSize << " -> " << dinBuffSize * 2 << std::endl;
-					dinBuffSize *= 2;
-					// увеличиваем блок памяти вдвое
-					dinBuff = (char*)realloc(dinBuff, dinBuffSize * sizeof(char));
-				}
-				dinBuff[mIndex] = strBuff[0];
-				std::cout << "(N:" << nIndex + 1 << "|M:" << mIndex + 1 << "|Buff:" << dinBuffSize << "): ";
-				std::cout << strBuff << std::endl;
-				std::cout << "dinBuff: " << dinBuff << std::endl;
-				mIndex++;
-			}
 			//Присвойте элементу массива cPointers с индексом nIndex
 			//указатель на строку с номером nIndex в массиве cBuffer
 			cPointers[nIndex] = cBuffer[nIndex];
@@ -344,46 +310,23 @@ int main()
 		//Выдать диагностику о том, что прием строк завершен.
 		std::cout << "Line reception complete!" << std::endl;
 		std::cout << "Print cBuffer" << std::endl;
-		printOneDimArray(cBuffer, nStringNumber);
+		printTwoDimArray(cBuffer, nStringNumber, cBuffStrLen);
 
 		//Теперь сортируем строки:
 
 		//Цикл сортировки строк методом "всплывающего пузырька" в
 		//порядке возрастания кода первого символа
-
-		//Повторяем, пока не отсортируем массив.
-		char symbolOne[] = { "" }, symbolTwo[] = { " " };
-		bool notSorted = true;
-		while (notSorted) {
-			//Предполагаем, что не правильных пар нет.
-			notSorted = false;
-			for (size_t i = 0; i < (nStringNumber - 1); i++) {
-				symbolOne[0] = *cPointers[i];
-				symbolTwo[0] = *cPointers[i + 1];
-				std::cout << "CMP: (" << symbolOne << "," << symbolTwo << ")->";
-				std::cout << strcmp(symbolOne, symbolTwo) << std::endl;
-				if (strcmp(symbolOne, symbolTwo) > 0) {
-					// Меняем их местами
-					char *temp = cPointers[i];
-					cPointers[i] = cPointers[i + 1];
-					cPointers[i + 1] = temp;
-
-					// Масив еще не отсортирован.
-					notSorted = true;
-				}
-			}
-		}
+		printTwoDimArray(cPointers, nStringNumber, cBuffStrLen);
+		sortByBubbleDynArr(cPointers, nStringNumber, cBuffStrLen);
 		std::cout << "Print sorted Array" << std::endl;
-		printOneDimArray(cPointers, nStringNumber);
+		printTwoDimArray(cPointers, nStringNumber, cBuffStrLen);
 
 		//Освобождение занятой памяти:
-		system("pause");
 		for (size_t i = 0; i < nStringNumber; i++) {
 			free(cBuffer[i]);
 		}
-		return 0;
-	}
-
+		stop;
+	}*/
 
 	/*
 		//Задание 6. Объявление и использование указателей на многомерные
@@ -532,12 +475,12 @@ int main()
 }
 
 template<typename T>
-void printOneDimArray(const T arr, size_t values) {
+void printOneDimArray(const T arr, size_t rows) {
 	std::cout << "/ -----" << " Print one-dimensional Array with";
-	std::cout << " Values: " << values << std::endl << "[";
-	for (size_t i = 0; i < values; i++) {
+	std::cout << " Values: " << rows << std::endl << "[";
+	for (size_t i = 0; i < rows; i++) {
 		std::cout << arr[i];
-		if (i != (values - 1)) {
+		if (i != (rows - 1)) {
 			std::cout << " ";
 		}
 	}
@@ -546,15 +489,15 @@ void printOneDimArray(const T arr, size_t values) {
 }
 
 template<typename T>
-void printOneDimArrayWitnEndl(const T arr, size_t values, size_t delimiter) {
+void printOneDimArrayWitnEndl(const T arr, size_t rows, size_t delimiter) {
 	std::cout << "/ -----" << " Print two-dimensional Array with";
-	std::cout << " Values: " << values << std::endl << "|";
-	for (size_t i = 0; i < values; i++) {
+	std::cout << " Values: " << rows << std::endl << "|";
+	for (size_t i = 0; i < rows; i++) {
 		if (((i % delimiter) == 0) && i != 0) {
 			std::cout << "|" << std::endl << "|";
 		}
 		std::cout << arr[i];
-		if ((i != (values - 1)) && (((i + 1) % delimiter) != 0)) {
+		if ((i != (rows - 1)) && (((i + 1) % delimiter) != 0)) {
 			std::cout << " ";
 		}
 	}
@@ -574,6 +517,25 @@ void printTwoDimArray(const T arr, size_t rows, size_t columns) {
 			}
 			std::cout << arr[i][j];
 			if (j == (columns - 1)) {
+				std::cout << " /" << std::endl;
+			}
+		}
+	}
+	std::cout << "/ -----" << std::endl;
+}
+
+template<typename T>
+void printTwoDimArray(const T arr, size_t rows, size_t * arrStrLen)
+{
+	std::cout << "/ -----" << " Print two-dimensional Array with";
+	std::cout << " Rows: " << rows << std::endl;
+	for (size_t i = 0; i < rows; i++) {
+		for (size_t j = 0; j < arrStrLen[i]; j++) {
+			if (j == 0) {
+				std::cout << "/ ";
+			}
+			std::cout << arr[i][j];
+			if (j == (arrStrLen[i] - 1)) {
 				std::cout << " /" << std::endl;
 			}
 		}
