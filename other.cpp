@@ -226,3 +226,18 @@ void fillDynamicArrayThroughCin(char **& arr, int rows, size_t *& arrStrLen)
 		}
 	}
 }
+
+void swapEvenMatrices(double arr[N6][M6][P6])
+{
+	//Цикл ввода строк:
+	for (size_t i = 0; i < N6; i += 2) {
+		double buff[M6][P6];
+		for (size_t j = 0; j < M6; j++) {
+			for (size_t k = 0; k < P6; k++) {
+				buff[j][k] = arr[i][j][k];
+				arr[i][j][k] = arr[i + 1][j][k];
+				arr[i + 1][j][k] = buff[j][k];
+			}
+		}
+	}
+}

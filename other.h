@@ -5,6 +5,11 @@ const size_t M = 80;
 const char STOP_STRING[] = "*";
 const char END_LINE[] = "\n";
 
+//  онстанты дл€ задани€ номер 6
+const size_t N6 = 4;
+const size_t M6 = 3;
+const size_t P6 = 3;
+
 // printOneDimArray, печатает одноуровневый массив
 template<typename T>
 void printOneDimArray(const T arr, size_t rows);
@@ -39,3 +44,6 @@ bool arrayExist(int *& arr, int num, int size);
 void fillStaticArrayThroughCin(char arr[N][M], int rows, int columns);
 // fillDynamicArrayThroughCin, заполн€ет массив строк значени€ми из stdinput
 void fillDynamicArrayThroughCin(char **&arr, int rows, size_t *&strLen);
+// swapEvenMatrices, мен€ет четные и не четные матрицы местами
+// в качестве аргумента фкнуци€ принимает 3-х мерный статический массив
+void swapEvenMatrices(double arr[N6][M6][P6]);
