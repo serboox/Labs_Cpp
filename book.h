@@ -1,7 +1,7 @@
 
 #include <iostream>
 
-// РџРµСЂРµС‡РёСЃР»СЏРµРј СЃС‚СЂРѕРєРѕРІС‹Рµ РєРѕРЅСЃС‚Р°РЅС‚С‹ РєР°С‚РµРіРѕСЂРёР№ Сѓ РєРЅРёРіРё 
+// Перечисляем строковые константы категорий у книги 
 const char
 BOOK_CATEGORY_ERROR_STRING[] = "",
 BOOK_CATEGORY_HIST_STRING[] = "hist",
@@ -10,18 +10,18 @@ BOOK_CATEGORY_DETECT_STRING[] = "detect",
 BOOK_CATEGORY_ACTION_STRING[] = "action",
 BOOK_CATEGORY_TRAVEL_STRING[] = "travel";
 
-// РћР±СЉСЏРІР»СЏРµРј enum СЃ РїРµСЂРµС‡РёСЃР»РµРЅРёРµРј РєР°С‚РµРіРѕСЂРёР№ РєРЅРёРіРё
+// Объявляем enum с перечислением категорий книги
 enum BookCategoryEnum {
-	BOOK_CATEGORY_ERROR = -1, // РўРёРї РґР»СЏ РѕС€РёР±РєРё
-	BOOK_CATEGORY_HIST, // РСЃС‚РѕСЂРёС‡РµСЃРєРёР№ СЂРѕРјР°РЅ
-	BOOK_CATEGORY_MIDEVAL, // Р›РёС‚РµСЂР°С‚СѓСЂР° Р°РЅС‚РёС‡РЅР°СЏ Рё СЃСЂРµРґРЅРёС… РІРµРєРѕРІ
-	BOOK_CATEGORY_DETECT, //  Р”РµС‚РµРєС‚РёРІС‹, С‚СЂРёР»Р»РµСЂС‹
-	BOOK_CATEGORY_ACTION, // Р‘РѕРµРІРёРє, РєРЅРёРіР° Рѕ РІРѕР№РЅРµ
-	BOOK_CATEGORY_TRAVEL, // РџСЂРёРєР»СЋС‡РµРЅРёСЏ, РїСѓС‚РµС€РµСЃС‚РІРёСЏ
+	BOOK_CATEGORY_ERROR = -1, // Тип для ошибки
+	BOOK_CATEGORY_HIST, // Исторический роман
+	BOOK_CATEGORY_MIDEVAL, // Литература античная и средних веков
+	BOOK_CATEGORY_DETECT, //  Детективы, триллеры
+	BOOK_CATEGORY_ACTION, // Боевик, книга о войне
+	BOOK_CATEGORY_TRAVEL, // Приключения, путешествия
 };
 
-// BOOK, СЃС‚СЂСѓРєС‚СѓСЂР° РєРЅРёРіРё
-// РџРѕР»СЏ Рё РјРµС‚РѕРґС‹ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РёРјРµСЋС‚ РјРѕРґРёС„РёРєР°С‚РѕСЂ РґРѕСЃС‚СѓРїР° public
+// BOOK, структура книги
+// Поля и методы по умолчанию имеют модификатор доступа public
 struct BOOK {
 	std::string authorFirstName; // 28 bytes
 	std::string authorLastName; // 28 bytes
@@ -31,23 +31,23 @@ struct BOOK {
 	float bookPrice; // 4 bytes
 	BookCategoryEnum bookCategory; // 4 bytes
 
-	// fillBookFields, С„СѓРЅРєС†РёСЏ Р·Р°РїРѕР»РЅСЏРµС‚ РїРѕР»СЏ РєРЅРёРіРё С‡РµСЂРµР· stdin
+	// fillBookFields, функция заполняет поля книги через stdin
 	void fillFromStdIn();
-	// getBookCategory, РјРµС‚РѕРґ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СЃС‚СЂРѕРєРѕРІРѕРіРѕ РєР»СЋС‡Р° Р·Р° РјРµСЃС‚Рѕ Р·РЅР°С‡РµРЅРёСЏ РєРѕРЅСЃС‚Р°РЅС‚С‹
+	// getBookCategory, метод для получения строкового ключа за место значения константы
 	std::string getBookCategory();
-	// РџРµСЂРµРіСЂСѓР¶Р°РµРј РјРµС‚РѕРґ getBookCategory РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ Р·РЅР°С‡РµРЅРёСЏ РєРѕСЃС‚Р°РЅС‚С‹ Р·Р° РјРµСЃС‚Рѕ СЃС‚СЂРѕРєРѕРІРѕРіРѕ РєР»СЋС‡Р°
+	// Перегружаем метод getBookCategory для получения значения костанты за место строкового ключа
 	BookCategoryEnum getBookCategory(std::string category);
-	// print, РјРµС‚РѕРґ РїРµС‡Р°С‚Рё РєРЅРёРіРё РЅР° СЌРєСЂР°РЅ
+	// print, метод печати книги на экран
 	void print();
 };
 
-// РћР±СЉСЏРІРёРј РєР»Р°СЃСЃ РЅР°СЃР»РµРґСѓСЏСЃСЊ РѕС‚ СЃС‚СЂСѓРєС‚СѓСЂС‹ BOOK
+// Объявим класс наследуясь от структуры BOOK
 class MyBook : public BOOK {
 public:
-	// РћРїСЂРµРґРµР»СЏРµРј С‚РёРї super РґР»СЏ РѕР±СЂР°С‰РµРЅРёСЏ Рє СЂРѕРґРёС‚РµР»СЋ
+	// Определяем тип super для обращения к родителю
 	typedef BOOK super;
 
-	// РћР±СЉСЏРІР»СЏРµРј РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєР»Р°СЃСЃР°
+	// Объявляем конструктор класса
 	MyBook(std::string authorFirstName,
 		std::string authorLastName,
 		std::string bookTitle,
@@ -57,15 +57,15 @@ public:
 
 	void print();
 protected:
-	// РќРµС‚ Р·Р°С‰РёС‰РµРЅРЅС‹С… РїРѕР»РµР№ Рё РјРµС‚РѕРґРѕРІ
+	// Нет защищенных полей и методов
 private:
-	// РќРµС‚ РїСЂРёРІР°С‚РЅС‹С… РїРѕР»РµР№ Рё РјРµС‚РѕРґРѕРІ
+	// Нет приватных полей и методов
 };
 
-// printOneDimArray, РїРµС‡Р°С‚Р°РµС‚ РІ stdout РѕРґРЅРѕСѓСЂРѕРІРЅРµРІС‹Р№ РјР°СЃСЃРёРІ
+// printOneDimArray, печатает в stdout одноуровневый массив
 template<typename T>
 void printOneDimArray(const T arr, size_t values);
 
-// printTwoDimArray, РїРµС‡Р°С‚Р°РµС‚ РІ stdout РґРІСѓС…СѓСЂРѕРІРЅРµРІС‹Р№ РјР°СЃСЃРёРІ
+// printTwoDimArray, печатает в stdout двухуровневый массив
 template<typename T>
 void printTwoDimArray(const T arr, size_t rows, size_t columns);

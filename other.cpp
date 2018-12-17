@@ -7,8 +7,6 @@
 #include "other.h"
 
 
-
-
 void run()
 {
 	std::vector<BOOK> bookVector;
@@ -18,16 +16,16 @@ void run()
 		std::printf("$ ");
 
 		std::getline(std::cin, command);
-		//std::cout << "---" << command << "---\n";
+		std::printf(u8"---%s----%d--\n", command.c_str(), command.length());
 
 		if (!command.compare(COMMAND_HELP)) {
 			std::printf(
-				"%s  Ð Ð°ÑÐ¿ÐµÑ‡Ð°Ñ‚Ð°Ñ‚ÑŒ ÑÐ¾Ð´ÐµÑ€Ð¶Ð¸Ð¼Ð¾Ðµ ÐºÐ°Ñ€Ñ‚Ð¾Ñ‚ÐµÐºÐ¸. \n"
-				"%s  Ð’Ð²ÐµÑÑ‚Ð¸ Ð½Ð¾Ð²ÑƒÑŽ ÐºÐ½Ð¸Ð³Ñƒ. \n"
-				"%s  Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÑŽÑ‰ÑƒÑŽ(Ð¸Ðµ). \n"
-				"%s  Ð—Ð°Ð¿Ð¸ÑÐ°Ñ‚ÑŒ Ñ‚ÐµÐºÑƒÑ‰ÐµÐµ ÑÐ¾Ð´ÐµÑ€Ð¶Ð¸Ð¼Ð¾Ðµ ÐºÐ°Ñ€Ñ‚Ð¾Ñ‚ÐµÐºÐ¸ Ð² Ñ„Ð°Ð¹Ð». \n"
-				"%s  Ð¡Ñ‡Ð¸Ñ‚Ð°Ñ‚ÑŒ Ð¸Ð· Ñ„Ð°Ð¹Ð»Ð° ÑÐ¾Ð´ÐµÑ€Ð¶Ð¸Ð¼Ð¾Ðµ Ð² ÐºÐ°Ñ€Ñ‚Ð¾Ñ‚ÐµÐºÑƒ. \n"
-				"%s  Ð’Ñ‹Ð¹Ñ‚Ð¸. \n",
+				"%s  Ðàñïå÷àòàòü ñîäåðæèìîå êàðòîòåêè. \n"
+				"%s  Ââåñòè íîâóþ êíèãó. \n"
+				"%s  Óäàëèòü ñóùåñòâóþùóþ(èå). \n"
+				"%s  Çàïèñàòü òåêóùåå ñîäåðæèìîå êàðòîòåêè â ôàéë. \n"
+				"%s  Ñ÷èòàòü èç ôàéëà ñîäåðæèìîå â êàðòîòåêó. \n"
+				"%s  Âûéòè. \n",
 				COMMAND_PRINT,
 				COMMAND_SET,
 				COMMAND_DELETE,
@@ -38,19 +36,19 @@ void run()
 			);
 		}
 		else if (!command.compare(COMMAND_PRINT)) {
-			std::printf(" Ð Ð°ÑÐ¿ÐµÑ‡Ð°Ñ‚Ð°Ñ‚ÑŒ ÑÐ¾Ð´ÐµÑ€Ð¶Ð¸Ð¼Ð¾Ðµ ÐºÐ°Ñ€Ñ‚Ð¾Ñ‚ÐµÐºÐ¸. \n");
+			std::printf(" Ðàñïå÷àòàòü ñîäåðæèìîå êàðòîòåêè. \n");
 		}
 		else if (!command.compare(COMMAND_SET)) {
-			std::printf(" Ð’Ð²ÐµÑÑ‚Ð¸ Ð½Ð¾Ð²ÑƒÑŽ ÐºÐ½Ð¸Ð³Ñƒ \n");
+			std::printf(" Ââåñòè íîâóþ êíèãó \n");
 		}
 		else if (!command.compare(COMMAND_DELETE)) {
-			std::printf(" Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÑŽÑ‰ÑƒÑŽ(Ð¸Ðµ). \n");
+			std::printf(" Óäàëèòü ñóùåñòâóþùóþ(èå). \n");
 		}
 		else if (!command.compare(COMMAND_WRITE)) {
-			std::printf(" Ð—Ð°Ð¿Ð¸ÑÐ°Ñ‚ÑŒ Ñ‚ÐµÐºÑƒÑ‰ÐµÐµ ÑÐ¾Ð´ÐµÑ€Ð¶Ð¸Ð¼Ð¾Ðµ ÐºÐ°Ñ€Ñ‚Ð¾Ñ‚ÐµÐºÐ¸ Ð² Ñ„Ð°Ð¹Ð». \n");
+			std::printf(" Çàïèñàòü òåêóùåå ñîäåðæèìîå êàðòîòåêè â ôàéë. \n");
 		}
 		else if (!command.compare(COMMAND_READ)) {
-			std::printf(" Ð¡Ñ‡Ð¸Ñ‚Ð°Ñ‚ÑŒ Ð¸Ð· Ñ„Ð°Ð¹Ð»Ð° ÑÐ¾Ð´ÐµÑ€Ð¶Ð¸Ð¼Ð¾Ðµ Ð² ÐºÐ°Ñ€Ñ‚Ð¾Ñ‚ÐµÐºÑƒ. \n");
+			std::printf(" Ñ÷èòàòü èç ôàéëà ñîäåðæèìîå â êàðòîòåêó. \n");
 		}
 		else if (!command.compare(COMMAND_EXIT)) {
 			break;

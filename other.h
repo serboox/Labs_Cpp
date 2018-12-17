@@ -1,5 +1,5 @@
 
-const char 
+const char
 COMMAND_PRINT[] = "print",
 COMMAND_SET[] = "set",
 COMMAND_DELETE[] = "delete",

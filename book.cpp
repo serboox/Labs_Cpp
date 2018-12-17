@@ -71,7 +71,7 @@ void BOOK::fillFromStdIn() {
 		std::getline(std::cin, this->authorFirstName);
 		if (this->authorFirstName.size() == 0) {
 			std::fprintf(stderr, "The field 'authorFirstName' can not be empty!\n");
-			_sleep(100);// Ð´ÐµÐ»Ð°ÐµÐ¼ Ð¾Ð¶Ð¸Ð´Ð°Ð½Ð¸Ðµ Ð´Ð»Ñ ÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ð¾Ð³Ð¾ Ð²Ñ‹Ð²Ð¾Ð´Ð° Ñ‚ÐµÐºÑÑ‚Ð¾Ð²Ñ‹Ð¹ Ð¿Ð¾Ð»ÐµÐ¹ Ð² ÐºÐ¾Ð½ÑÐ¾Ð»ÑŒ
+			_sleep(100);// äåëàåì îæèäàíèå äëÿ êîððåêòíîãî âûâîäà òåêñòîâûé ïîëåé â êîíñîëü
 			continue;
 		}
 		break;
@@ -82,7 +82,7 @@ void BOOK::fillFromStdIn() {
 		std::getline(std::cin, this->authorLastName);
 		if (this->authorLastName.size() == 0) {
 			std::fprintf(stderr, "The field 'authorLastName' can not be empty!\n");
-			_sleep(100);// Ð´ÐµÐ»Ð°ÐµÐ¼ Ð¾Ð¶Ð¸Ð´Ð°Ð½Ð¸Ðµ Ð´Ð»Ñ ÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ð¾Ð³Ð¾ Ð²Ñ‹Ð²Ð¾Ð´Ð° Ñ‚ÐµÐºÑÑ‚Ð¾Ð²Ñ‹Ð¹ Ð¿Ð¾Ð»ÐµÐ¹ Ð² ÐºÐ¾Ð½ÑÐ¾Ð»ÑŒ
+			_sleep(100);// äåëàåì îæèäàíèå äëÿ êîððåêòíîãî âûâîäà òåêñòîâûé ïîëåé â êîíñîëü
 			continue;
 		}
 		break;
@@ -90,10 +90,10 @@ void BOOK::fillFromStdIn() {
 
 	while (true) {
 		std::fprintf(stdout, "bookTitle (string): ");
-		std::getline(std::cin,	this->bookTitle);
+		std::getline(std::cin, this->bookTitle);
 		if (this->bookTitle.size() == 0) {
 			std::fprintf(stderr, "The field 'bookTitle' can not be empty!\n");
-			_sleep(100);// Ð´ÐµÐ»Ð°ÐµÐ¼ Ð¾Ð¶Ð¸Ð´Ð°Ð½Ð¸Ðµ Ð´Ð»Ñ ÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ð¾Ð³Ð¾ Ð²Ñ‹Ð²Ð¾Ð´Ð° Ñ‚ÐµÐºÑÑ‚Ð¾Ð²Ñ‹Ð¹ Ð¿Ð¾Ð»ÐµÐ¹ Ð² ÐºÐ¾Ð½ÑÐ¾Ð»ÑŒ
+			_sleep(100);// äåëàåì îæèäàíèå äëÿ êîððåêòíîãî âûâîäà òåêñòîâûé ïîëåé â êîíñîëü
 			continue;
 		}
 		break;
@@ -106,7 +106,7 @@ void BOOK::fillFromStdIn() {
 		if (this->bookYear < YEAR_OF_WRITING) {
 			std::fprintf(stderr, "The date of writing the book can not be less "
 				"than %d!\n", YEAR_OF_WRITING);
-			_sleep(100);// Ð´ÐµÐ»Ð°ÐµÐ¼ Ð¾Ð¶Ð¸Ð´Ð°Ð½Ð¸Ðµ Ð´Ð»Ñ ÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ð¾Ð³Ð¾ Ð²Ñ‹Ð²Ð¾Ð´Ð° Ñ‚ÐµÐºÑÑ‚Ð¾Ð²Ñ‹Ð¹ Ð¿Ð¾Ð»ÐµÐ¹ Ð² ÐºÐ¾Ð½ÑÐ¾Ð»ÑŒ
+			_sleep(100);// äåëàåì îæèäàíèå äëÿ êîððåêòíîãî âûâîäà òåêñòîâûé ïîëåé â êîíñîëü
 			continue;
 		}
 		break;
@@ -118,7 +118,7 @@ void BOOK::fillFromStdIn() {
 		std::cin.ignore();
 		if (this->bookPrice < 0) {
 			std::fprintf(stderr, "The cost of the book can not be less than %d!\n", 0);
-			_sleep(100);// Ð´ÐµÐ»Ð°ÐµÐ¼ Ð¾Ð¶Ð¸Ð´Ð°Ð½Ð¸Ðµ Ð´Ð»Ñ ÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ð¾Ð³Ð¾ Ð²Ñ‹Ð²Ð¾Ð´Ð° Ñ‚ÐµÐºÑÑ‚Ð¾Ð²Ñ‹Ð¹ Ð¿Ð¾Ð»ÐµÐ¹ Ð² ÐºÐ¾Ð½ÑÐ¾Ð»ÑŒ
+			_sleep(100);// äåëàåì îæèäàíèå äëÿ êîððåêòíîãî âûâîäà òåêñòîâûé ïîëåé â êîíñîëü
 			continue;
 		}
 		break;
@@ -130,7 +130,7 @@ void BOOK::fillFromStdIn() {
 		std::getline(std::cin, category);
 		if (category.size() == 0) {
 			std::fprintf(stderr, "The field 'bookCategory' can not be empty!\n");
-			_sleep(100);// Ð´ÐµÐ»Ð°ÐµÐ¼ Ð¾Ð¶Ð¸Ð´Ð°Ð½Ð¸Ðµ Ð´Ð»Ñ ÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ð¾Ð³Ð¾ Ð²Ñ‹Ð²Ð¾Ð´Ð° Ñ‚ÐµÐºÑÑ‚Ð¾Ð²Ñ‹Ð¹ Ð¿Ð¾Ð»ÐµÐ¹ Ð² ÐºÐ¾Ð½ÑÐ¾Ð»ÑŒ
+			_sleep(100);// äåëàåì îæèäàíèå äëÿ êîððåêòíîãî âûâîäà òåêñòîâûé ïîëåé â êîíñîëü
 			continue;
 		}
 
@@ -142,7 +142,7 @@ void BOOK::fillFromStdIn() {
 			std::fprintf(stderr, "The field 'bookCategory' may contain only next values "
 				"('hist','mideval', 'detect', 'action', 'travel')"
 				"!\n");
-			_sleep(100);// Ð´ÐµÐ»Ð°ÐµÐ¼ Ð¾Ð¶Ð¸Ð´Ð°Ð½Ð¸Ðµ Ð´Ð»Ñ ÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ð¾Ð³Ð¾ Ð²Ñ‹Ð²Ð¾Ð´Ð° Ñ‚ÐµÐºÑÑ‚Ð¾Ð²Ñ‹Ð¹ Ð¿Ð¾Ð»ÐµÐ¹ Ð² ÐºÐ¾Ð½ÑÐ¾Ð»ÑŒ
+			_sleep(100);// äåëàåì îæèäàíèå äëÿ êîððåêòíîãî âûâîäà òåêñòîâûé ïîëåé â êîíñîëü
 			continue;
 		}
 		this->bookCategory = bookCategoryEnum;
