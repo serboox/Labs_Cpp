@@ -10,7 +10,7 @@ void run()
 		std::printf("$ ");
 
 		std::getline(std::cin, command);
-		std::printf("---%s----%d--\n", command.c_str(), command.length());
+		//std::printf("---%s----%d--\n", command.c_str(), command.length());
 
 		if (!command.compare(COMMAND_HELP)) {
 			std::printf(
@@ -36,18 +36,18 @@ void run()
 			std::printf("\n");
 		}
 		else if (!command.compare(COMMAND_SET)) {
-			std::printf("Ввести новую книгу \n\n");
+			std::printf("Ввести новую книгу: \n\n");
 			card.set();
-			std::printf("\n");
 		}
 		else if (!command.compare(COMMAND_DELETE)) {
-			std::printf("Удалить существующую(ие). \n");
+			std::printf("Удалить существующую(ие): \n");
+			card.deleteCards();
 		}
 		else if (!command.compare(COMMAND_WRITE)) {
-			std::printf("Записать текущее содержимое картотеки в файл. \n");
+			std::printf("Записать текущее содержимое картотеки в файл: \n");
 		}
 		else if (!command.compare(COMMAND_READ)) {
-			std::printf("Считать из файла содержимое в картотеку. \n");
+			std::printf("Считать из файла содержимое в картотеку: \n");
 		}
 		else if (!command.compare(COMMAND_EXIT)) {
 			break;
@@ -67,22 +67,20 @@ void run()
 	}
 }
 
-void Card::set()
-{
-	BOOK newBook;
-	newBook.fillFromStdIn();
-	this->bookVector.push_back(newBook);
-}
-
 void Card::print()
 {
-	size_t authorFirstNameSize = std::strlen(" Имя "),
+	size_t indexColumnSize = std::strlen(" Index "),
+		authorFirstNameSize = std::strlen(" Имя "),
 		authorLastNameSize = std::strlen(" Фамилия "),
 		bookTitleSize = std::strlen(" Заголовок "),
 		bookYearSize = std::strlen(" Год "),
 		bookPriceSize = std::strlen(" Цена "),
 		bookCategorySize = std::strlen(" Категория ");
+	size_t i = 0;
 	for (BOOK book : this->bookVector) {
+		if (indexColumnSize < std::to_string(i).size()) {
+			indexColumnSize = std::to_string(i).size();
+		}
 		if (authorFirstNameSize < book.authorFirstName.size()) {
 			authorFirstNameSize = book.authorFirstName.size();
 		}
@@ -101,25 +99,31 @@ void Card::print()
 		if (bookCategorySize < book.getBookCategory().size()) {
 			bookCategorySize = book.getBookCategory().size();
 		}
+		i++;
 	}
-	std::cout << alignCenter("Имя", authorFirstNameSize) << " | "
+	std::cout << alignCenter("Index", indexColumnSize) << " | "
+		<< alignCenter("Имя", authorFirstNameSize) << " | "
 		<< alignCenter("Фамилия", authorLastNameSize) << " | "
 		<< alignCenter("Заголовок", bookTitleSize) << " | "
 		<< alignCenter("Год", bookYearSize) << " | "
 		<< alignCenter("Цена", bookPriceSize) << " | "
 		<< alignCenter("Категория", bookCategorySize) << " |\n";
-	size_t totalSize = authorFirstNameSize + authorLastNameSize + bookTitleSize + bookYearSize + bookPriceSize + bookCategorySize;
+	size_t totalSize = indexColumnSize + authorFirstNameSize + authorLastNameSize
+		+ bookTitleSize + bookYearSize + bookPriceSize + bookCategorySize;
 	totalSize += totalSize * 0.21;
-	for (size_t i=0; i <= totalSize; i++)
+	for (size_t i = 0; i <= totalSize; i++)
 		std::cout << "—";
 	std::cout << std::endl;
+	i = 0;
 	for (BOOK book : this->bookVector) {
-		std::cout << alignCenter(book.authorFirstName, authorFirstNameSize) << " | ";
-		std::cout << alignCenter(book.authorLastName, authorLastNameSize) << " | "
+		std::cout << alignCenter(std::to_string(i), indexColumnSize) << " | "
+			<< alignCenter(book.authorFirstName, authorFirstNameSize) << " | "
+			<< alignCenter(book.authorLastName, authorLastNameSize) << " | "
 			<< alignCenter(book.bookTitle, bookTitleSize) << " | "
 			<< alignCenter(std::to_string(book.bookYear), bookYearSize) << " | "
 			<< alignCenter(std::to_string(book.bookPrice), bookPriceSize) << " | "
 			<< alignCenter(book.getBookCategory().c_str(), bookCategorySize) << " |\n";
+		i++;
 	}
 }
 
@@ -150,4 +154,78 @@ std::string alignLeft(const std::string s, const int w) {
 		spaces << " ";
 	ss << s << spaces.str();
 	return ss.str();
+}
+
+void Card::set()
+{
+	BOOK newBook;
+	newBook.fillFromStdIn();
+	this->bookVector.push_back(newBook);
+}
+
+void Card::deleteCards()
+{
+	std::string command;
+	while (true) {
+		if (this->bookVector.size() <= 0) {
+			std::printf("Ваша картотека пуста. Size: %d\n", this->bookVector.size());
+			return;
+		}
+		
+		int i;
+		size_t firstIndex = 0,
+			lastIndex = this->bookVector.size() - 1;
+		std::printf("Пожалуйста введите Index удаляемой книги (от %d до %d): ", firstIndex, lastIndex);
+		std::scanf("%d", &i);
+		std::cin.ignore();
+
+		if (i < firstIndex || i > lastIndex) {
+			std::printf("Такой книги не существует! \n");
+			while (true) {
+				command = "";
+				std::printf("Желаете продолжить? [Y/n]: ");
+				std::getline(std::cin, command);
+				if (!command.compare("") || !command.compare("Y") || !command.compare("y")) {
+					break;
+				}else if (!command.compare("n") || !command.compare("N")) {
+					return;
+				}
+				continue;
+			}
+			continue;
+		}
+
+		this->bookVector[i].print();
+		bool remove = false;
+		while (true) {
+			command = "";
+			std::printf("Вы действительно желаете удалить эту книгу из картотеки? [Y/n]: ");
+			std::getline(std::cin, command);
+			if (!command.compare("") || !command.compare("Y") || !command.compare("y")) {
+				remove = true;
+				break;
+			}
+			else if (!command.compare("n") || !command.compare("N")) {
+				remove = false;
+				break;
+			}
+			continue;
+		}
+		if (remove) {
+			this->bookVector.erase(this->bookVector.begin() + i);
+		}
+		std::printf("Книга удалена! \n");
+		while (true) {
+			command = "";
+			std::printf("Желаете продолжить? [y/N]: ");
+			std::getline(std::cin, command);
+			if (!command.compare("Y") || !command.compare("y")) {
+				break;
+			}
+			else if (!command.compare("") || !command.compare("n") || !command.compare("N")) {
+				return;
+			}
+			continue;
+		}
+	}
 }

@@ -18,7 +18,7 @@ COMMAND_ENDL[] = "\n";
 // run запускает выбор команд
 void run();
 
-// Card структура книжной карточки
+// Card структура книжной картотеки
 struct Card {
 	std::vector<BOOK> bookVector;
 
@@ -35,12 +35,15 @@ struct Card {
 
 		this->bookVector.push_back(newBook);
 	}
+	
+	// print печатает содержимое картотеки на экран
+	void print();
 
-	// set добавляет новую книгу в карточку
+	// set добавляет новую книгу в картотеку
 	void set();
 
-	// print печатает содержимое карточки на экран
-	void print();
+	// deleteCards удаляет одну или несколько книг из картотеки
+	void deleteCards();
 };
 
 // alignCenter печатает содержимое ячейки табицы по центру
