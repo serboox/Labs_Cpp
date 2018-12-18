@@ -26,10 +26,10 @@ struct Card {
 	Card() {
 
 		BOOK newBook;
-		newBook.authorFirstName.append("Сергей");
-		newBook.authorLastName.append("Николаевич");
+		newBook.authorFirstName.append("Вита");
+		newBook.authorLastName.append("Темирбекова");
 		newBook.bookTitle.append("Как научится кодить на с++ за 14 дней?");
-		newBook.bookYear = 1990;
+		newBook.bookYear = 1999;
 		newBook.bookPrice = 28;
 		newBook.bookCategory = BOOK_CATEGORY_TRAVEL;
 
