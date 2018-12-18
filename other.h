@@ -4,13 +4,20 @@
 #include <iomanip>
 #include <sstream>
 #include <vector>
+#include <fstream>
+
+#if defined(_WIN16) | defined(_WIN32) | defined(_WIN64)
+#define SEPERATOR "\\"
+#else
+#define SEPERATOR "/"
+#endif
 
 const char
 COMMAND_PRINT[] = "print",
-COMMAND_SET[] = "set",
+COMMAND_ADD[] = "add",
 COMMAND_DELETE[] = "delete",
-COMMAND_WRITE[] = "write",
-COMMAND_READ[] = "read",
+COMMAND_SAVE[] = "save",
+COMMAND_LOAD[] = "load",
 COMMAND_HELP[] = "help",
 COMMAND_EXIT[] = "exit",
 COMMAND_ENDL[] = "\n";
@@ -27,7 +34,7 @@ struct Card {
 
 		BOOK newBook;
 		newBook.authorFirstName.append("Вита");
-		newBook.authorLastName.append("Темирбекова");
+		newBook.authorLastName.append("Сергеевна");
 		newBook.bookTitle.append("Как научится кодить на с++ за 14 дней?");
 		newBook.bookYear = 1999;
 		newBook.bookPrice = 28;
@@ -39,11 +46,17 @@ struct Card {
 	// print печатает содержимое картотеки на экран
 	void print();
 
-	// set добавляет новую книгу в картотеку
-	void set();
+	// add добавляет новую книгу в картотеку
+	void add();
 
 	// deleteCards удаляет одну или несколько книг из картотеки
 	void deleteCards();
+
+	// saveToFile сохраняет данные в файл
+	void saveToFile();
+
+	// readFromFile считывает данные из файла
+	void readFromFile();
 };
 
 // alignCenter печатает содержимое ячейки табицы по центру

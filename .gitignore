@@ -416,3 +416,5 @@ ASALocalRun/
 *.out
 *.app
 
+
+enc_temp_folder

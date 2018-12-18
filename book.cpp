@@ -69,6 +69,7 @@ void BOOK::fillFromStdIn() {
 		std::fprintf(stdout, "authorFirstName (string): ");
 
 		std::getline(std::cin, this->authorFirstName);
+		semicolonToSpace(this->authorFirstName);
 		if (this->authorFirstName.size() == 0) {
 			std::fprintf(stderr, "The field 'authorFirstName' can not be empty!\n");
 			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
@@ -80,6 +81,7 @@ void BOOK::fillFromStdIn() {
 	while (true) {
 		std::fprintf(stdout, "authorLastName (string): ");
 		std::getline(std::cin, this->authorLastName);
+		semicolonToSpace(this->authorLastName);
 		if (this->authorLastName.size() == 0) {
 			std::fprintf(stderr, "The field 'authorLastName' can not be empty!\n");
 			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
@@ -91,6 +93,7 @@ void BOOK::fillFromStdIn() {
 	while (true) {
 		std::fprintf(stdout, "bookTitle (string): ");
 		std::getline(std::cin, this->bookTitle);
+		semicolonToSpace(this->bookTitle);
 		if (this->bookTitle.size() == 0) {
 			std::fprintf(stderr, "The field 'bookTitle' can not be empty!\n");
 			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
@@ -151,21 +154,11 @@ void BOOK::fillFromStdIn() {
 	std::cout << std::endl;
 }
 
-MyBook::MyBook(std::string authorFirstName,
-	std::string authorLastName,
-	std::string bookTitle,
-	short int bookYear,
-	float bookPrice,
-	BookCategoryEnum bookCategory) {
-
-	this->authorFirstName = authorFirstName;
-	this->authorLastName = authorLastName;
-	this->bookTitle = bookTitle;
-	this->bookYear = bookYear;
-	this->bookPrice = bookPrice;
-	this->bookCategory = bookCategory;
-}
-
-void MyBook::print() {
-	super::print();
+void semicolonToSpace(std::string &text)
+{
+	for (size_t i = 0; i < text.length(); i++)
+	{
+		if (text[i] == ';')
+			text[i] = ' ';
+	}
 }

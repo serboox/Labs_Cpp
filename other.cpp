@@ -22,10 +22,10 @@ void run()
 				"%s  Отобразить список комманд. \n"
 				"%s  Выйти. \n",
 				COMMAND_PRINT,
-				COMMAND_SET,
+				COMMAND_ADD,
 				COMMAND_DELETE,
-				COMMAND_WRITE,
-				COMMAND_READ,
+				COMMAND_SAVE,
+				COMMAND_LOAD,
 				COMMAND_HELP,
 				COMMAND_EXIT
 			);
@@ -35,19 +35,21 @@ void run()
 			card.print();
 			std::printf("\n");
 		}
-		else if (!command.compare(COMMAND_SET)) {
+		else if (!command.compare(COMMAND_ADD)) {
 			std::printf("Ввести новую книгу: \n\n");
-			card.set();
+			card.add();
 		}
 		else if (!command.compare(COMMAND_DELETE)) {
 			std::printf("Удалить существующую(ие): \n");
 			card.deleteCards();
 		}
-		else if (!command.compare(COMMAND_WRITE)) {
+		else if (!command.compare(COMMAND_SAVE)) {
 			std::printf("Записать текущее содержимое картотеки в файл: \n");
+			card.saveToFile();
 		}
-		else if (!command.compare(COMMAND_READ)) {
+		else if (!command.compare(COMMAND_LOAD)) {
 			std::printf("Считать из файла содержимое в картотеку: \n");
+			card.readFromFile();
 		}
 		else if (!command.compare(COMMAND_EXIT)) {
 			break;
@@ -156,7 +158,7 @@ std::string alignLeft(const std::string s, const int w) {
 	return ss.str();
 }
 
-void Card::set()
+void Card::add()
 {
 	BOOK newBook;
 	newBook.fillFromStdIn();
@@ -228,4 +230,50 @@ void Card::deleteCards()
 			continue;
 		}
 	}
+}
+
+void Card::saveToFile()
+{
+	std::string saveData;
+	for (BOOK book : this->bookVector) {
+		saveData += book.authorFirstName.c_str();
+		saveData += ";";
+		saveData +=  book.authorLastName.c_str();
+		saveData += ";";
+		saveData +=  book.bookTitle.c_str();
+		saveData += ";";
+		saveData +=  std::to_string(book.bookYear);
+		saveData += ";";
+		saveData +=  std::to_string(book.bookPrice);
+		saveData += ";";
+		saveData +=  book.getBookCategory().c_str();
+		saveData += "\n";
+	}
+	//std::printf("%s", saveData.c_str());
+	std::ofstream outfile;
+	std::string defaultPathToFile = "C:\\Users\\Public\\card.txt";
+	while (true) {
+		std::string pathToFile = "";
+		std::printf("Введите полный путь к файлу [default:%s]: ", defaultPathToFile.c_str());
+		std::getline(std::cin, pathToFile);
+		if (!pathToFile.compare("")) {
+			pathToFile = defaultPathToFile;
+		}
+		outfile.open(pathToFile, std::fstream::in | std::fstream::out | std::fstream::trunc);
+		if (outfile.is_open()) {
+			outfile << saveData.c_str();
+			std::printf("Файл сохранен по поти: '%s'\n", pathToFile.c_str());
+			break;
+		}
+		else {
+			std::printf("Поток для записи в файл '%s' закрыт! \n", pathToFile.c_str());
+			continue;
+		}
+		continue;
+	}
+	outfile.close();
+}
+
+void Card::readFromFile()
+{
 }

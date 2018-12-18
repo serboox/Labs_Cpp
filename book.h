@@ -41,26 +41,8 @@ struct BOOK {
 	void print();
 };
 
-// Объявим класс наследуясь от структуры BOOK
-class MyBook : public BOOK {
-public:
-	// Определяем тип super для обращения к родителю
-	typedef BOOK super;
-
-	// Объявляем конструктор класса
-	MyBook(std::string authorFirstName,
-		std::string authorLastName,
-		std::string bookTitle,
-		short int bookYear,
-		float bookPrice,
-		BookCategoryEnum bookCategory);
-
-	void print();
-protected:
-	// Нет защищенных полей и методов
-private:
-	// Нет приватных полей и методов
-};
+// semicolonToSpace все знаки ';' на пробелы
+void semicolonToSpace(std::string &text);
 
 // printOneDimArray, печатает в stdout одноуровневый массив
 template<typename T>
