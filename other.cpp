@@ -19,6 +19,7 @@ void run()
 				"%s  Удалить существующую(ие). \n"
 				"%s  Записать текущее содержимое картотеки в файл. \n"
 				"%s  Считать из файла содержимое в картотеку. \n"
+				"%s  Сортировки массива по одному или нескольким полям. \n"
 				"%s  Отобразить список комманд. \n"
 				"%s  Выйти. \n",
 				COMMAND_PRINT,
@@ -26,6 +27,7 @@ void run()
 				COMMAND_DELETE,
 				COMMAND_SAVE,
 				COMMAND_LOAD,
+				COMMAND_SORT,
 				COMMAND_HELP,
 				COMMAND_EXIT
 			);
@@ -50,6 +52,10 @@ void run()
 		else if (!command.compare(COMMAND_LOAD)) {
 			std::printf("Считать из файла содержимое в картотеку: \n");
 			card.readFromFile();
+		}
+		else if (!command.compare(COMMAND_LOAD)) {
+			std::printf("Сортировки массива по одному или нескольким полям: \n");
+			card.sort();
 		}
 		else if (!command.compare(COMMAND_EXIT)) {
 			break;
@@ -173,7 +179,7 @@ void Card::deleteCards()
 			std::printf("Ваша картотека пуста. Size: %d\n", this->bookVector.size());
 			return;
 		}
-		
+
 		int i;
 		size_t firstIndex = 0,
 			lastIndex = this->bookVector.size() - 1;
@@ -189,7 +195,8 @@ void Card::deleteCards()
 				std::getline(std::cin, command);
 				if (!command.compare("") || !command.compare("Y") || !command.compare("y")) {
 					break;
-				}else if (!command.compare("n") || !command.compare("N")) {
+				}
+				else if (!command.compare("n") || !command.compare("N")) {
 					return;
 				}
 				continue;
@@ -238,32 +245,32 @@ void Card::saveToFile()
 	for (BOOK book : this->bookVector) {
 		saveData += book.authorFirstName.c_str();
 		saveData += ";";
-		saveData +=  book.authorLastName.c_str();
+		saveData += book.authorLastName.c_str();
 		saveData += ";";
-		saveData +=  book.bookTitle.c_str();
+		saveData += book.bookTitle.c_str();
 		saveData += ";";
-		saveData +=  std::to_string(book.bookYear);
+		saveData += std::to_string(book.bookYear);
 		saveData += ";";
-		saveData +=  std::to_string(book.bookPrice);
+		saveData += std::to_string(book.bookPrice);
 		saveData += ";";
-		saveData +=  book.getBookCategory().c_str();
+		saveData += book.getBookCategory().c_str();
 		saveData += "\n";
 	}
 	//std::printf("%s", saveData.c_str());
-	std::ofstream outfile;
-	std::string defaultPathToFile = "C:\\Users\\Public\\card.txt";
+	std::ofstream saveFile;
 	while (true) {
 		std::string pathToFile = "";
-		std::printf("Введите полный путь к файлу [default:%s]: ", defaultPathToFile.c_str());
+		std::printf("Введите полный путь к файлу [default:%s]: ", DEFAULT_PATH_TO_FILE.c_str());
 		std::getline(std::cin, pathToFile);
 		if (!pathToFile.compare("")) {
-			pathToFile = defaultPathToFile;
+			pathToFile = DEFAULT_PATH_TO_FILE;
 		}
-		outfile.open(pathToFile, std::fstream::in | std::fstream::out | std::fstream::trunc);
-		if (outfile.is_open()) {
-			outfile << saveData.c_str();
+		saveFile.open(pathToFile, std::fstream::in | std::fstream::out | std::fstream::trunc);
+		if (saveFile.is_open()) {
+			saveFile << saveData.c_str();
+			saveFile.close();
 			std::printf("Файл сохранен по поти: '%s'\n", pathToFile.c_str());
-			break;
+			return;
 		}
 		else {
 			std::printf("Поток для записи в файл '%s' закрыт! \n", pathToFile.c_str());
@@ -271,9 +278,76 @@ void Card::saveToFile()
 		}
 		continue;
 	}
-	outfile.close();
 }
 
 void Card::readFromFile()
+{
+	std::string readData;
+	std::ifstream readFile;
+	while (true) {
+		std::string pathToFile = "";
+		std::printf("Введите полный путь к файлу [default:%s]: ", DEFAULT_PATH_TO_FILE.c_str());
+		std::getline(std::cin, pathToFile);
+		if (!pathToFile.compare("")) {
+			pathToFile = DEFAULT_PATH_TO_FILE;
+		}
+		readFile.open(pathToFile, std::fstream::out);
+		if (readFile.is_open()) {
+			size_t i = 0;
+			this->bookVector.clear();
+			while (std::getline(readFile, readData)) {
+				if (!readData.compare("")) {
+					continue;
+				}
+				//std::printf("%s\n", readData.c_str());
+				std::vector<std::string> bookProps = split(readData,';');
+				if (bookProps.size() != 6) {
+					std::printf("Строка %d не соответствует требуемуму формату т.к."
+						"число ее свойств (%d) должно быть равно 6!\n %s\n",
+						i, bookProps.size(), readData.c_str());
+					continue;
+				}
+
+				BOOK newBook;
+				newBook.authorFirstName.append(bookProps[0]);
+				newBook.authorLastName.append(bookProps[1]);
+				newBook.bookTitle.append(bookProps[2]);
+				newBook.bookYear = static_cast<short int>(atoi(bookProps[3].c_str()));
+				newBook.bookPrice = std::stof(bookProps[4].c_str());
+				newBook.bookCategory = newBook.getBookCategory(bookProps[5]);
+				this->bookVector.push_back(newBook);
+			}
+			readFile.close();
+			std::printf("Файл '%s' прочитан.\n", pathToFile.c_str());
+			return;
+		}
+		else {
+			std::printf("Поток для чтения из файла '%s' закрыт! \n", pathToFile.c_str());
+			return;
+		}
+		continue;
+	}
+}
+
+std::vector<std::string> split(const std::string& s, const char sep) {
+	typedef std::string::const_iterator iter;
+	std::vector<std::string> ret;
+	iter i = s.begin();
+	while (i != s.end()) {
+		i = std::find_if(i, s.end(), [sep](char c) -> bool {
+			return sep != c;
+		});
+		iter j = std::find_if(i, s.end(), [sep](char c) -> bool {
+			return sep == c;
+		});
+		if (i != s.end()) {
+			ret.push_back(std::string(i, j));
+			i = j;
+		}
+	}
+	return ret;
+}
+
+void Card::sort()
 {
 }
