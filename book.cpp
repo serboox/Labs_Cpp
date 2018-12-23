@@ -154,6 +154,29 @@ void BOOK::fillFromStdIn() {
 	std::cout << std::endl;
 }
 
+bool validateColumnTitle(const std::string str)
+{
+	if (!str.compare(COLUMN_AUTHOR_FIRST_NAME_TITLE.c_str())) {
+		return true;
+	}
+	else if (!str.compare(COLUMN_AUTHOR_LAST_NAME_TITLE.c_str())) {
+		return true;
+	}
+	else if (!str.compare(COLUMN_BOOK_TITLE_TITLE.c_str())) {
+		return true;
+	}
+	else if (!str.compare(COLUMN_BOOK_YEAR_TITLE.c_str())) {
+		return true;
+	}
+	else if (!str.compare(COLUMN_BOOK_PRICE_TITLE.c_str())) {
+		return true;
+	}
+	else if (!str.compare(COLUMN_BOOK_CATEGORY_TITLE.c_str())) {
+		return true;
+	}
+	return false;
+}
+
 void semicolonToSpace(std::string &text)
 {
 	for (size_t i = 0; i < text.length(); i++)

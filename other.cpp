@@ -53,9 +53,9 @@ void run()
 			std::printf("Считать из файла содержимое в картотеку: \n");
 			card.readFromFile();
 		}
-		else if (!command.compare(COMMAND_LOAD)) {
-			std::printf("Сортировки массива по одному или нескольким полям: \n");
-			card.sort();
+		else if (!command.compare(COMMAND_SORT)) {
+			std::printf("Сортировка массива по одному или нескольким полям: \n");
+			card.initSort();
 		}
 		else if (!command.compare(COMMAND_EXIT)) {
 			break;
@@ -75,15 +75,23 @@ void run()
 	}
 }
 
+std::string strSpaceWrap(std::string str)
+{
+	std::string res = " ";
+	res += str;
+	res += " ";
+	return res;
+}
+
 void Card::print()
 {
-	size_t indexColumnSize = std::strlen(" Index "),
-		authorFirstNameSize = std::strlen(" Имя "),
-		authorLastNameSize = std::strlen(" Фамилия "),
-		bookTitleSize = std::strlen(" Заголовок "),
-		bookYearSize = std::strlen(" Год "),
-		bookPriceSize = std::strlen(" Цена "),
-		bookCategorySize = std::strlen(" Категория ");
+	size_t indexColumnSize = std::strlen(strSpaceWrap(COLUMN_INDEX_TITLE).c_str()),
+		authorFirstNameSize = std::strlen(strSpaceWrap(COLUMN_AUTHOR_FIRST_NAME_TITLE).c_str()),
+		authorLastNameSize = std::strlen(strSpaceWrap(COLUMN_AUTHOR_LAST_NAME_TITLE).c_str()),
+		bookTitleSize = std::strlen(strSpaceWrap(COLUMN_BOOK_TITLE_TITLE).c_str()),
+		bookYearSize = std::strlen(strSpaceWrap(COLUMN_BOOK_YEAR_TITLE).c_str()),
+		bookPriceSize = std::strlen(strSpaceWrap(COLUMN_BOOK_PRICE_TITLE).c_str()),
+		bookCategorySize = std::strlen(strSpaceWrap(COLUMN_BOOK_CATEGORY_TITLE).c_str());
 	size_t i = 0;
 	for (BOOK book : this->bookVector) {
 		if (indexColumnSize < std::to_string(i).size()) {
@@ -109,13 +117,13 @@ void Card::print()
 		}
 		i++;
 	}
-	std::cout << alignCenter("Index", indexColumnSize) << " | "
-		<< alignCenter("Имя", authorFirstNameSize) << " | "
-		<< alignCenter("Фамилия", authorLastNameSize) << " | "
-		<< alignCenter("Заголовок", bookTitleSize) << " | "
-		<< alignCenter("Год", bookYearSize) << " | "
-		<< alignCenter("Цена", bookPriceSize) << " | "
-		<< alignCenter("Категория", bookCategorySize) << " |\n";
+	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
+		<< alignCenter(COLUMN_AUTHOR_FIRST_NAME_TITLE, authorFirstNameSize) << " | "
+		<< alignCenter(COLUMN_AUTHOR_LAST_NAME_TITLE, authorLastNameSize) << " | "
+		<< alignCenter(COLUMN_BOOK_TITLE_TITLE, bookTitleSize) << " | "
+		<< alignCenter(COLUMN_BOOK_YEAR_TITLE, bookYearSize) << " | "
+		<< alignCenter(COLUMN_BOOK_PRICE_TITLE, bookPriceSize) << " | "
+		<< alignCenter(COLUMN_BOOK_CATEGORY_TITLE, bookCategorySize) << " |\n";
 	size_t totalSize = indexColumnSize + authorFirstNameSize + authorLastNameSize
 		+ bookTitleSize + bookYearSize + bookPriceSize + bookCategorySize;
 	totalSize += totalSize * 0.21;
@@ -132,6 +140,20 @@ void Card::print()
 			<< alignCenter(std::to_string(book.bookPrice), bookPriceSize) << " | "
 			<< alignCenter(book.getBookCategory().c_str(), bookCategorySize) << " |\n";
 		i++;
+	}
+}
+
+void Card::printSortMap()
+{
+	for (auto data = this->sortMap.begin(); data != this->sortMap.end(); ++data) {
+		std::printf("Map: %s => %s\n", data->first.c_str(), data->second ? "true" : "false");
+	}
+}
+
+void Card::printSortVector()
+{
+	for (auto data = this->sortVector.begin(); data != this->sortVector.end(); ++data) {
+		std::printf("Vector: %s\n", data->c_str());
 	}
 }
 
@@ -300,7 +322,7 @@ void Card::readFromFile()
 					continue;
 				}
 				//std::printf("%s\n", readData.c_str());
-				std::vector<std::string> bookProps = split(readData,';');
+				std::vector<std::string> bookProps = split(readData, ';');
 				if (bookProps.size() != 6) {
 					std::printf("Строка %d не соответствует требуемуму формату т.к."
 						"число ее свойств (%d) должно быть равно 6!\n %s\n",
@@ -319,6 +341,9 @@ void Card::readFromFile()
 			}
 			readFile.close();
 			std::printf("Файл '%s' прочитан.\n", pathToFile.c_str());
+
+			this->print();
+
 			return;
 		}
 		else {
@@ -348,6 +373,267 @@ std::vector<std::string> split(const std::string& s, const char sep) {
 	return ret;
 }
 
-void Card::sort()
+void Card::initSort()
 {
+	if (this->bookVector.size() == 1) {
+		this->print();
+		std::printf("Для сортировки необходимо чтобы книг было больше 1!\n");
+		return;
+	}
+	while (true) {
+		std::string otherBy = "";
+		std::printf(
+			"Перечислите через запятую названия колонок (кроме '%s') по которым будет производиться сортировка \n"
+			"Например %s %s,%s %s,%s %s (%s можно не писать): ",
+			COLUMN_INDEX_TITLE.c_str(),
+			COLUMN_AUTHOR_FIRST_NAME_TITLE.c_str(), SORT_DESC.c_str(),
+			COLUMN_AUTHOR_LAST_NAME_TITLE.c_str(), SORT_ASC.c_str(),
+			COLUMN_BOOK_YEAR_TITLE.c_str(), SORT_DESC.c_str(),
+			SORT_ASC.c_str());
+		std::getline(std::cin, otherBy);
+		if (!otherBy.compare("")) {
+			std::printf("Перечисление не может быть пустым!\n");
+			bool isContinue = false;
+			while (true) {
+				std::string command = "";
+				std::printf("Желаете продолжить? [y/N]: ");
+				std::getline(std::cin, command);
+				if (!command.compare("Y") || !command.compare("y")) {
+					isContinue = true;
+					break;
+				}
+				else if (!command.compare("") || !command.compare("n") || !command.compare("N")) {
+					return;
+				}
+			}
+			if (isContinue) {
+				continue;
+			}
+		}
+		if (!this->parseSortString(otherBy)) {
+			continue;
+		}
+
+		//this->printSortMap();
+		//this->printSortVector();
+		this->sortBook();
+		this->sortMap.clear();
+		this->sortVector.clear();
+		this->print();
+		while (true) {
+			std::string command = "";
+			std::printf("Желаете продолжить? [Y/n]: ");
+			std::getline(std::cin, command);
+			if (!command.compare("") || !command.compare("Y") || !command.compare("y")) {
+				break;
+			}
+			else if (!command.compare("n") || !command.compare("N")) {
+				return;
+			}
+			continue;
+		}
+	}
+}
+
+bool Card::parseSortString(const std::string str)
+{
+	std::vector<std::string> splitString = split(str, ',');
+	for (size_t i = 0; i < splitString.size(); i++) {
+		std::vector<std::string> colAndTypeOper = split(splitString[i], ' ');
+		//std::printf("Size: (%d)\n", colAndTypeOper.size());
+		if (colAndTypeOper.size() > 2) {
+			std::printf("Не удалось распознать строку '%s'!\n", splitString[i].c_str());
+			return false;
+		}
+		else if (colAndTypeOper.size() == 2) {
+			if (!validateColumnTitle(colAndTypeOper[0])) {
+				std::printf("Не удалось распознать название колонки '%s'!\n", colAndTypeOper[0].c_str());
+				return false;
+			}
+			this->sortMap[colAndTypeOper[0]] = false;
+			this->sortVector.push_back(colAndTypeOper[0]);
+			if (!colAndTypeOper[1].compare(SORT_DESC)) {
+				this->sortMap[colAndTypeOper[0]] = true;
+			}
+			else if (colAndTypeOper[1].compare(SORT_ASC)) {
+				std::printf("Не удалось распознать тип сортироваки '%s'!\n", colAndTypeOper[1].c_str());
+				return false;
+			}
+		}
+		else {
+			if (!validateColumnTitle(colAndTypeOper[0])) {
+				std::printf("Не удалось распознать название колонки '%s'!\n", colAndTypeOper[0].c_str());
+				return false;
+			}
+			this->sortMap[colAndTypeOper[0]] = false;
+			this->sortVector.push_back(colAndTypeOper[0]);
+		}
+	}
+	return true;
+}
+
+void Card::sortBook()
+{
+	const std::string beginKey = sortVector[0];
+	for (size_t i = 0; i < this->bookVector.size() - 1; i++) {
+		BOOK maxElement = this->bookVector[i];
+		bool isDesc = this->sortMap[beginKey];
+		size_t posMaxElem = i;
+		for (size_t j = i + 1; j < this->bookVector.size(); j++) {
+			std::pair<int, bool> cmpRes = this->cmpBookRecursive(posMaxElem, j, 0);
+			//std::printf("Результат сравнения: '%d' \n", cmpRes);
+			//this->print();
+
+			if (cmpRes.first == 0) {
+				//std::printf("Книги равны\n");
+				continue;
+			}
+			else if (cmpRes.first > 0 && cmpRes.second) {
+				// DESC
+				maxElement = this->bookVector[j];
+				posMaxElem = j;
+			}
+			else if (cmpRes.first < 0 && !cmpRes.second) {
+				// ASC
+				maxElement = this->bookVector[j];
+				posMaxElem = j;
+			}
+		}
+		//std::printf("(i:%d;posMaxElem:%d)\n", i, posMaxElem);
+		BOOK bookBuf = this->bookVector[i];
+		this->bookVector[i] = maxElement;
+		this->bookVector[posMaxElem] = bookBuf;
+	}
+}
+
+std::pair<int, bool> Card::cmpBookRecursive(const size_t firstVectorIndex, const size_t secondVectorIndex, const size_t sortIndex)
+{
+	std::pair<int, bool> res;
+	BOOK firstBook = this->bookVector[firstVectorIndex];
+	BOOK secondBook = this->bookVector[secondVectorIndex];
+	const std::string key = sortVector[sortIndex];
+	res.second =this->sortMap[key];
+	if (!key.compare(COLUMN_AUTHOR_FIRST_NAME_TITLE.c_str())) {
+		if (!secondBook.authorFirstName.compare(firstBook.authorFirstName.c_str())) {
+			//std::printf("Значения имен равны\n");
+			size_t newSortIndex = sortIndex;
+			if (newSortIndex < this->sortVector.size() - 1) {
+				newSortIndex++;
+				return this->cmpBookRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
+			}
+			res.first = 0;
+			return res;
+		}
+		else if (secondBook.authorFirstName.compare(firstBook.authorFirstName.c_str()) > 0) {
+			res.first = 1;
+			return res;
+		}
+		else if (secondBook.authorFirstName.compare(firstBook.authorFirstName.c_str()) < 0) {
+			res.first = -1;
+			return res;
+		}
+	}
+	else if (!key.compare(COLUMN_AUTHOR_LAST_NAME_TITLE.c_str())) {
+		if (!secondBook.authorLastName.compare(firstBook.authorLastName.c_str())) {
+			//std::printf("Значения фамилий равны\n");
+			size_t newSortIndex = sortIndex;
+			if (newSortIndex < this->sortVector.size() - 1) {
+				newSortIndex++;
+				return this->cmpBookRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
+			}
+			res.first = 0;
+			return res;
+		}
+		else if (secondBook.authorLastName.compare(firstBook.authorLastName.c_str()) > 0) {
+			res.first = 1;
+			return res;
+		}
+		else if (secondBook.authorLastName.compare(firstBook.authorLastName.c_str()) < 0) {
+			res.first = -1;
+			return res;
+		}
+	}
+	else if (!key.compare(COLUMN_BOOK_TITLE_TITLE.c_str())) {
+		if (!secondBook.bookTitle.compare(firstBook.bookTitle.c_str())) {
+			//std::printf("Значения название книги равны\n");
+			size_t newSortIndex = sortIndex;
+			if (newSortIndex < this->sortVector.size() - 1) {
+				newSortIndex++;
+				return this->cmpBookRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
+			}
+			res.first = 0;
+			return res;
+		}
+		else if (secondBook.bookTitle.compare(firstBook.bookTitle.c_str()) > 0) {
+			res.first = 1;
+			return res;
+		}
+		else if (secondBook.bookTitle.compare(firstBook.bookTitle.c_str()) < 0) {
+			res.first = -1;
+			return res;
+		}
+	}
+	else if (!key.compare(COLUMN_BOOK_YEAR_TITLE.c_str())) {
+		if (secondBook.bookYear == firstBook.bookYear) {
+			//std::printf("Значения даты выпуска книги равны\n");
+			size_t newSortIndex = sortIndex;
+			if (newSortIndex < this->sortVector.size() - 1) {
+				newSortIndex++;
+				return this->cmpBookRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
+			}
+			res.first = 0;
+			return res;
+			
+		}
+		else if (secondBook.bookYear > firstBook.bookYear) {
+			res.first = 1;
+			return res;
+		}
+		else if (secondBook.bookYear < firstBook.bookYear) {
+			res.first = -1;
+			return res;
+		}
+	}
+	else if (!key.compare(COLUMN_BOOK_PRICE_TITLE.c_str())) {
+		if (secondBook.bookPrice == firstBook.bookPrice) {
+			//std::printf("Значения стоимостей книги равны\n");
+			size_t newSortIndex = sortIndex;
+			if (newSortIndex < this->sortVector.size() - 1) {
+				newSortIndex++;
+				return this->cmpBookRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
+			}
+			res.first = 0;
+			return res;
+		}
+		else if (secondBook.bookPrice > firstBook.bookPrice) {
+			res.first = 1;
+			return res;
+		}
+		else if (secondBook.bookPrice < firstBook.bookPrice) {
+			res.first = -1;
+			return res;
+		}
+	}
+	else if (!key.compare(COLUMN_BOOK_CATEGORY_TITLE.c_str())) {
+		if (!secondBook.getBookCategory().compare(firstBook.getBookCategory().c_str())) {
+			//std::printf("Значения категорий равны\n");
+			size_t newSortIndex = sortIndex;
+			if (newSortIndex < this->sortVector.size() - 1) {
+				newSortIndex++;
+				return this->cmpBookRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
+			}
+			res.first = 0;
+			return res;
+		}
+		else if (secondBook.getBookCategory().compare(firstBook.getBookCategory().c_str()) > 0) {
+			res.first = 1;
+			return res;
+		}
+		else if (secondBook.getBookCategory().compare(firstBook.getBookCategory().c_str()) < 0) {
+			res.first = -1;
+			return res;
+		}
+	}
+	res.first = 0;
+	return res;
 }
