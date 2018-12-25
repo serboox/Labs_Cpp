@@ -1,18 +1,5 @@
-#include "iostream"
-#include <string>
-#include <cmath>
-#include <stdlib.h>
-#include "rectangle.h"
 
-void Rectangle::print() {
-	std::printf("Rectangle{\n"
-		"\weight (float):%f\n"
-		"\height (float): %f\n"
-		"\area (float): %f\n}",
-		this->width,
-		this->height,
-		this->area);
-};
+#include "rectangle.h"
 
 void Rectangle::fillFromStdIn() {
 	std::fprintf(stdout, "Please enter fields\n");
@@ -43,6 +30,16 @@ void Rectangle::fillFromStdIn() {
 	this->area = this->width * this->height;
 	std::cout << std::endl;
 }
+
+void Rectangle::print() {
+	std::printf("Rectangle{\n"
+		"\t weight (float):%f\n"
+		"\t height (float): %f\n"
+		"\t area (float): %f\n}\n",
+		this->width,
+		this->height,
+		this->area);
+};
 
 bool validateColumnTitle(const std::string str)
 {

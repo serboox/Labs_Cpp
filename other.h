@@ -52,11 +52,11 @@ struct RectangleSet {
 	// RectangleSet конструктор, срабатывающий при инициализации структуры
 	RectangleSet() {
 		// Определяем прямоугольник по умолчанию
-		Rectangle newRectangle;
+		/*Rectangle newRectangle;
 		newRectangle.width = 2.14;
 		newRectangle.height = 4.71;
 		newRectangle.area = newRectangle.width * newRectangle.height;
-		this->recVector.push_back(newRectangle);
+		this->recVector.push_back(newRectangle);*/
 	}
 
 	// print печатает содержимое набора прямоуголников в консоль

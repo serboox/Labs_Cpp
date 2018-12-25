@@ -1,3 +1,4 @@
+
 #include "other.h"
 
 void run()
@@ -53,7 +54,7 @@ void run()
 			std::printf("Считать из файла: \n");
 			recSet.readFromFile();
 		}
-		else if (!command.compare(COMMAND_SORT)) {
+		else if (!command.compare(COMMAND_SEARCH)) {
 			std::printf("Найти прямоугольник(и) площадь которого соответствует значениею: \n");
 			recSet.search();
 		}
@@ -111,8 +112,8 @@ void RectangleSet::print()
 	}
 	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
 		<< alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize) << " | "
-		<< alignCenter(COLUMN_WIDTH_TITLE, heightColumnSize) << " | "
-		<< alignCenter(COLUMN_HEIGHT_TITLE, areaColumnSize) << " |\n";
+		<< alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize) << " | "
+		<< alignCenter(COLUMN_AREA_TITLE, areaColumnSize) << " |\n";
 	size_t totalSize = indexColumnSize + widthColumnSize + heightColumnSize + areaColumnSize;
 	totalSize += totalSize * 0.21;
 	for (size_t i = 0; i <= totalSize; i++)
@@ -350,7 +351,46 @@ std::vector<std::string> split(const std::string& s, const char sep) {
 
 void RectangleSet::search()
 {
-	//TODO: Нужно реализовать метод сортировки
+
+	float findArea;
+	while (true) {
+		if (this->recVector.size() <= 0) {
+			std::printf("Ваш набор пуст. Size: %d\n", this->recVector.size());
+			return;
+		}
+
+		std::printf("Введите площадь прямоугольника который нужно найти: ");
+		std::scanf("%f", &findArea);
+		std::cin.ignore();
+
+		//std::printf("Find rectangle with area: %f\n", findArea);
+		RectangleSet res;
+		for (size_t i = 0; i < this->recVector.size(); i++) {
+			if (findArea == this->recVector[i].area) {
+				res.recVector.push_back(this->recVector[i]);
+			}
+		}
+		if (res.recVector.size() == 0) {
+			std::printf("Ни одного прямоугольника с площадью %f не найдено.\n", findArea);
+		}
+		else {
+			res.print();
+		}
+
+
+		while (true) {
+			std::string command = "";
+			std::printf("Желаете продолжить? [Y/n]: ");
+			std::getline(std::cin, command);
+			if (!command.compare("") | !command.compare("Y") || !command.compare("y")) {
+				break;
+			}
+			else if (!command.compare("n") || !command.compare("N")) {
+				return;
+			}
+			continue;
+		}
+	}
 }
 
 void RectangleSet::initSort()
@@ -364,11 +404,10 @@ void RectangleSet::initSort()
 		std::string otherBy = "";
 		std::printf(
 			"Перечислите через запятую названия колонок (кроме '%s') по которым будет производиться сортировка \n"
-			"Например %s %s,%s %s,%s %s (%s можно не писать): ",
+			"Например %s %s,%s %s (%s можно не писать): ",
 			COLUMN_INDEX_TITLE.c_str(),
-			COLUMN_AUTHOR_FIRST_NAME_TITLE.c_str(), SORT_DESC.c_str(),
-			COLUMN_AUTHOR_LAST_NAME_TITLE.c_str(), SORT_ASC.c_str(),
-			COLUMN_BOOK_YEAR_TITLE.c_str(), SORT_DESC.c_str(),
+			COLUMN_WIDTH_TITLE.c_str(), SORT_DESC.c_str(),
+			COLUMN_AREA_TITLE.c_str(), SORT_DESC.c_str(),
 			SORT_ASC.c_str());
 		std::getline(std::cin, otherBy);
 		if (!otherBy.compare("")) {
@@ -460,12 +499,12 @@ void RectangleSet::sortBook()
 		bool isDesc = this->sortMap[beginKey];
 		size_t posMaxElem = i;
 		for (size_t j = i + 1; j < this->recVector.size(); j++) {
-			std::pair<int, bool> cmpRes = this->cmpBookRecursive(posMaxElem, j, 0);
+			std::pair<int, bool> cmpRes = this->cmpRectangleRecursive(posMaxElem, j, 0);
 			//std::printf("Результат сравнения: '%d' \n", cmpRes);
 			//this->print();
 
 			if (cmpRes.first == 0) {
-				//std::printf("Книги равны\n");
+				//std::printf("Прямоугольники равны\n");
 				continue;
 			}
 			else if (cmpRes.first > 0 && cmpRes.second) {
@@ -492,10 +531,10 @@ std::pair<int, bool> RectangleSet::cmpRectangleRecursive(const size_t firstVecto
 	Rectangle firstBook = this->recVector[firstVectorIndex];
 	Rectangle secondBook = this->recVector[secondVectorIndex];
 	const std::string key = sortVector[sortIndex];
-	res.second =this->sortMap[key];
-	if (!key.compare(COLUMN_AUTHOR_FIRST_NAME_TITLE.c_str())) {
-		if (!secondBook.authorFirstName.compare(firstBook.authorFirstName.c_str())) {
-			//std::printf("Значения имен равны\n");
+	res.second = this->sortMap[key];
+	if (!key.compare(COLUMN_WIDTH_TITLE.c_str())) {
+		if (secondBook.width == firstBook.width) {
+			//std::printf("Значения ширин прямоугольников равны\n");
 			size_t newSortIndex = sortIndex;
 			if (newSortIndex < this->sortVector.size() - 1) {
 				newSortIndex++;
@@ -504,18 +543,18 @@ std::pair<int, bool> RectangleSet::cmpRectangleRecursive(const size_t firstVecto
 			res.first = 0;
 			return res;
 		}
-		else if (secondBook.authorFirstName.compare(firstBook.authorFirstName.c_str()) > 0) {
+		else if (secondBook.width > firstBook.width) {
 			res.first = 1;
 			return res;
 		}
-		else if (secondBook.authorFirstName.compare(firstBook.authorFirstName.c_str()) < 0) {
+		else if (secondBook.width < firstBook.width) {
 			res.first = -1;
 			return res;
 		}
 	}
-	else if (!key.compare(COLUMN_AUTHOR_LAST_NAME_TITLE.c_str())) {
-		if (!secondBook.authorLastName.compare(firstBook.authorLastName.c_str())) {
-			//std::printf("Значения фамилий равны\n");
+	else if (!key.compare(COLUMN_HEIGHT_TITLE.c_str())) {
+		if (secondBook.height == firstBook.height) {
+			//std::printf("Значения высот прямоугольников равны\n");
 			size_t newSortIndex = sortIndex;
 			if (newSortIndex < this->sortVector.size() - 1) {
 				newSortIndex++;
@@ -524,18 +563,18 @@ std::pair<int, bool> RectangleSet::cmpRectangleRecursive(const size_t firstVecto
 			res.first = 0;
 			return res;
 		}
-		else if (secondBook.authorLastName.compare(firstBook.authorLastName.c_str()) > 0) {
+		else if (secondBook.height > firstBook.height) {
 			res.first = 1;
 			return res;
 		}
-		else if (secondBook.authorLastName.compare(firstBook.authorLastName.c_str()) < 0) {
+		else if (secondBook.height < firstBook.height) {
 			res.first = -1;
 			return res;
 		}
 	}
-	else if (!key.compare(COLUMN_BOOK_TITLE_TITLE.c_str())) {
-		if (!secondBook.bookTitle.compare(firstBook.bookTitle.c_str())) {
-			//std::printf("Значения название книги равны\n");
+	else if (!key.compare(COLUMN_AREA_TITLE.c_str())) {
+		if (secondBook.area == firstBook.area) {
+			//std::printf("Значения площадей прямоугольников равны\n");
 			size_t newSortIndex = sortIndex;
 			if (newSortIndex < this->sortVector.size() - 1) {
 				newSortIndex++;
@@ -544,72 +583,11 @@ std::pair<int, bool> RectangleSet::cmpRectangleRecursive(const size_t firstVecto
 			res.first = 0;
 			return res;
 		}
-		else if (secondBook.bookTitle.compare(firstBook.bookTitle.c_str()) > 0) {
+		else if (secondBook.area > firstBook.area) {
 			res.first = 1;
 			return res;
 		}
-		else if (secondBook.bookTitle.compare(firstBook.bookTitle.c_str()) < 0) {
-			res.first = -1;
-			return res;
-		}
-	}
-	else if (!key.compare(COLUMN_BOOK_YEAR_TITLE.c_str())) {
-		if (secondBook.bookYear == firstBook.bookYear) {
-			//std::printf("Значения даты выпуска книги равны\n");
-			size_t newSortIndex = sortIndex;
-			if (newSortIndex < this->sortVector.size() - 1) {
-				newSortIndex++;
-				return this->cmpRectangleRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
-			}
-			res.first = 0;
-			return res;
-			
-		}
-		else if (secondBook.bookYear > firstBook.bookYear) {
-			res.first = 1;
-			return res;
-		}
-		else if (secondBook.bookYear < firstBook.bookYear) {
-			res.first = -1;
-			return res;
-		}
-	}
-	else if (!key.compare(COLUMN_BOOK_PRICE_TITLE.c_str())) {
-		if (secondBook.bookPrice == firstBook.bookPrice) {
-			//std::printf("Значения стоимостей книги равны\n");
-			size_t newSortIndex = sortIndex;
-			if (newSortIndex < this->sortVector.size() - 1) {
-				newSortIndex++;
-				return this->cmpRectangleRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
-			}
-			res.first = 0;
-			return res;
-		}
-		else if (secondBook.bookPrice > firstBook.bookPrice) {
-			res.first = 1;
-			return res;
-		}
-		else if (secondBook.bookPrice < firstBook.bookPrice) {
-			res.first = -1;
-			return res;
-		}
-	}
-	else if (!key.compare(COLUMN_BOOK_CATEGORY_TITLE.c_str())) {
-		if (!secondBook.getBookCategory().compare(firstBook.getBookCategory().c_str())) {
-			//std::printf("Значения категорий равны\n");
-			size_t newSortIndex = sortIndex;
-			if (newSortIndex < this->sortVector.size() - 1) {
-				newSortIndex++;
-				return this->cmpRectangleRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
-			}
-			res.first = 0;
-			return res;
-		}
-		else if (secondBook.getBookCategory().compare(firstBook.getBookCategory().c_str()) > 0) {
-			res.first = 1;
-			return res;
-		}
-		else if (secondBook.getBookCategory().compare(firstBook.getBookCategory().c_str()) < 0) {
+		else if (secondBook.area < firstBook.area) {
 			res.first = -1;
 			return res;
 		}

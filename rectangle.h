@@ -1,5 +1,7 @@
-
 #include <iostream>
+#include <string>
+#include <cmath>
+#include <stdlib.h>
 
 const std::string COLUMN_INDEX_TITLE = "Index";
 const std::string COLUMN_WIDTH_TITLE = "Высота";
