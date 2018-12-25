@@ -45,4 +45,4 @@ if ((CMAKE_GENERATOR MATCHES "Visual Studio") AND (CMAKE_GENERATOR_TOOLSET STREQ
             "host compiler, pass -Thost=x64 on the CMake command line.")
 endif()
 
-add_executable(lab6 main.cpp book.cpp other.cpp)
+add_executable(lab6 main.cpp rectangle.cpp other.cpp)

@@ -1,10 +1,8 @@
-
-#include "book.h"
 #include "other.h"
 
 void run()
 {
-	Card card;
+	RectangleSet recSet;
 	while (true) {
 		std::string command;
 		std::printf("$ ");
@@ -14,12 +12,13 @@ void run()
 
 		if (!command.compare(COMMAND_HELP)) {
 			std::printf(
-				"%s  Распечатать содержимое картотеки. \n"
-				"%s  Ввести новую книгу. \n"
-				"%s  Удалить существующую(ие). \n"
-				"%s  Записать текущее содержимое картотеки в файл. \n"
-				"%s  Считать из файла содержимое в картотеку. \n"
-				"%s  Сортировки массива по одному или нескольким полям. \n"
+				"%s  Распечатать содержимое набора. \n"
+				"%s  Добавить новый прямоугольник. \n"
+				"%s  Удалить существующий(ие). \n"
+				"%s  Записать в файл. \n"
+				"%s  Считать из файла. \n"
+				"%s  Найти прямоугольник(и) площадь которого соответствует значениею. \n"
+				"%s  Сортировки набора по одному или нескольким полям. \n"
 				"%s  Отобразить список комманд. \n"
 				"%s  Выйти. \n",
 				COMMAND_PRINT,
@@ -27,35 +26,40 @@ void run()
 				COMMAND_DELETE,
 				COMMAND_SAVE,
 				COMMAND_LOAD,
+				COMMAND_SEARCH,
 				COMMAND_SORT,
 				COMMAND_HELP,
 				COMMAND_EXIT
 			);
 		}
 		else if (!command.compare(COMMAND_PRINT)) {
-			std::printf("Cодержимое картотеки: \n\n");
-			card.print();
+			std::printf("Cодержимое набора прямоугольников: \n\n");
+			recSet.print();
 			std::printf("\n");
 		}
 		else if (!command.compare(COMMAND_ADD)) {
-			std::printf("Ввести новую книгу: \n\n");
-			card.add();
+			std::printf("Добавить новый прямоугольник: \n\n");
+			recSet.add();
 		}
 		else if (!command.compare(COMMAND_DELETE)) {
-			std::printf("Удалить существующую(ие): \n");
-			card.deleteCards();
+			std::printf("Удалить существующий(ие): \n");
+			recSet.deleteCards();
 		}
 		else if (!command.compare(COMMAND_SAVE)) {
-			std::printf("Записать текущее содержимое картотеки в файл: \n");
-			card.saveToFile();
+			std::printf("Записать в файл: \n");
+			recSet.saveToFile();
 		}
 		else if (!command.compare(COMMAND_LOAD)) {
-			std::printf("Считать из файла содержимое в картотеку: \n");
-			card.readFromFile();
+			std::printf("Считать из файла: \n");
+			recSet.readFromFile();
 		}
 		else if (!command.compare(COMMAND_SORT)) {
-			std::printf("Сортировка массива по одному или нескольким полям: \n");
-			card.initSort();
+			std::printf("Найти прямоугольник(и) площадь которого соответствует значениею: \n");
+			recSet.search();
+		}
+		else if (!command.compare(COMMAND_SORT)) {
+			std::printf("Сортировки набора по одному или нескольким полям: \n");
+			recSet.initSort();
 		}
 		else if (!command.compare(COMMAND_EXIT)) {
 			break;
@@ -83,74 +87,55 @@ std::string strSpaceWrap(std::string str)
 	return res;
 }
 
-void Card::print()
+void RectangleSet::print()
 {
 	size_t indexColumnSize = std::strlen(strSpaceWrap(COLUMN_INDEX_TITLE).c_str()),
-		authorFirstNameSize = std::strlen(strSpaceWrap(COLUMN_AUTHOR_FIRST_NAME_TITLE).c_str()),
-		authorLastNameSize = std::strlen(strSpaceWrap(COLUMN_AUTHOR_LAST_NAME_TITLE).c_str()),
-		bookTitleSize = std::strlen(strSpaceWrap(COLUMN_BOOK_TITLE_TITLE).c_str()),
-		bookYearSize = std::strlen(strSpaceWrap(COLUMN_BOOK_YEAR_TITLE).c_str()),
-		bookPriceSize = std::strlen(strSpaceWrap(COLUMN_BOOK_PRICE_TITLE).c_str()),
-		bookCategorySize = std::strlen(strSpaceWrap(COLUMN_BOOK_CATEGORY_TITLE).c_str());
+		widthColumnSize = std::strlen(strSpaceWrap(COLUMN_WIDTH_TITLE).c_str()),
+		heightColumnSize = std::strlen(strSpaceWrap(COLUMN_HEIGHT_TITLE).c_str()),
+		areaColumnSize = std::strlen(strSpaceWrap(COLUMN_AREA_TITLE).c_str());
 	size_t i = 0;
-	for (BOOK book : this->bookVector) {
+	for (Rectangle rectangle : this->recVector) {
 		if (indexColumnSize < std::to_string(i).size()) {
 			indexColumnSize = std::to_string(i).size();
 		}
-		if (authorFirstNameSize < book.authorFirstName.size()) {
-			authorFirstNameSize = book.authorFirstName.size();
+		if (widthColumnSize < std::to_string(rectangle.width).size()) {
+			widthColumnSize = std::to_string(rectangle.width).size();
 		}
-		if (authorLastNameSize < book.authorLastName.size()) {
-			authorLastNameSize = book.authorLastName.size();
+		if (heightColumnSize < std::to_string(rectangle.height).size()) {
+			heightColumnSize = std::to_string(rectangle.height).size();
 		}
-		if (bookTitleSize < book.bookTitle.size()) {
-			bookTitleSize = book.bookTitle.size();
-		}
-		if (bookYearSize < std::to_string(bookYearSize).size()) {
-			bookYearSize = std::to_string(bookYearSize).size();
-		}
-		if (bookPriceSize < std::to_string(book.bookPrice).size()) {
-			bookPriceSize = std::to_string(book.bookPrice).size();
-		}
-		if (bookCategorySize < book.getBookCategory().size()) {
-			bookCategorySize = book.getBookCategory().size();
+		if (areaColumnSize < std::to_string(rectangle.area).size()) {
+			areaColumnSize = std::to_string(rectangle.area).size();
 		}
 		i++;
 	}
 	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
-		<< alignCenter(COLUMN_AUTHOR_FIRST_NAME_TITLE, authorFirstNameSize) << " | "
-		<< alignCenter(COLUMN_AUTHOR_LAST_NAME_TITLE, authorLastNameSize) << " | "
-		<< alignCenter(COLUMN_BOOK_TITLE_TITLE, bookTitleSize) << " | "
-		<< alignCenter(COLUMN_BOOK_YEAR_TITLE, bookYearSize) << " | "
-		<< alignCenter(COLUMN_BOOK_PRICE_TITLE, bookPriceSize) << " | "
-		<< alignCenter(COLUMN_BOOK_CATEGORY_TITLE, bookCategorySize) << " |\n";
-	size_t totalSize = indexColumnSize + authorFirstNameSize + authorLastNameSize
-		+ bookTitleSize + bookYearSize + bookPriceSize + bookCategorySize;
+		<< alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize) << " | "
+		<< alignCenter(COLUMN_WIDTH_TITLE, heightColumnSize) << " | "
+		<< alignCenter(COLUMN_HEIGHT_TITLE, areaColumnSize) << " |\n";
+	size_t totalSize = indexColumnSize + widthColumnSize + heightColumnSize + areaColumnSize;
 	totalSize += totalSize * 0.21;
 	for (size_t i = 0; i <= totalSize; i++)
 		std::cout << "—";
 	std::cout << std::endl;
 	i = 0;
-	for (BOOK book : this->bookVector) {
+	for (Rectangle rectangle : this->recVector) {
 		std::cout << alignCenter(std::to_string(i), indexColumnSize) << " | "
-			<< alignCenter(book.authorFirstName, authorFirstNameSize) << " | "
-			<< alignCenter(book.authorLastName, authorLastNameSize) << " | "
-			<< alignCenter(book.bookTitle, bookTitleSize) << " | "
-			<< alignCenter(std::to_string(book.bookYear), bookYearSize) << " | "
-			<< alignCenter(std::to_string(book.bookPrice), bookPriceSize) << " | "
-			<< alignCenter(book.getBookCategory().c_str(), bookCategorySize) << " |\n";
+			<< alignCenter(std::to_string(rectangle.width), widthColumnSize) << " | "
+			<< alignCenter(std::to_string(rectangle.height), heightColumnSize) << " | "
+			<< alignCenter(std::to_string(rectangle.area), areaColumnSize) << " |\n";
 		i++;
 	}
 }
 
-void Card::printSortMap()
+void RectangleSet::printSortMap()
 {
 	for (auto data = this->sortMap.begin(); data != this->sortMap.end(); ++data) {
 		std::printf("Map: %s => %s\n", data->first.c_str(), data->second ? "true" : "false");
 	}
 }
 
-void Card::printSortVector()
+void RectangleSet::printSortVector()
 {
 	for (auto data = this->sortVector.begin(); data != this->sortVector.end(); ++data) {
 		std::printf("Vector: %s\n", data->c_str());
@@ -186,31 +171,31 @@ std::string alignLeft(const std::string s, const int w) {
 	return ss.str();
 }
 
-void Card::add()
+void RectangleSet::add()
 {
-	BOOK newBook;
-	newBook.fillFromStdIn();
-	this->bookVector.push_back(newBook);
+	Rectangle newRectangle;
+	newRectangle.fillFromStdIn();
+	this->recVector.push_back(newRectangle);
 }
 
-void Card::deleteCards()
+void RectangleSet::deleteCards()
 {
 	std::string command;
 	while (true) {
-		if (this->bookVector.size() <= 0) {
-			std::printf("Ваша картотека пуста. Size: %d\n", this->bookVector.size());
+		if (this->recVector.size() <= 0) {
+			std::printf("Ваш набор пуст. Size: %d\n", this->recVector.size());
 			return;
 		}
 
 		int i;
 		size_t firstIndex = 0,
-			lastIndex = this->bookVector.size() - 1;
-		std::printf("Пожалуйста введите Index удаляемой книги (от %d до %d): ", firstIndex, lastIndex);
+			lastIndex = this->recVector.size() - 1;
+		std::printf("Пожалуйста введите Index удаляемого прямоугольника (от %d до %d): ", firstIndex, lastIndex);
 		std::scanf("%d", &i);
 		std::cin.ignore();
 
 		if (i < firstIndex || i > lastIndex) {
-			std::printf("Такой книги не существует! \n");
+			std::printf("Такого прямоугольника не существует! \n");
 			while (true) {
 				command = "";
 				std::printf("Желаете продолжить? [Y/n]: ");
@@ -226,11 +211,11 @@ void Card::deleteCards()
 			continue;
 		}
 
-		this->bookVector[i].print();
+		this->recVector[i].print();
 		bool remove = false;
 		while (true) {
 			command = "";
-			std::printf("Вы действительно желаете удалить эту книгу из картотеки? [Y/n]: ");
+			std::printf("Вы действительно хотите удалить этот прямоугольник из набора? [Y/n]: ");
 			std::getline(std::cin, command);
 			if (!command.compare("") || !command.compare("Y") || !command.compare("y")) {
 				remove = true;
@@ -243,9 +228,9 @@ void Card::deleteCards()
 			continue;
 		}
 		if (remove) {
-			this->bookVector.erase(this->bookVector.begin() + i);
+			this->recVector.erase(this->recVector.begin() + i);
 		}
-		std::printf("Книга удалена! \n");
+		std::printf("Прямоугольник удален! \n");
 		while (true) {
 			command = "";
 			std::printf("Желаете продолжить? [y/N]: ");
@@ -261,28 +246,22 @@ void Card::deleteCards()
 	}
 }
 
-void Card::saveToFile()
+void RectangleSet::saveToFile()
 {
 	std::string saveData;
-	for (BOOK book : this->bookVector) {
-		saveData += book.authorFirstName.c_str();
+	for (Rectangle book : this->recVector) {
+		saveData += std::to_string(book.width);
 		saveData += ";";
-		saveData += book.authorLastName.c_str();
+		saveData += std::to_string(book.height);
 		saveData += ";";
-		saveData += book.bookTitle.c_str();
-		saveData += ";";
-		saveData += std::to_string(book.bookYear);
-		saveData += ";";
-		saveData += std::to_string(book.bookPrice);
-		saveData += ";";
-		saveData += book.getBookCategory().c_str();
+		saveData += std::to_string(book.area);
 		saveData += "\n";
 	}
 	//std::printf("%s", saveData.c_str());
 	std::ofstream saveFile;
 	while (true) {
 		std::string pathToFile = "";
-		std::printf("Введите полный путь к файлу [default:%s]: ", DEFAULT_PATH_TO_FILE.c_str());
+		std::printf("Введите путь к файлу [default:%s]: ", DEFAULT_PATH_TO_FILE.c_str());
 		std::getline(std::cin, pathToFile);
 		if (!pathToFile.compare("")) {
 			pathToFile = DEFAULT_PATH_TO_FILE;
@@ -302,13 +281,13 @@ void Card::saveToFile()
 	}
 }
 
-void Card::readFromFile()
+void RectangleSet::readFromFile()
 {
 	std::string readData;
 	std::ifstream readFile;
 	while (true) {
 		std::string pathToFile = "";
-		std::printf("Введите полный путь к файлу [default:%s]: ", DEFAULT_PATH_TO_FILE.c_str());
+		std::printf("Введите путь к файлу [default:%s]: ", DEFAULT_PATH_TO_FILE.c_str());
 		std::getline(std::cin, pathToFile);
 		if (!pathToFile.compare("")) {
 			pathToFile = DEFAULT_PATH_TO_FILE;
@@ -316,34 +295,30 @@ void Card::readFromFile()
 		readFile.open(pathToFile, std::fstream::out);
 		if (readFile.is_open()) {
 			size_t i = 0;
-			this->bookVector.clear();
+			this->recVector.clear();
 			while (std::getline(readFile, readData)) {
 				if (!readData.compare("")) {
 					continue;
 				}
 				//std::printf("%s\n", readData.c_str());
-				std::vector<std::string> bookProps = split(readData, ';');
-				if (bookProps.size() != 6) {
+				std::vector<std::string> rectangleProps = split(readData, ';');
+				if (rectangleProps.size() != 3) {
 					std::printf("Строка %d не соответствует требуемуму формату т.к."
-						"число ее свойств (%d) должно быть равно 6!\n %s\n",
-						i, bookProps.size(), readData.c_str());
+						"число ее свойств (%d) должно быть равно 3!\n %s\n",
+						i, rectangleProps.size(), readData.c_str());
 					continue;
 				}
 
-				BOOK newBook;
-				newBook.authorFirstName.append(bookProps[0]);
-				newBook.authorLastName.append(bookProps[1]);
-				newBook.bookTitle.append(bookProps[2]);
-				newBook.bookYear = static_cast<short int>(atoi(bookProps[3].c_str()));
-				newBook.bookPrice = std::stof(bookProps[4].c_str());
-				newBook.bookCategory = newBook.getBookCategory(bookProps[5]);
-				this->bookVector.push_back(newBook);
+				Rectangle newRectangle;
+				newRectangle.width = std::stof(rectangleProps[0].c_str());
+				newRectangle.height = std::stof(rectangleProps[1].c_str());
+				newRectangle.area = std::stof(rectangleProps[2].c_str());
+				this->recVector.push_back(newRectangle);
 			}
 			readFile.close();
 			std::printf("Файл '%s' прочитан.\n", pathToFile.c_str());
 
 			this->print();
-
 			return;
 		}
 		else {
@@ -373,11 +348,16 @@ std::vector<std::string> split(const std::string& s, const char sep) {
 	return ret;
 }
 
-void Card::initSort()
+void RectangleSet::search()
 {
-	if (this->bookVector.size() == 1) {
+	//TODO: Нужно реализовать метод сортировки
+}
+
+void RectangleSet::initSort()
+{
+	if (this->recVector.size() == 1) {
 		this->print();
-		std::printf("Для сортировки необходимо чтобы книг было больше 1!\n");
+		std::printf("Для сортировки необходимо чтобы прямоугольников было больше 1!\n");
 		return;
 	}
 	while (true) {
@@ -435,7 +415,7 @@ void Card::initSort()
 	}
 }
 
-bool Card::parseSortString(const std::string str)
+bool RectangleSet::parseSortString(const std::string str)
 {
 	std::vector<std::string> splitString = split(str, ',');
 	for (size_t i = 0; i < splitString.size(); i++) {
@@ -472,14 +452,14 @@ bool Card::parseSortString(const std::string str)
 	return true;
 }
 
-void Card::sortBook()
+void RectangleSet::sortBook()
 {
 	const std::string beginKey = sortVector[0];
-	for (size_t i = 0; i < this->bookVector.size() - 1; i++) {
-		BOOK maxElement = this->bookVector[i];
+	for (size_t i = 0; i < this->recVector.size() - 1; i++) {
+		Rectangle maxElement = this->recVector[i];
 		bool isDesc = this->sortMap[beginKey];
 		size_t posMaxElem = i;
-		for (size_t j = i + 1; j < this->bookVector.size(); j++) {
+		for (size_t j = i + 1; j < this->recVector.size(); j++) {
 			std::pair<int, bool> cmpRes = this->cmpBookRecursive(posMaxElem, j, 0);
 			//std::printf("Результат сравнения: '%d' \n", cmpRes);
 			//this->print();
@@ -490,27 +470,27 @@ void Card::sortBook()
 			}
 			else if (cmpRes.first > 0 && cmpRes.second) {
 				// DESC
-				maxElement = this->bookVector[j];
+				maxElement = this->recVector[j];
 				posMaxElem = j;
 			}
 			else if (cmpRes.first < 0 && !cmpRes.second) {
 				// ASC
-				maxElement = this->bookVector[j];
+				maxElement = this->recVector[j];
 				posMaxElem = j;
 			}
 		}
 		//std::printf("(i:%d;posMaxElem:%d)\n", i, posMaxElem);
-		BOOK bookBuf = this->bookVector[i];
-		this->bookVector[i] = maxElement;
-		this->bookVector[posMaxElem] = bookBuf;
+		Rectangle bookBuf = this->recVector[i];
+		this->recVector[i] = maxElement;
+		this->recVector[posMaxElem] = bookBuf;
 	}
 }
 
-std::pair<int, bool> Card::cmpBookRecursive(const size_t firstVectorIndex, const size_t secondVectorIndex, const size_t sortIndex)
+std::pair<int, bool> RectangleSet::cmpRectangleRecursive(const size_t firstVectorIndex, const size_t secondVectorIndex, const size_t sortIndex)
 {
 	std::pair<int, bool> res;
-	BOOK firstBook = this->bookVector[firstVectorIndex];
-	BOOK secondBook = this->bookVector[secondVectorIndex];
+	Rectangle firstBook = this->recVector[firstVectorIndex];
+	Rectangle secondBook = this->recVector[secondVectorIndex];
 	const std::string key = sortVector[sortIndex];
 	res.second =this->sortMap[key];
 	if (!key.compare(COLUMN_AUTHOR_FIRST_NAME_TITLE.c_str())) {
@@ -519,7 +499,7 @@ std::pair<int, bool> Card::cmpBookRecursive(const size_t firstVectorIndex, const
 			size_t newSortIndex = sortIndex;
 			if (newSortIndex < this->sortVector.size() - 1) {
 				newSortIndex++;
-				return this->cmpBookRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
+				return this->cmpRectangleRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
 			}
 			res.first = 0;
 			return res;
@@ -539,7 +519,7 @@ std::pair<int, bool> Card::cmpBookRecursive(const size_t firstVectorIndex, const
 			size_t newSortIndex = sortIndex;
 			if (newSortIndex < this->sortVector.size() - 1) {
 				newSortIndex++;
-				return this->cmpBookRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
+				return this->cmpRectangleRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
 			}
 			res.first = 0;
 			return res;
@@ -559,7 +539,7 @@ std::pair<int, bool> Card::cmpBookRecursive(const size_t firstVectorIndex, const
 			size_t newSortIndex = sortIndex;
 			if (newSortIndex < this->sortVector.size() - 1) {
 				newSortIndex++;
-				return this->cmpBookRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
+				return this->cmpRectangleRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
 			}
 			res.first = 0;
 			return res;
@@ -579,7 +559,7 @@ std::pair<int, bool> Card::cmpBookRecursive(const size_t firstVectorIndex, const
 			size_t newSortIndex = sortIndex;
 			if (newSortIndex < this->sortVector.size() - 1) {
 				newSortIndex++;
-				return this->cmpBookRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
+				return this->cmpRectangleRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
 			}
 			res.first = 0;
 			return res;
@@ -600,7 +580,7 @@ std::pair<int, bool> Card::cmpBookRecursive(const size_t firstVectorIndex, const
 			size_t newSortIndex = sortIndex;
 			if (newSortIndex < this->sortVector.size() - 1) {
 				newSortIndex++;
-				return this->cmpBookRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
+				return this->cmpRectangleRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
 			}
 			res.first = 0;
 			return res;
@@ -620,7 +600,7 @@ std::pair<int, bool> Card::cmpBookRecursive(const size_t firstVectorIndex, const
 			size_t newSortIndex = sortIndex;
 			if (newSortIndex < this->sortVector.size() - 1) {
 				newSortIndex++;
-				return this->cmpBookRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
+				return this->cmpRectangleRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
 			}
 			res.first = 0;
 			return res;
