@@ -4,6 +4,7 @@
 void run()
 {
 	RectangleSet recSet;
+
 	while (true) {
 		std::string command;
 		std::printf("$ ");
@@ -91,12 +92,12 @@ std::string strSpaceWrap(std::string str)
 void RectangleSet::print()
 {
 	if (this->size <= 0) {
-		std::printf("Ваш набор пуст. Size: %d\n", this->size);
+		std::printf("Ваш набор пуст. Size: %zu\n", this->size);
 		return;
 	}
 	Rectangle *rectangle = this->firstRectangle;
 	if (rectangle == nullptr) {
-		std::printf("Ваш набор пуст. Size: %d\n", this->size);
+		std::printf("Ваш набор пуст. Size: %zu\n", this->size);
 		return;
 	}
 	size_t indexColumnSize = std::strlen(strSpaceWrap(COLUMN_INDEX_TITLE).c_str()),
@@ -108,17 +109,19 @@ void RectangleSet::print()
 		if (indexColumnSize < std::to_string(i).size()) {
 			indexColumnSize = std::to_string(i).size();
 		}
-		if (widthColumnSize < std::to_string(rectangle.width).size()) {
-			widthColumnSize = std::to_string(rectangle.width).size();
+		if (widthColumnSize < std::to_string(rectangle->width).size()) {
+			widthColumnSize = std::to_string(rectangle->width).size();
 		}
-		if (heightColumnSize < std::to_string(rectangle.height).size()) {
-			heightColumnSize = std::to_string(rectangle.height).size();
+		if (heightColumnSize < std::to_string(rectangle->height).size()) {
+			heightColumnSize = std::to_string(rectangle->height).size();
 		}
-		if (areaColumnSize < std::to_string(rectangle.area).size()) {
-			areaColumnSize = std::to_string(rectangle.area).size();
+		if (areaColumnSize < std::to_string(rectangle->area).size()) {
+			areaColumnSize = std::to_string(rectangle->area).size();
 		}
 		i++;
+
 		rectangle = rectangle->nextRectangle;
+		//std::printf("Titles: %zu : %zu : %d\n", i, this->size, rectangle != nullptr);
 	} while (rectangle != nullptr);
 	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
 		<< alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize) << " | "
@@ -248,14 +251,14 @@ void RectangleSet::deleteCards()
 	std::string command;
 	while (true) {
 		if (this->size <= 0) {
-			std::printf("Ваш набор пуст. Size: %d\n", this->size);
+			std::printf("Ваш набор пуст. Size: %zu\n", this->size);
 			return;
 		}
 
 		int i;
 		size_t firstIndex = 0,
 			lastIndex = this->size - 1;
-		std::printf("Пожалуйста введите Index удаляемого прямоугольника (от %d до %d): ", firstIndex, lastIndex);
+		std::printf("Пожалуйста введите Index удаляемого прямоугольника (от %zu до %zu): ", firstIndex, lastIndex);
 		std::scanf("%d", &i);
 		std::cin.ignore();
 
@@ -376,7 +379,7 @@ void RectangleSet::readFromFile()
 		readFile.open(pathToFile, std::fstream::out);
 		if (readFile.is_open()) {
 			size_t i = 0;
-			this->clear();
+			this->recVector.clear();
 			while (std::getline(readFile, readData)) {
 				if (!readData.compare("")) {
 					continue;
@@ -384,33 +387,25 @@ void RectangleSet::readFromFile()
 				//std::printf("%s\n", readData.c_str());
 				std::vector<std::string> rectangleProps = split(readData, ';');
 				if (rectangleProps.size() != 3) {
-					std::printf("Строка %d не соответствует требуемуму формату т.к."
-						"число ее свойств (%d) должно быть равно 3!\n %s\n",
+					std::printf("Строка %zu не соответствует требуемуму формату т.к."
+						"число ее свойств (%zu) должно быть равно 3!\n %s\n",
 						i, rectangleProps.size(), readData.c_str());
 					continue;
 				}
 
-				Rectangle *newRectangle;
-				newRectangle = (struct Rectangle*)malloc(sizeof(struct Rectangle));
-				newRectangle->width = std::stof(rectangleProps[0].c_str());
-				newRectangle->height = std::stof(rectangleProps[1].c_str());
-				newRectangle->area = std::stof(rectangleProps[2].c_str());
-				newRectangle->prevRectangle = nullptr;
-				newRectangle->nextRectangle = nullptr;
-				if (this->firstRectangle == nullptr) {
-					this->firstRectangle = newRectangle;
-					this->lastRectangle = newRectangle;
-				}
-				else {
-					newRectangle->prevRectangle = this->lastRectangle;
-					this->lastRectangle->nextRectangle = newRectangle;
-					this->lastRectangle = newRectangle;
-				}
-				++this->size;
+				Rectangle newRectangle;
+				newRectangle.width = std::stof(rectangleProps[0].c_str());
+				newRectangle.height = std::stof(rectangleProps[1].c_str());
+				newRectangle.area = std::stof(rectangleProps[2].c_str());
+				newRectangle.prevRectangle = nullptr;
+				newRectangle.nextRectangle = nullptr;
+				this->recVector.push_back(newRectangle);
 			}
 			readFile.close();
 			std::printf("Файл '%s' прочитан.\n", pathToFile.c_str());
 
+			this->fillDoublyLinkedListFromRecVector();
+			this->recVector.clear();
 			this->print();
 			return;
 		}
@@ -446,7 +441,7 @@ void RectangleSet::search()
 	float findArea;
 	while (true) {
 		if (this->size <= 0) {
-			std::printf("Ваш набор пуст. Size: %d\n", this->size);
+			std::printf("Ваш набор пуст. Size: %zu\n", this->size);
 			return;
 		}
 
@@ -506,18 +501,28 @@ Rectangle *RectangleSet::searchFromIndex(size_t index)
 
 void RectangleSet::clear()
 {
+	//std::printf("Start clear size %zu\n", this->size);
     if (this->size == 0) {
         return;
     }
-	Rectangle *rectangle = this->firstRectangle;
+	if (this->firstRectangle == nullptr) {
+		return;
+	}
+
+	Rectangle *rectangle = this->firstRectangle, *nextRectangle;
 	do {
-		Rectangle *curRectangle = rectangle;
-		rectangle = rectangle->nextRectangle;
-		free(curRectangle);
-	} while (rectangle != nullptr);
+		nextRectangle = rectangle->nextRectangle;
+		if (nextRectangle == nullptr) {
+			break;
+		}
+		free(rectangle);
+		rectangle = nextRectangle;
+	} while(rectangle != nullptr);
+
 	this->firstRectangle = nullptr;
 	this->lastRectangle = nullptr;
 	this->size = 0;
+	//std::printf("Finish clear size %zu\n", this->size);
 }
 
 void RectangleSet::initSort()
@@ -569,7 +574,7 @@ void RectangleSet::initSort()
 		this->sortVector.clear();
 
 		this->printRecVector();
-		//this->fillDoublyLinkedListFromRecVector();
+		this->fillDoublyLinkedListFromRecVector();
 		this->recVector.clear();
 		while (true) {
 			std::string command = "";
@@ -588,62 +593,43 @@ void RectangleSet::initSort()
 
 void RectangleSet::fillRecVectorFromDoublyLinkedList()
 {
-	//std::printf("fillRecVectorFromDoublyLinkedList\n");
 	this->recVector.clear();
-	Rectangle *rectangle = this->firstRectangle;
+	Rectangle *rectangle = this->firstRectangle, *nextRectangle;
 	do {
+		nextRectangle = rectangle->nextRectangle;
+		if (rectangle == nullptr) {
+			return;
+		}
+		rectangle->prevRectangle = nullptr;
+		rectangle->nextRectangle = nullptr;
 		this->recVector.push_back(*rectangle);
-		rectangle = rectangle->nextRectangle;
+		rectangle = nextRectangle;
 	} while (rectangle != nullptr);
 }
 
 void RectangleSet::fillDoublyLinkedListFromRecVector()
 {
-	std::printf("fillDoublyLinkedListFromRecVector\n");
+	//std::printf("Start fillDoublyLinkedListFromRecVector size: %zu\n", this->size);
 	this->clear();
-	//Rectangle *rectangle = this->firstRectangle;
-	//do {
-	//	if (rectangle == nullptr) {
-	//		break;
-	//	}
-	//	std::printf("%f %f %f\n", rectangle->width, rectangle->height, rectangle->area);
-	//	rectangle = rectangle->nextRectangle;
-	//} while (rectangle != nullptr);
-	//return;
-
-	this->printRecVector();
-
-	size_t i = 0;
-	for(Rectangle rec : this->recVector) {
-
-		std::printf("Start: %d\n", this->size);
-		rec.print();
-
-		Rectangle *newRectangle = &rec;
-		//newRectangle = (struct Rectangle*)malloc(sizeof(struct Rectangle));
+	Rectangle *newRectangle = nullptr;
+	Rectangle *lastRectangle = nullptr;
+	for(size_t i = 0; i < this->recVector.size(); i++) {
+		newRectangle = &this->recVector[i];
 		newRectangle->prevRectangle = nullptr;
 		newRectangle->nextRectangle = nullptr;
 		if (this->firstRectangle == nullptr) {
-			std::printf("Set first rectangle: \n");
-
 			this->firstRectangle = newRectangle;
 			this->lastRectangle = newRectangle;
 		} else {
-			std::printf("Set next rectangle: \n");
-			newRectangle->prevRectangle = this->lastRectangle;
-			this->lastRectangle->nextRectangle = newRectangle;
+			lastRectangle = this->lastRectangle;
+			newRectangle->prevRectangle = lastRectangle;
+			lastRectangle->nextRectangle = newRectangle;
+			this->lastRectangle = nullptr;
 			this->lastRectangle = newRectangle;
 		}
 		++this->size;
-
-		std::printf("Finish: %d\n", this->size);
-		std::printf("Vector size: %d\n", this->size);
-		this->recVector.size();
-		this->print();
-		if (this->size > 3) {
-			return;
-		}
 	}
+	//std::printf("Finish fillDoublyLinkedListFromRecVector size: %zu\n", this->size);
 }
 
 bool RectangleSet::parseSortString(const std::string str)
