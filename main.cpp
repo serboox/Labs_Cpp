@@ -4,7 +4,9 @@
 #include "other.h" // заголовочный ФАЙЛ с кодом программы
 // макросы для определения ОС
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-#include <Windows.h> //библиотека для выставления кодировки в консоли
+#include <Windows.h> // библиотека для выставления кодировки в консоли
+#else
+#include <unistd.h> // библиотека для sleep
 #endif 
 
 #define      stop __asm nop // для брейкпойнтов

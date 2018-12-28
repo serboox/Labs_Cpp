@@ -270,7 +270,7 @@ void RectangleSet::deleteCards()
 			continue;
 		}
 
-		Rectangle *deleteRectangle = this->searcFromIndex(i);
+		Rectangle *deleteRectangle = this->searchFromIndex(i);
 		deleteRectangle->print();
 		bool remove = false;
 		while (true) {
@@ -483,12 +483,12 @@ void RectangleSet::search()
 	}
 }
 
-Rectangle *RectangleSet::searcFromIndex(size_t index)
+Rectangle *RectangleSet::searchFromIndex(size_t index)
 {
 	size_t i = 0;
 	Rectangle *rectangle = this->firstRectangle;
 	do {
-		if (index = i) {
+		if (index == i) {
 			return rectangle;
 		}
 		i++;
@@ -499,7 +499,9 @@ Rectangle *RectangleSet::searcFromIndex(size_t index)
 
 void RectangleSet::clear()
 {
-	size_t i = 0;
+    if (this->size == 0) {
+        return;
+    }
 	Rectangle *rectangle = this->firstRectangle;
 	do {
 		Rectangle *curRectangle = rectangle;
@@ -513,7 +515,7 @@ void RectangleSet::clear()
 
 void RectangleSet::initSort()
 {
-	if (this->recVector.size() == 1) {
+	if (this->size <= 1) {
 		this->print();
 		std::printf("Для сортировки необходимо чтобы прямоугольников было больше 1!\n");
 		return;
@@ -551,12 +553,17 @@ void RectangleSet::initSort()
 			continue;
 		}
 
+		this->fillRecVectorFromDoublyLinkedList();
 		//this->printSortMap();
 		//this->printSortVector();
+
 		this->sortBook();
 		this->sortMap.clear();
 		this->sortVector.clear();
-		this->print();
+
+		this->printRecVector();
+		//this->fillDoublyLinkedListFromRecVector();
+		this->recVector.clear();
 		while (true) {
 			std::string command = "";
 			std::printf("Желаете продолжить? [Y/n]: ");
@@ -568,6 +575,66 @@ void RectangleSet::initSort()
 				return;
 			}
 			continue;
+		}
+	}
+}
+
+void RectangleSet::fillRecVectorFromDoublyLinkedList()
+{
+	//std::printf("fillRecVectorFromDoublyLinkedList\n");
+	this->recVector.clear();
+	Rectangle *rectangle = this->firstRectangle;
+	do {
+		this->recVector.push_back(*rectangle);
+		rectangle = rectangle->nextRectangle;
+	} while (rectangle != nullptr);
+}
+
+void RectangleSet::fillDoublyLinkedListFromRecVector()
+{
+	std::printf("fillDoublyLinkedListFromRecVector\n");
+	this->clear();
+	//Rectangle *rectangle = this->firstRectangle;
+	//do {
+	//	if (rectangle == nullptr) {
+	//		break;
+	//	}
+	//	std::printf("%f %f %f\n", rectangle->width, rectangle->height, rectangle->area);
+	//	rectangle = rectangle->nextRectangle;
+	//} while (rectangle != nullptr);
+	//return;
+
+	this->printRecVector();
+
+	size_t i = 0;
+	for(Rectangle rec : this->recVector) {
+
+		std::printf("Start: %d\n", this->size);
+		rec.print();
+
+		Rectangle *newRectangle = &rec;
+		//newRectangle = (struct Rectangle*)malloc(sizeof(struct Rectangle));
+		newRectangle->prevRectangle = nullptr;
+		newRectangle->nextRectangle = nullptr;
+		if (this->firstRectangle == nullptr) {
+			std::printf("Set first rectangle: \n");
+
+			this->firstRectangle = newRectangle;
+			this->lastRectangle = newRectangle;
+		} else {
+			std::printf("Set next rectangle: \n");
+			newRectangle->prevRectangle = this->lastRectangle;
+			this->lastRectangle->nextRectangle = newRectangle;
+			this->lastRectangle = newRectangle;
+		}
+		++this->size;
+
+		std::printf("Finish: %d\n", this->size);
+		std::printf("Vector size: %d\n", this->size);
+		this->recVector.size();
+		this->print();
+		if (this->size > 3) {
+			return;
 		}
 	}
 }

@@ -36,9 +36,9 @@ const std::string SORT_DESC = "DESC";
 struct RectangleSet {
 
 	// *firstRectangle - указатель на первый прямоугольник в двухсвязанном списке
-	Rectangle *firstRectangle = NULL;
+	Rectangle *firstRectangle = nullptr;
 	// *lastRectangle - указатель на последний прямоугольник в двухсвязанном списке
-	Rectangle *lastRectangle = NULL;
+	Rectangle *lastRectangle = nullptr;
 	// size - хранит количество прямоугольников в наборе
 	size_t size = 0;
 
@@ -98,13 +98,17 @@ struct RectangleSet {
 		которых соответствует указанному (stdin) числу
 	*/
 	void search();
-	// searcFromIndex находит прямоугольник по индексу
-	Rectangle *searcFromIndex(size_t index);
+	// searchFromIndex находит прямоугольник по индексу
+	Rectangle *searchFromIndex(size_t index);
 
 	// clear находит прямоугольник по индексу
 	void clear();
 	// sort сортирует прямоугольники в определенном порядке
 	void initSort();
+    // fillRecVectorFromDoublyLinkedList формирует вектор recVector из данных двухсвязанного списка
+	void fillRecVectorFromDoublyLinkedList();
+    // fillDoublyLinkedListFromRecVector формирует двухсвязанный список из вуктора recVector
+    void fillDoublyLinkedListFromRecVector();
 	/*
 		parseSortString преобразует строку(std:cin) в данные необходимые для сортировки,
 		заполняет поля sortMap и sortVector, возвращает false в случае ошибки

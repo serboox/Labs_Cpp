@@ -10,7 +10,11 @@ void Rectangle::fillFromStdIn() {
 		std::cin.ignore();
 		if (this->width < 0) {
 			std::fprintf(stderr, "The weight of the rectangle can not be less than %d!\n", 0);
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+#else
+			sleep(200);// делаем ожидание для корректного вывода текстовый полей в консоль
+#endif
 			continue;
 		}
 		break;
@@ -22,14 +26,18 @@ void Rectangle::fillFromStdIn() {
 		std::cin.ignore();
 		if (this->width < 0) {
 			std::fprintf(stderr, "The height of the rectangle can not be less than %d!\n", 0);
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+#else
+			sleep(200);// делаем ожидание для корректного вывода текстовый полей в консоль
+#endif
 			continue;
 		}
 		break;
 	}
 	this->area = this->width * this->height;
-	this->nextRectangle = NULL;
-	this->prevRectangle = NULL;
+	this->nextRectangle = nullptr;
+	this->prevRectangle = nullptr;
 	std::cout << std::endl;
 }
 

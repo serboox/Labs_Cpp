@@ -3,6 +3,10 @@
 #include <cmath>
 #include <stdlib.h>
 
+#if !defined(WIN32) && !defined(_WIN32) && !defined(_WIN64)
+#include <unistd.h> // библиотека для sleep
+#endif
+
 const std::string COLUMN_INDEX_TITLE = "Index";
 const std::string COLUMN_WIDTH_TITLE = "Высота";
 const std::string COLUMN_HEIGHT_TITLE = "Ширина";
@@ -18,9 +22,9 @@ struct Rectangle {
 	float area; // 4 bytes
 	
 	// *prevRectangle - указатель на предыдущий прямоугольник
-	Rectangle *prevRectangle = NULL;
+	Rectangle *prevRectangle = nullptr;
 	// *nextRectangle - указатель на следующий прямоугольник
-	Rectangle *nextRectangle = NULL;
+	Rectangle *nextRectangle = nullptr;
 
 	// fillBookFields, функция заполняет поля прямогулольника через stdin
 	void fillFromStdIn();
