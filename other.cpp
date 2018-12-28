@@ -395,8 +395,9 @@ void RectangleSet::readFromFile()
 				newRectangle->width = std::stof(rectangleProps[0].c_str());
 				newRectangle->height = std::stof(rectangleProps[1].c_str());
 				newRectangle->area = std::stof(rectangleProps[2].c_str());
+				newRectangle->prevRectangle = nullptr;
+				newRectangle->nextRectangle = nullptr;
 				if (this->firstRectangle == nullptr) {
-
 					this->firstRectangle = newRectangle;
 					this->lastRectangle = newRectangle;
 				}
