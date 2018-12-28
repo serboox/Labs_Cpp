@@ -94,6 +94,10 @@ void RectangleSet::print()
 		std::printf("Ваш набор пуст. Size: %d\n", this->size);
 		return;
 	}
+	Rectangle *rectangle = this->firstRectangle;
+	if (rectangle == nullptr) {
+		std::printf("Ваш набор пуст. Size: %d\n", this->size);
+	}
 	size_t indexColumnSize = std::strlen(strSpaceWrap(COLUMN_INDEX_TITLE).c_str()),
 		widthColumnSize = std::strlen(strSpaceWrap(COLUMN_WIDTH_TITLE).c_str()),
 		heightColumnSize = std::strlen(strSpaceWrap(COLUMN_HEIGHT_TITLE).c_str()),
@@ -124,7 +128,6 @@ void RectangleSet::print()
 		std::cout << "—";
 	std::cout << std::endl;
 	i = 0;
-	Rectangle *rectangle = this->firstRectangle;
 	do {
 		std::cout << alignCenter(std::to_string(i), indexColumnSize) << " | "
 			<< alignCenter(std::to_string(rectangle->width), widthColumnSize) << " | "
