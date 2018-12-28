@@ -97,6 +97,7 @@ void RectangleSet::print()
 	Rectangle *rectangle = this->firstRectangle;
 	if (rectangle == nullptr) {
 		std::printf("Ваш набор пуст. Size: %d\n", this->size);
+		return;
 	}
 	size_t indexColumnSize = std::strlen(strSpaceWrap(COLUMN_INDEX_TITLE).c_str()),
 		widthColumnSize = std::strlen(strSpaceWrap(COLUMN_WIDTH_TITLE).c_str()),
