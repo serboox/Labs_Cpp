@@ -16,6 +16,11 @@ struct Rectangle {
 	float height; // 4 bytes
 	// area высчитывается автоматически area=width*height
 	float area; // 4 bytes
+	
+	// *prevRectangle - указатель на предыдущий прямоугольник
+	Rectangle *prevRectangle = NULL;
+	// *nextRectangle - указатель на следующий прямоугольник
+	Rectangle *nextRectangle = NULL;
 
 	// fillBookFields, функция заполняет поля прямогулольника через stdin
 	void fillFromStdIn();

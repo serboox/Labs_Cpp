@@ -1,5 +1,5 @@
-
-#include <cstdio>
+// в этом заголовке я обьявляю все константы, библиотеки,структуры,методы и функции.
+#include <cstdio>// стандартная библиотека
 #include <string>
 #include <iomanip>
 #include <sstream>
@@ -11,13 +11,6 @@
 #include <map>
 
 #include "rectangle.h"
-
-// Определяем константы используемые в качестве разделителей при определении пути к файлу
-#if defined(_WIN16) | defined(_WIN32) | defined(_WIN64)
-#define SEPERATOR "\\"
-#else
-#define SEPERATOR "/"
-#endif
 
 // Перечисляем констаны для комманд используемых в консоли
 const char
@@ -34,16 +27,23 @@ COMMAND_ENDL[] = "\n";
 
 // DEFAULT_PATH_TO_FILE константа хранящая путь для сохраняемого/считываемого файла по умолчанию
 const std::string DEFAULT_PATH_TO_FILE = "C:\\Users\\Public\\rectangleSet.txt";
-// SORT_ASC сотировака в порядке убывания
+// SORT_ASC сотировака в порядке возрастания
 const std::string SORT_ASC = "ASC";
-// SORT_DESC сортировака в порядке возрастания
+// SORT_DESC сортировака в порядке  убывания
 const std::string SORT_DESC = "DESC";
 
 // RectangleSet структура набора прямоугольников
 struct RectangleSet {
-	// recVector содержит вектор прямоугольников (структур Rectangle)
-	std::vector<Rectangle> recVector;
 
+	// *firstRectangle - указатель на первый прямоугольник в двухсвязанном списке
+	Rectangle *firstRectangle = NULL;
+	// *lastRectangle - указатель на последний прямоугольник в двухсвязанном списке
+	Rectangle *lastRectangle = NULL;
+	// size - хранит количество прямоугольников в наборе
+	size_t size = 0;
+
+	// recVector содержит вектор с промежуточным буффером прямоугольников (структур Rectangle), 
+	std::vector<Rectangle> recVector;
 	// sortMap содержит данные для сортировки map[название поля]isDesc
 	std::map<std::string, bool> sortMap;
 	// sortVector хранит имена колонок в порядке котором следует производить сортировку
@@ -52,15 +52,35 @@ struct RectangleSet {
 	// RectangleSet конструктор, срабатывающий при инициализации структуры
 	RectangleSet() {
 		// Определяем прямоугольник по умолчанию
-		/*Rectangle newRectangle;
-		newRectangle.width = 2.14;
-		newRectangle.height = 4.71;
-		newRectangle.area = newRectangle.width * newRectangle.height;
-		this->recVector.push_back(newRectangle);*/
+		/*Rectangle *newRectangle;
+		newRectangle = (struct Rectangle*)malloc(sizeof(struct Rectangle));
+		newRectangle->width = 2.14;
+		newRectangle->height = 4.71;
+		newRectangle->area = newRectangle->width * newRectangle->height;
+		newRectangle->prevRectangle = nullptr;
+		newRectangle->nextRectangle = nullptr;
+		
+		++this->size;
+		this->firstRectangle = newRectangle;
+		this->lastRectangle = newRectangle;
+
+		Rectangle *newRectangle2;
+		newRectangle2 = (struct Rectangle*)malloc(sizeof(struct Rectangle));
+		newRectangle2->width = 7.14;
+		newRectangle2->height = 9.71;
+		newRectangle2->area = newRectangle2->width * newRectangle2->height;
+		
+		newRectangle2->nextRectangle = nullptr;
+		newRectangle2->prevRectangle = this->lastRectangle;
+		this->firstRectangle->nextRectangle = newRectangle2;
+		this->lastRectangle = newRectangle2;
+		++this->size;*/
 	}
 
 	// print печатает содержимое набора прямоуголников в консоль
 	void print();
+	/* print печатает содержимое промежуточного вектора прямоуголников в консоль */
+	void printRecVector();
 	// print печатает содержимое карты для сортировки в консоль
 	void printSortMap();
 	// print печатает содержимое вектора для сортировки в консоль
@@ -78,6 +98,11 @@ struct RectangleSet {
 		которых соответствует указанному (stdin) числу
 	*/
 	void search();
+	// searcFromIndex находит прямоугольник по индексу
+	Rectangle *searcFromIndex(size_t index);
+
+	// clear находит прямоугольник по индексу
+	void clear();
 	// sort сортирует прямоугольники в определенном порядке
 	void initSort();
 	/*

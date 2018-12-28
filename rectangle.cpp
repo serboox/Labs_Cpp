@@ -28,6 +28,8 @@ void Rectangle::fillFromStdIn() {
 		break;
 	}
 	this->area = this->width * this->height;
+	this->nextRectangle = NULL;
+	this->prevRectangle = NULL;
 	std::cout << std::endl;
 }
 
