@@ -104,7 +104,7 @@ void RectangleSet::print()
 		heightColumnSize = std::strlen(strSpaceWrap(COLUMN_HEIGHT_TITLE).c_str()),
 		areaColumnSize = std::strlen(strSpaceWrap(COLUMN_AREA_TITLE).c_str());
 	size_t i = 0;
-	for (Rectangle rectangle : this->recVector) {
+	do {
 		if (indexColumnSize < std::to_string(i).size()) {
 			indexColumnSize = std::to_string(i).size();
 		}
@@ -118,7 +118,8 @@ void RectangleSet::print()
 			areaColumnSize = std::to_string(rectangle.area).size();
 		}
 		i++;
-	}
+		rectangle = rectangle->nextRectangle;
+	} while (rectangle != nullptr);
 	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
 		<< alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize) << " | "
 		<< alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize) << " | "
@@ -128,6 +129,7 @@ void RectangleSet::print()
 	for (size_t i = 0; i <= totalSize; i++)
 		std::cout << "—";
 	std::cout << std::endl;
+	rectangle = this->firstRectangle;
 	i = 0;
 	do {
 		std::cout << alignCenter(std::to_string(i), indexColumnSize) << " | "
