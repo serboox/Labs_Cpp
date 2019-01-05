@@ -33,6 +33,9 @@ cmake-build-debug/
 cmake-build-release/
 build/
 
+# Assembly language files
+asm/
+
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
 
