@@ -5,7 +5,7 @@
 .PHONY: build test
 
 APP_NAME?=my_app
-BUILD_FOLDER_PATH?=./build
+BUILD_FOLDER_NAME?=build
 
 OSFLAG?=
 COMMAND_CREATE_BUILD_DIR?=
@@ -15,12 +15,12 @@ COMMAND_RUN?=
 COMMAND_CLEAN?=
 ifeq ($(OS),Windows_NT)
 	# Windows commands
-	COMMAND_CREATE_BUILD_DIR = mkdir -p ${BUILD_FOLDER_PATH}
-	COMMAND_BUILD_OBJECT = gcc -c ./src/main.c -o ${BUILD_FOLDER_PATH}/main.o && \
-		gcc -c ./src/other.c -o ${BUILD_FOLDER_PATH}/other.o
-	COMMAND_BUILD = gcc -o ${APP_NAME}.exe ${BUILD_FOLDER_PATH}/${APP_NAME}.o
+	COMMAND_CREATE_BUILD_DIR = mkdir -p ${BUILD_FOLDER_NAME}
+	COMMAND_BUILD_OBJECT = gcc -c .\\src\\main.c -o ${BUILD_FOLDER_NAME}\\main.o && \
+		gcc -c .\\src\\other.c -o ${BUILD_FOLDER_NAME}\\other.o
+	COMMAND_BUILD = gcc -o ${APP_NAME}.exe ${BUILD_FOLDER_NAME}\\${APP_NAME}.o
 	COMMAND_RUN = ${APP_NAME}.exe
-	COMMAND_CLEAN = rm -f ${BUILD_FOLDER_PATH}/${APP_NAME}.o ${APP_NAME}.exe
+	COMMAND_CLEAN = rm ${BUILD_FOLDER_NAME} #${APP_NAME}.exe
 
 	OSFLAG += -D WIN32
 	ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
@@ -31,12 +31,12 @@ ifeq ($(OS),Windows_NT)
 	endif
 else
 	# Unix commands
-	COMMAND_CREATE_BUILD_DIR = mkdir -p ${BUILD_FOLDER_PATH}
-	COMMAND_BUILD_OBJECT = gcc -c ./src/main.c -o ${BUILD_FOLDER_PATH}/main.o && \
-		gcc -c ./src/other.c -o ${BUILD_FOLDER_PATH}/other.o
-	COMMAND_BUILD = gcc -o ${APP_NAME} ${BUILD_FOLDER_PATH}/*.o
+	COMMAND_CREATE_BUILD_DIR = mkdir -p ./${BUILD_FOLDER_NAME}
+	COMMAND_BUILD_OBJECT = gcc -c ./src/main.c -o ./${BUILD_FOLDER_NAME}/main.o && \
+		gcc -c ./src/other.c -o ./${BUILD_FOLDER_NAME}/other.o
+	COMMAND_BUILD = gcc -o ${APP_NAME} ./${BUILD_FOLDER_NAME}/*.o
 	COMMAND_RUN = ./${APP_NAME}
-	COMMAND_CLEAN = rm -f ${BUILD_FOLDER_PATH}/${APP_NAME}.o ${APP_NAME}
+	COMMAND_CLEAN = rm -f ./${BUILD_FOLDER_NAME}/${APP_NAME}.o ${APP_NAME}
 
 	UNAME_S := $(shell uname -s)
 	ifeq ($(UNAME_S),Linux)
