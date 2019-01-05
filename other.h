@@ -1,5 +1,5 @@
 // в этом заголовке я обьявляю все константы, библиотеки,структуры,методы и функции.
-#include <cstdio>// стандартная библиотека
+#include <cstdio> // стандартная библиотека
 #include <string>
 #include <iomanip>
 #include <sstream>
@@ -14,16 +14,16 @@
 
 // Перечисляем констаны для комманд используемых в консоли
 const char
-COMMAND_PRINT[] = "print",
-COMMAND_ADD[] = "add",
-COMMAND_DELETE[] = "delete",
-COMMAND_SAVE[] = "save",
-COMMAND_LOAD[] = "load",
-COMMAND_SEARCH[] = "search",
-COMMAND_SORT[] = "sort",
-COMMAND_HELP[] = "help",
-COMMAND_EXIT[] = "exit",
-COMMAND_ENDL[] = "\n";
+	COMMAND_PRINT[] = "print",
+	COMMAND_ADD[] = "add",
+	COMMAND_DELETE[] = "delete",
+	COMMAND_SAVE[] = "save",
+	COMMAND_LOAD[] = "load",
+	COMMAND_SEARCH[] = "search",
+	COMMAND_SORT[] = "sort",
+	COMMAND_HELP[] = "help",
+	COMMAND_EXIT[] = "exit",
+	COMMAND_ENDL[] = "\n";
 
 // DEFAULT_PATH_TO_FILE константа хранящая путь для сохраняемого/считываемого файла по умолчанию
 const std::string DEFAULT_PATH_TO_FILE = "C:\\Users\\Public\\rectangleSet.txt";
@@ -33,7 +33,8 @@ const std::string SORT_ASC = "ASC";
 const std::string SORT_DESC = "DESC";
 
 // RectangleSet структура набора прямоугольников
-struct RectangleSet {
+struct RectangleSet
+{
 
 	// *firstRectangle - указатель на первый прямоугольник в двухсвязанном списке
 	Rectangle *firstRectangle = nullptr;
@@ -42,7 +43,7 @@ struct RectangleSet {
 	// size - хранит количество прямоугольников в наборе
 	size_t size = 0;
 
-	// recVector содержит вектор с промежуточным буффером прямоугольников (структур Rectangle), 
+	// recVector содержит вектор с промежуточным буффером прямоугольников (структур Rectangle),
 	std::vector<Rectangle> recVector;
 	// sortMap содержит данные для сортировки map[название поля]isDesc
 	std::map<std::string, bool> sortMap;
@@ -50,7 +51,8 @@ struct RectangleSet {
 	std::vector<std::string> sortVector;
 
 	// RectangleSet конструктор, срабатывающий при инициализации структуры
-	RectangleSet() {
+	RectangleSet()
+	{
 		// Определяем прямоугольник по умолчанию
 		/*Rectangle *newRectangle;
 		newRectangle = (struct Rectangle*)malloc(sizeof(struct Rectangle));
@@ -78,7 +80,8 @@ struct RectangleSet {
 	}
 
 	// RectangleSet дуструктор, срабатывающий при выгрузке структуры из памяти структуры
-	~RectangleSet() {
+	~RectangleSet()
+	{
 		this->clear();
 	}
 
@@ -110,10 +113,10 @@ struct RectangleSet {
 	void clear();
 	// sort сортирует прямоугольники в определенном порядке
 	void initSort();
-    // fillRecVectorFromDoublyLinkedList формирует вектор recVector из данных двухсвязанного списка
+	// fillRecVectorFromDoublyLinkedList формирует вектор recVector из данных двухсвязанного списка
 	void fillRecVectorFromDoublyLinkedList();
-    // fillDoublyLinkedListFromRecVector формирует двухсвязанный список из вуктора recVector
-    void fillDoublyLinkedListFromRecVector();
+	// fillDoublyLinkedListFromRecVector формирует двухсвязанный список из вуктора recVector
+	void fillDoublyLinkedListFromRecVector();
 	/*
 		parseSortString преобразует строку(std:cin) в данные необходимые для сортировки,
 		заполняет поля sortMap и sortVector, возвращает false в случае ошибки
@@ -128,8 +131,8 @@ struct RectangleSet {
 		-1 если firstVectorIndex < secondVectorIndex
 	*/
 	std::pair<int, bool> cmpRectangleRecursive(
-		const size_t firstVectorIndex, 
-		const size_t secondVectorIndex, 
+		const size_t firstVectorIndex,
+		const size_t secondVectorIndex,
 		const size_t sortIndex);
 };
 
@@ -144,4 +147,4 @@ std::string alignRight(const std::string s, const int w);
 // alignCenter печатает содержимое ячейки табицы с левого края
 std::string alignLeft(const std::string s, const int w);
 // split разбивает строку по разделителю
-std::vector<std::string> split(const std::string& s, const char sep);
+std::vector<std::string> split(const std::string &s, const char sep);
