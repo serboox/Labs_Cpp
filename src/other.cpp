@@ -3,7 +3,7 @@
 
 void run()
 {
-	RectangleSet recSet;
+	RectangleDLL *recDLL = new RectangleDLL;
 
 	while (true)
 	{
@@ -38,38 +38,38 @@ void run()
 		else if (!command.compare(COMMAND_PRINT))
 		{
 			std::printf("Cодержимое набора прямоугольников: \n\n");
-			recSet.print();
+			printRectangleDLL(recDLL);
 			std::printf("\n");
 		}
 		else if (!command.compare(COMMAND_ADD))
 		{
 			std::printf("Добавить новый прямоугольник: \n\n");
-			recSet.add();
+			addRectangle(recDLL);
 		}
 		else if (!command.compare(COMMAND_DELETE))
 		{
 			std::printf("Удалить существующий(ие): \n");
-			recSet.deleteCards();
+			deleteRectangle(recDLL);
 		}
 		else if (!command.compare(COMMAND_SAVE))
 		{
 			std::printf("Записать в файл: \n");
-			recSet.saveToFile();
+			saveToFile(recDLL);
 		}
 		else if (!command.compare(COMMAND_LOAD))
 		{
 			std::printf("Считать из файла: \n");
-			recSet.readFromFile();
+			readFromFile(recDLL);
 		}
 		else if (!command.compare(COMMAND_SEARCH))
 		{
 			std::printf("Найти прямоугольник(и) площадь которого соответствует значениею: \n");
-			recSet.search();
+			searchRectangle(recDLL);
 		}
 		else if (!command.compare(COMMAND_SORT))
 		{
 			std::printf("Сортировки набора по одному или нескольким полям: \n");
-			recSet.initSort();
+			initRectangleSort(recDLL);
 		}
 		else if (!command.compare(COMMAND_EXIT))
 		{
@@ -99,17 +99,17 @@ std::string strSpaceWrap(std::string str)
 	return res;
 }
 
-void RectangleSet::print()
+void printRectangleDLL(RectangleDLL *&recDLL)
 {
-	if (this->size <= 0)
+	if (recDLL->size <= 0)
 	{
-		std::printf("Ваш набор пуст. Size: %zu\n", this->size);
+		std::printf("Ваш набор пуст. Size: %zu\n", recDLL->size);
 		return;
 	}
-	Rectangle *rectangle = this->firstRectangle;
+	Rectangle *rectangle = recDLL->firstRectangle;
 	if (rectangle == nullptr)
 	{
-		std::printf("Ваш набор пуст. Size: %zu\n", this->size);
+		std::printf("Ваш набор пуст. Size: %zu\n", recDLL->size);
 		return;
 	}
 	size_t indexColumnSize = std::strlen(strSpaceWrap(COLUMN_INDEX_TITLE).c_str()),
@@ -149,7 +149,7 @@ void RectangleSet::print()
 	for (size_t i = 0; i <= totalSize; i++)
 		std::cout << "—";
 	std::cout << std::endl;
-	rectangle = this->firstRectangle;
+	rectangle = recDLL->firstRectangle;
 	i = 0;
 	do
 	{
@@ -162,14 +162,14 @@ void RectangleSet::print()
 	} while (rectangle != nullptr);
 }
 
-void RectangleSet::printRecVector()
+void printRecVector(RectangleDLL *&recleDLL)
 {
 	size_t indexColumnSize = std::strlen(strSpaceWrap(COLUMN_INDEX_TITLE).c_str()),
 		   widthColumnSize = std::strlen(strSpaceWrap(COLUMN_WIDTH_TITLE).c_str()),
 		   heightColumnSize = std::strlen(strSpaceWrap(COLUMN_HEIGHT_TITLE).c_str()),
 		   areaColumnSize = std::strlen(strSpaceWrap(COLUMN_AREA_TITLE).c_str());
 	size_t i = 0;
-	for (Rectangle rectangle : this->recVector)
+	for (Rectangle rectangle : recleDLL->recVector)
 	{
 		if (indexColumnSize < std::to_string(i).size())
 		{
@@ -199,7 +199,7 @@ void RectangleSet::printRecVector()
 		std::cout << "—";
 	std::cout << std::endl;
 	i = 0;
-	for (Rectangle rectangle : this->recVector)
+	for (Rectangle rectangle : recleDLL->recVector)
 	{
 		std::cout << alignCenter(std::to_string(i), indexColumnSize) << " | "
 				  << alignCenter(std::to_string(rectangle.width), widthColumnSize) << " | "
@@ -209,17 +209,17 @@ void RectangleSet::printRecVector()
 	}
 }
 
-void RectangleSet::printSortMap()
+void printSortMap(RectangleDLL *&recDLL)
 {
-	for (auto data = this->sortMap.begin(); data != this->sortMap.end(); ++data)
+	for (auto data = recDLL->sortMap.begin(); data != recDLL->sortMap.end(); ++data)
 	{
 		std::printf("Map: %s => %s\n", data->first.c_str(), data->second ? "true" : "false");
 	}
 }
 
-void RectangleSet::printSortVector()
+void printSortVector(RectangleDLL *&recDLL)
 {
-	for (auto data = this->sortVector.begin(); data != this->sortVector.end(); ++data)
+	for (auto data = recDLL->sortVector.begin(); data != recDLL->sortVector.end(); ++data)
 	{
 		std::printf("Vector: %s\n", data->c_str());
 	}
@@ -257,40 +257,40 @@ std::string alignLeft(const std::string s, const int w)
 	return ss.str();
 }
 
-void RectangleSet::add()
+void addRectangle(RectangleDLL *&recDLL)
 {
 	Rectangle *newRectangle;
 	newRectangle = (struct Rectangle *)malloc(sizeof(struct Rectangle));
 	fillRectangleFromStdIn(newRectangle);
-	if (this->firstRectangle == nullptr)
+	if (recDLL->firstRectangle == nullptr)
 	{
 
-		this->firstRectangle = newRectangle;
-		this->lastRectangle = newRectangle;
+		recDLL->firstRectangle = newRectangle;
+		recDLL->lastRectangle = newRectangle;
 	}
 	else
 	{
-		newRectangle->prevRectangle = this->lastRectangle;
-		this->lastRectangle->nextRectangle = newRectangle;
-		this->lastRectangle = newRectangle;
+		newRectangle->prevRectangle = recDLL->lastRectangle;
+		recDLL->lastRectangle->nextRectangle = newRectangle;
+		recDLL->lastRectangle = newRectangle;
 	}
-	++this->size;
+	++recDLL->size;
 }
 
-void RectangleSet::deleteCards()
+void deleteRectangle(RectangleDLL *&recDLL)
 {
 	std::string command;
 	while (true)
 	{
-		if (this->size <= 0)
+		if (recDLL->size <= 0)
 		{
-			std::printf("Ваш набор пуст. Size: %zu\n", this->size);
+			std::printf("Ваш набор пуст. Size: %zu\n", recDLL->size);
 			return;
 		}
 
 		int i;
 		size_t firstIndex = 0,
-			   lastIndex = this->size - 1;
+			   lastIndex = recDLL->size - 1;
 		std::printf("Пожалуйста введите Index удаляемого прямоугольника (от %zu до %zu): ", firstIndex, lastIndex);
 		std::scanf("%d", &i);
 		std::cin.ignore();
@@ -316,7 +316,7 @@ void RectangleSet::deleteCards()
 			continue;
 		}
 
-		Rectangle *deleteRectangle = this->searchFromIndex(i);
+		Rectangle *deleteRectangle = searchRectangleFromIndex(recDLL, i);
 		printRectangle(deleteRectangle);
 		bool remove = false;
 		while (true)
@@ -374,10 +374,10 @@ void RectangleSet::deleteCards()
 	}
 }
 
-void RectangleSet::saveToFile()
+void saveToFile(RectangleDLL *&recDLL)
 {
 	std::string saveData;
-	Rectangle *rectangle = this->firstRectangle;
+	Rectangle *rectangle = recDLL->firstRectangle;
 	do
 	{
 		saveData += std::to_string(rectangle->width);
@@ -416,7 +416,7 @@ void RectangleSet::saveToFile()
 	}
 }
 
-void RectangleSet::readFromFile()
+void readFromFile(RectangleDLL *&recDLL)
 {
 	std::string readData;
 	std::ifstream readFile;
@@ -433,7 +433,7 @@ void RectangleSet::readFromFile()
 		if (readFile.is_open())
 		{
 			size_t i = 0;
-			this->recVector.clear();
+			recDLL->recVector.clear();
 			while (std::getline(readFile, readData))
 			{
 				if (!readData.compare(""))
@@ -456,14 +456,14 @@ void RectangleSet::readFromFile()
 				newRectangle.area = std::stof(rectangleProps[2].c_str());
 				newRectangle.prevRectangle = nullptr;
 				newRectangle.nextRectangle = nullptr;
-				this->recVector.push_back(newRectangle);
+				recDLL->recVector.push_back(newRectangle);
 			}
 			readFile.close();
 			std::printf("Файл '%s' прочитан.\n", pathToFile.c_str());
 
-			this->fillDoublyLinkedListFromRecVector();
-			this->recVector.clear();
-			this->print();
+			fillDoublyLinkedListFromRecVector(recDLL);
+			recDLL->recVector.clear();
+			printRectangleDLL(recDLL);
 			return;
 		}
 		else
@@ -497,14 +497,14 @@ std::vector<std::string> split(const std::string &s, const char sep)
 	return ret;
 }
 
-void RectangleSet::search()
+void searchRectangle(RectangleDLL *&recDLL)
 {
 	float findArea;
 	while (true)
 	{
-		if (this->size <= 0)
+		if (recDLL->size <= 0)
 		{
-			std::printf("Ваш набор пуст. Size: %zu\n", this->size);
+			std::printf("Ваш набор пуст. Size: %zu\n", recDLL->size);
 			return;
 		}
 
@@ -513,30 +513,30 @@ void RectangleSet::search()
 		std::cin.ignore();
 
 		//std::printf("Find rectangle with area: %f\n", findArea);
-		RectangleSet res;
-		for (size_t i = 0; i < this->recVector.size(); i++)
+		RectangleDLL *res = new RectangleDLL;
+		for (size_t i = 0; i < recDLL->recVector.size(); i++)
 		{
-			if (findArea == this->recVector[i].area)
+			if (findArea == recDLL->recVector[i].area)
 			{
-				res.recVector.push_back(this->recVector[i]);
+				res->recVector.push_back(recDLL->recVector[i]);
 			}
 		}
-		Rectangle *rectangle = this->firstRectangle;
+		Rectangle *rectangle = recDLL->firstRectangle;
 		do
 		{
 			if (rectangle->area == findArea)
 			{
-				res.recVector.push_back(*rectangle);
+				res->recVector.push_back(*rectangle);
 			}
 			rectangle = rectangle->nextRectangle;
 		} while (rectangle != nullptr);
-		if (res.recVector.size() == 0)
+		if (res->recVector.size() == 0)
 		{
 			std::printf("Ни одного прямоугольника с площадью %f не найдено.\n", findArea);
 		}
 		else
 		{
-			res.printRecVector();
+			printRecVector(res);
 		}
 
 		while (true)
@@ -557,10 +557,10 @@ void RectangleSet::search()
 	}
 }
 
-Rectangle *RectangleSet::searchFromIndex(size_t index)
+Rectangle *searchRectangleFromIndex(RectangleDLL *&recDLL, size_t index)
 {
 	size_t i = 0;
-	Rectangle *rectangle = this->firstRectangle;
+	Rectangle *rectangle = recDLL->firstRectangle;
 	do
 	{
 		if (index == i)
@@ -573,19 +573,19 @@ Rectangle *RectangleSet::searchFromIndex(size_t index)
 	return nullptr;
 }
 
-void RectangleSet::clear()
+void clearDLL(RectangleDLL *&recDLL)
 {
 	//std::printf("Start clear size %zu\n", this->size);
-	if (this->size == 0)
+	if (recDLL->size == 0)
 	{
 		return;
 	}
-	if (this->firstRectangle == nullptr)
+	if (recDLL->firstRectangle == nullptr)
 	{
 		return;
 	}
 
-	Rectangle *rectangle = this->firstRectangle, *nextRectangle;
+	Rectangle *rectangle = recDLL->firstRectangle, *nextRectangle;
 	do
 	{
 		nextRectangle = rectangle->nextRectangle;
@@ -597,17 +597,18 @@ void RectangleSet::clear()
 		rectangle = nextRectangle;
 	} while (rectangle != nullptr);
 
-	this->firstRectangle = nullptr;
-	this->lastRectangle = nullptr;
-	this->size = 0;
+	recDLL->firstRectangle = nullptr;
+	recDLL->lastRectangle = nullptr;
+	recDLL->size = 0;
 	//std::printf("Finish clear size %zu\n", this->size);
 }
 
-void RectangleSet::initSort()
+void initRectangleSort(RectangleDLL *&recDLL)
 {
-	if (this->size <= 1)
+	if (recDLL->size <= 1)
 	{
-		this->print();
+		//this->print();
+		printRectangleDLL(recDLL);
 		std::printf("Для сортировки необходимо чтобы прямоугольников было больше 1!\n");
 		return;
 	}
@@ -646,22 +647,22 @@ void RectangleSet::initSort()
 				continue;
 			}
 		}
-		if (!this->parseSortString(otherBy))
+		if (!recDLL->parseSortString(otherBy))
 		{
 			continue;
 		}
 
-		this->fillRecVectorFromDoublyLinkedList();
+		fillRecVectorFromDoublyLinkedList(recDLL);
 		//this->printSortMap();
 		//this->printSortVector();
 
-		this->sortBook();
-		this->sortMap.clear();
-		this->sortVector.clear();
+		recDLL->sortBook();
+		recDLL->sortMap.clear();
+		recDLL->sortVector.clear();
 
-		this->printRecVector();
-		this->fillDoublyLinkedListFromRecVector();
-		this->recVector.clear();
+		printRecVector(recDLL);
+		fillDoublyLinkedListFromRecVector(recDLL);
+		recDLL->recVector.clear();
 		while (true)
 		{
 			std::string command = "";
@@ -680,10 +681,10 @@ void RectangleSet::initSort()
 	}
 }
 
-void RectangleSet::fillRecVectorFromDoublyLinkedList()
+void fillRecVectorFromDoublyLinkedList(RectangleDLL *&recDLL)
 {
-	this->recVector.clear();
-	Rectangle *rectangle = this->firstRectangle, *nextRectangle;
+	recDLL->recVector.clear();
+	Rectangle *rectangle = recDLL->firstRectangle, *nextRectangle;
 	do
 	{
 		nextRectangle = rectangle->nextRectangle;
@@ -693,41 +694,41 @@ void RectangleSet::fillRecVectorFromDoublyLinkedList()
 		}
 		rectangle->prevRectangle = nullptr;
 		rectangle->nextRectangle = nullptr;
-		this->recVector.push_back(*rectangle);
+		recDLL->recVector.push_back(*rectangle);
 		rectangle = nextRectangle;
 	} while (rectangle != nullptr);
 }
 
-void RectangleSet::fillDoublyLinkedListFromRecVector()
+void fillDoublyLinkedListFromRecVector(RectangleDLL *&recDLL)
 {
 	//std::printf("Start fillDoublyLinkedListFromRecVector size: %zu\n", this->size);
-	this->clear();
+	clearDLL(recDLL);
 	Rectangle *newRectangle = nullptr;
 	Rectangle *lastRectangle = nullptr;
-	for (size_t i = 0; i < this->recVector.size(); i++)
+	for (size_t i = 0; i < recDLL->recVector.size(); i++)
 	{
-		newRectangle = &this->recVector[i];
+		newRectangle = &recDLL->recVector[i];
 		newRectangle->prevRectangle = nullptr;
 		newRectangle->nextRectangle = nullptr;
-		if (this->firstRectangle == nullptr)
+		if (recDLL->firstRectangle == nullptr)
 		{
-			this->firstRectangle = newRectangle;
-			this->lastRectangle = newRectangle;
+			recDLL->firstRectangle = newRectangle;
+			recDLL->lastRectangle = newRectangle;
 		}
 		else
 		{
-			lastRectangle = this->lastRectangle;
+			lastRectangle = recDLL->lastRectangle;
 			newRectangle->prevRectangle = lastRectangle;
 			lastRectangle->nextRectangle = newRectangle;
-			this->lastRectangle = nullptr;
-			this->lastRectangle = newRectangle;
+			recDLL->lastRectangle = nullptr;
+			recDLL->lastRectangle = newRectangle;
 		}
-		++this->size;
+		++recDLL->size;
 	}
 	//std::printf("Finish fillDoublyLinkedListFromRecVector size: %zu\n", this->size);
 }
 
-bool RectangleSet::parseSortString(const std::string str)
+bool RectangleDLL::parseSortString(const std::string str)
 {
 	std::vector<std::string> splitString = split(str, ',');
 	for (size_t i = 0; i < splitString.size(); i++)
@@ -772,7 +773,7 @@ bool RectangleSet::parseSortString(const std::string str)
 	return true;
 }
 
-void RectangleSet::sortBook()
+void RectangleDLL::sortBook()
 {
 	const std::string beginKey = sortVector[0];
 	for (size_t i = 0; i < this->recVector.size() - 1; i++)
@@ -811,7 +812,7 @@ void RectangleSet::sortBook()
 	}
 }
 
-std::pair<int, bool> RectangleSet::cmpRectangleRecursive(const size_t firstVectorIndex, const size_t secondVectorIndex, const size_t sortIndex)
+std::pair<int, bool> RectangleDLL::cmpRectangleRecursive(const size_t firstVectorIndex, const size_t secondVectorIndex, const size_t sortIndex)
 {
 	std::pair<int, bool> res;
 	Rectangle firstBook = this->recVector[firstVectorIndex];

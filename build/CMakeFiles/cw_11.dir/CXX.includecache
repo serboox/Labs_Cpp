@@ -6,20 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/Users/selectel/clang/serboox/Labs_Cpp/src/main.cpp
-iostream
--
-string
--
-cmath
-/Users/selectel/clang/serboox/Labs_Cpp/src/cmath
-other.h
-/Users/selectel/clang/serboox/Labs_Cpp/src/other.h
-Windows.h
--
-unistd.h
--
-
 /Users/selectel/clang/serboox/Labs_Cpp/src/other.cpp
 other.h
 /Users/selectel/clang/serboox/Labs_Cpp/src/other.h
@@ -45,10 +31,6 @@ utility
 -
 map
 -
-rectangle.h
-/Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.h
-
-/Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.cpp
 rectangle.h
 /Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.h
 
