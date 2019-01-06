@@ -1,6 +1,6 @@
 #include <iostream> // заголовочный файл стандартной библиотеки для работы с вводом/выводом
-#include <string>   // заголовочный файл стандартной библиотеки для работы со строками
 #include <stdlib.h> // заголовочный файл стандартной библиотеки
+#include <cstring>  // библиотека для работы со строками (используем для strcmp();)
 
 #if !defined(WIN32) && !defined(_WIN32) && !defined(_WIN64)
 #include <unistd.h> // библиотека для функции sleep() используемая в Unix
@@ -35,4 +35,4 @@ void fillRectangleFromStdIn(Rectangle *&rectangle);
 void printRectangle(Rectangle *&rectangle);
 /* validateColumnTitle производит проверку соответствует ли строка
 	названию одной одной из колонок */
-bool validateColumnTitle(const std::string str);
+bool validateColumnTitle(const char str[]);

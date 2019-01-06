@@ -742,7 +742,7 @@ bool parseRectangleSortString(RectangleDLL *&recDLL, const std::string str)
 		}
 		else if (colAndTypeOper.size() == 2)
 		{
-			if (!validateColumnTitle(colAndTypeOper[0]))
+			if (!validateColumnTitle(colAndTypeOper[0].c_str()))
 			{
 				std::printf("Не удалось распознать название колонки '%s'!\n", colAndTypeOper[0].c_str());
 				return false;
@@ -761,7 +761,7 @@ bool parseRectangleSortString(RectangleDLL *&recDLL, const std::string str)
 		}
 		else
 		{
-			if (!validateColumnTitle(colAndTypeOper[0]))
+			if (!validateColumnTitle(colAndTypeOper[0].c_str()))
 			{
 				std::printf("Не удалось распознать название колонки '%s'!\n", colAndTypeOper[0].c_str());
 				return false;

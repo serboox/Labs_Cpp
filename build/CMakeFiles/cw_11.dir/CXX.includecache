@@ -6,16 +6,40 @@
 
 #IncludeRegexTransform: 
 
-/Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.cpp
+/Users/selectel/clang/serboox/Labs_Cpp/src/other.cpp
+other.h
+/Users/selectel/clang/serboox/Labs_Cpp/src/other.h
+
+/Users/selectel/clang/serboox/Labs_Cpp/src/other.h
+cstdio
+-
+string
+-
+iomanip
+-
+sstream
+-
+vector
+-
+fstream
+-
+algorithm
+-
+cctype
+-
+utility
+-
+map
+-
 rectangle.h
 /Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.h
 
 /Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.h
 iostream
 -
-string
--
 stdlib.h
+-
+cstring
 -
 unistd.h
 -

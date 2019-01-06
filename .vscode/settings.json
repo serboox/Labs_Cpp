@@ -11,7 +11,8 @@
         "type_traits": "c",
         "typeinfo": "c",
         "algorithm": "c",
-        "string": "cpp"
+        "string": "cpp",
+        "cstring": "cpp"
     },
     "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools"
 }
