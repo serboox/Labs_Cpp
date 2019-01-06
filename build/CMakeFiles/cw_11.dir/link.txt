@@ -1,0 +1,1 @@
+/Library/Developer/CommandLineTools/usr/bin/c++   -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cw_11.dir/src/main.cpp.o CMakeFiles/cw_11.dir/src/other.cpp.o CMakeFiles/cw_11.dir/src/rectangle.cpp.o  -o cw_11 

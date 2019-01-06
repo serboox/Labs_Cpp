@@ -16,15 +16,15 @@ void run()
 		if (!command.compare(COMMAND_HELP))
 		{
 			std::printf(
-				"%s  Распечатать содержимое набора. \n"
-				"%s  Добавить новый прямоугольник. \n"
-				"%s  Удалить существующий(ие). \n"
-				"%s  Записать в файл. \n"
-				"%s  Считать из файла. \n"
-				"%s  Найти прямоугольник(и) площадь которого соответствует значениею. \n"
-				"%s  Сортировки набора по одному или нескольким полям. \n"
-				"%s  Отобразить список комманд. \n"
-				"%s  Выйти. \n",
+				"%s  Р Р°СЃРїРµС‡Р°С‚Р°С‚СЊ СЃРѕРґРµСЂР¶РёРјРѕРµ РЅР°Р±РѕСЂР°. \n"
+				"%s  Р”РѕР±Р°РІРёС‚СЊ РЅРѕРІС‹Р№ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРє. \n"
+				"%s  РЈРґР°Р»РёС‚СЊ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№(РёРµ). \n"
+				"%s  Р—Р°РїРёСЃР°С‚СЊ РІ С„Р°Р№Р». \n"
+				"%s  РЎС‡РёС‚Р°С‚СЊ РёР· С„Р°Р№Р»Р°. \n"
+				"%s  РќР°Р№С‚Рё РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРє(Рё) РїР»РѕС‰Р°РґСЊ РєРѕС‚РѕСЂРѕРіРѕ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ Р·РЅР°С‡РµРЅРёРµСЋ. \n"
+				"%s  РЎРѕСЂС‚РёСЂРѕРІРєРё РЅР°Р±РѕСЂР° РїРѕ РѕРґРЅРѕРјСѓ РёР»Рё РЅРµСЃРєРѕР»СЊРєРёРј РїРѕР»СЏРј. \n"
+				"%s  РћС‚РѕР±СЂР°Р·РёС‚СЊ СЃРїРёСЃРѕРє РєРѕРјРјР°РЅРґ. \n"
+				"%s  Р’С‹Р№С‚Рё. \n",
 				COMMAND_PRINT,
 				COMMAND_ADD,
 				COMMAND_DELETE,
@@ -37,38 +37,38 @@ void run()
 		}
 		else if (!command.compare(COMMAND_PRINT))
 		{
-			std::printf("Cодержимое набора прямоугольников: \n\n");
+			std::printf("CРѕРґРµСЂР¶РёРјРѕРµ РЅР°Р±РѕСЂР° РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєРѕРІ: \n\n");
 			recSet.print();
 			std::printf("\n");
 		}
 		else if (!command.compare(COMMAND_ADD))
 		{
-			std::printf("Добавить новый прямоугольник: \n\n");
+			std::printf("Р”РѕР±Р°РІРёС‚СЊ РЅРѕРІС‹Р№ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРє: \n\n");
 			recSet.add();
 		}
 		else if (!command.compare(COMMAND_DELETE))
 		{
-			std::printf("Удалить существующий(ие): \n");
+			std::printf("РЈРґР°Р»РёС‚СЊ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№(РёРµ): \n");
 			recSet.deleteCards();
 		}
 		else if (!command.compare(COMMAND_SAVE))
 		{
-			std::printf("Записать в файл: \n");
+			std::printf("Р—Р°РїРёСЃР°С‚СЊ РІ С„Р°Р№Р»: \n");
 			recSet.saveToFile();
 		}
 		else if (!command.compare(COMMAND_LOAD))
 		{
-			std::printf("Считать из файла: \n");
+			std::printf("РЎС‡РёС‚Р°С‚СЊ РёР· С„Р°Р№Р»Р°: \n");
 			recSet.readFromFile();
 		}
 		else if (!command.compare(COMMAND_SEARCH))
 		{
-			std::printf("Найти прямоугольник(и) площадь которого соответствует значениею: \n");
+			std::printf("РќР°Р№С‚Рё РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРє(Рё) РїР»РѕС‰Р°РґСЊ РєРѕС‚РѕСЂРѕРіРѕ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ Р·РЅР°С‡РµРЅРёРµСЋ: \n");
 			recSet.search();
 		}
 		else if (!command.compare(COMMAND_SORT))
 		{
-			std::printf("Сортировки набора по одному или нескольким полям: \n");
+			std::printf("РЎРѕСЂС‚РёСЂРѕРІРєРё РЅР°Р±РѕСЂР° РїРѕ РѕРґРЅРѕРјСѓ РёР»Рё РЅРµСЃРєРѕР»СЊРєРёРј РїРѕР»СЏРј: \n");
 			recSet.initSort();
 		}
 		else if (!command.compare(COMMAND_EXIT))
@@ -103,13 +103,13 @@ void RectangleSet::print()
 {
 	if (this->size <= 0)
 	{
-		std::printf("Ваш набор пуст. Size: %zu\n", this->size);
+		std::printf("Р’Р°С€ РЅР°Р±РѕСЂ РїСѓСЃС‚. Size: %zu\n", this->size);
 		return;
 	}
 	Rectangle *rectangle = this->firstRectangle;
 	if (rectangle == nullptr)
 	{
-		std::printf("Ваш набор пуст. Size: %zu\n", this->size);
+		std::printf("Р’Р°С€ РЅР°Р±РѕСЂ РїСѓСЃС‚. Size: %zu\n", this->size);
 		return;
 	}
 	size_t indexColumnSize = std::strlen(strSpaceWrap(COLUMN_INDEX_TITLE).c_str()),
@@ -147,7 +147,7 @@ void RectangleSet::print()
 	size_t totalSize = indexColumnSize + widthColumnSize + heightColumnSize + areaColumnSize;
 	totalSize += totalSize * 0.21;
 	for (size_t i = 0; i <= totalSize; i++)
-		std::cout << "—";
+		std::cout << "вЂ”";
 	std::cout << std::endl;
 	rectangle = this->firstRectangle;
 	i = 0;
@@ -196,7 +196,7 @@ void RectangleSet::printRecVector()
 	size_t totalSize = indexColumnSize + widthColumnSize + heightColumnSize + areaColumnSize;
 	totalSize += totalSize * 0.21;
 	for (size_t i = 0; i <= totalSize; i++)
-		std::cout << "—";
+		std::cout << "вЂ”";
 	std::cout << std::endl;
 	i = 0;
 	for (Rectangle rectangle : this->recVector)
@@ -284,24 +284,24 @@ void RectangleSet::deleteCards()
 	{
 		if (this->size <= 0)
 		{
-			std::printf("Ваш набор пуст. Size: %zu\n", this->size);
+			std::printf("Р’Р°С€ РЅР°Р±РѕСЂ РїСѓСЃС‚. Size: %zu\n", this->size);
 			return;
 		}
 
 		int i;
 		size_t firstIndex = 0,
 			   lastIndex = this->size - 1;
-		std::printf("Пожалуйста введите Index удаляемого прямоугольника (от %zu до %zu): ", firstIndex, lastIndex);
+		std::printf("РџРѕР¶Р°Р»СѓР№СЃС‚Р° РІРІРµРґРёС‚Рµ Index СѓРґР°Р»СЏРµРјРѕРіРѕ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР° (РѕС‚ %zu РґРѕ %zu): ", firstIndex, lastIndex);
 		std::scanf("%d", &i);
 		std::cin.ignore();
 
 		if (i < firstIndex || i > lastIndex)
 		{
-			std::printf("Такого прямоугольника не существует! \n");
+			std::printf("РўР°РєРѕРіРѕ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР° РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚! \n");
 			while (true)
 			{
 				command = "";
-				std::printf("Желаете продолжить? [Y/n]: ");
+				std::printf("Р–РµР»Р°РµС‚Рµ РїСЂРѕРґРѕР»Р¶РёС‚СЊ? [Y/n]: ");
 				std::getline(std::cin, command);
 				if (!command.compare("") || !command.compare("Y") || !command.compare("y"))
 				{
@@ -322,7 +322,7 @@ void RectangleSet::deleteCards()
 		while (true)
 		{
 			command = "";
-			std::printf("Вы действительно хотите удалить этот прямоугольник из набора? [Y/n]: ");
+			std::printf("Р’С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ СЌС‚РѕС‚ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРє РёР· РЅР°Р±РѕСЂР°? [Y/n]: ");
 			std::getline(std::cin, command);
 			if (!command.compare("") || !command.compare("Y") || !command.compare("y"))
 			{
@@ -344,22 +344,22 @@ void RectangleSet::deleteCards()
 			nextRectangle = deleteRectangle->nextRectangle;
 			if (prevRectangle != NULL)
 			{
-				// переставляем указатель
+				// РїРµСЂРµСЃС‚Р°РІР»СЏРµРј СѓРєР°Р·Р°С‚РµР»СЊ
 				prevRectangle->nextRectangle = deleteRectangle->nextRectangle;
 			}
 			if (nextRectangle != NULL)
 			{
-				// переставляем указатель
+				// РїРµСЂРµСЃС‚Р°РІР»СЏРµРј СѓРєР°Р·Р°С‚РµР»СЊ
 				nextRectangle->prevRectangle = deleteRectangle->prevRectangle;
 			}
-			// освобождаем память удаляемого элемента
+			// РѕСЃРІРѕР±РѕР¶РґР°РµРј РїР°РјСЏС‚СЊ СѓРґР°Р»СЏРµРјРѕРіРѕ СЌР»РµРјРµРЅС‚Р°
 			free(deleteRectangle);
 		}
-		std::printf("Прямоугольник удален! \n");
+		std::printf("РџСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРє СѓРґР°Р»РµРЅ! \n");
 		while (true)
 		{
 			command = "";
-			std::printf("Желаете продолжить? [y/N]: ");
+			std::printf("Р–РµР»Р°РµС‚Рµ РїСЂРѕРґРѕР»Р¶РёС‚СЊ? [y/N]: ");
 			std::getline(std::cin, command);
 			if (!command.compare("Y") || !command.compare("y"))
 			{
@@ -393,7 +393,7 @@ void RectangleSet::saveToFile()
 	while (true)
 	{
 		std::string pathToFile = "";
-		std::printf("Введите путь к файлу [default:%s]: ", DEFAULT_PATH_TO_FILE.c_str());
+		std::printf("Р’РІРµРґРёС‚Рµ РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ [default:%s]: ", DEFAULT_PATH_TO_FILE.c_str());
 		std::getline(std::cin, pathToFile);
 		if (!pathToFile.compare(""))
 		{
@@ -404,12 +404,12 @@ void RectangleSet::saveToFile()
 		{
 			saveFile << saveData.c_str();
 			saveFile.close();
-			std::printf("Файл сохранен по поти: '%s'\n", pathToFile.c_str());
+			std::printf("Р¤Р°Р№Р» СЃРѕС…СЂР°РЅРµРЅ РїРѕ РїРѕС‚Рё: '%s'\n", pathToFile.c_str());
 			return;
 		}
 		else
 		{
-			std::printf("Поток для записи в файл '%s' закрыт! \n", pathToFile.c_str());
+			std::printf("РџРѕС‚РѕРє РґР»СЏ Р·Р°РїРёСЃРё РІ С„Р°Р№Р» '%s' Р·Р°РєСЂС‹С‚! \n", pathToFile.c_str());
 			continue;
 		}
 		continue;
@@ -423,7 +423,7 @@ void RectangleSet::readFromFile()
 	while (true)
 	{
 		std::string pathToFile = "";
-		std::printf("Введите путь к файлу [default:%s]: ", DEFAULT_PATH_TO_FILE.c_str());
+		std::printf("Р’РІРµРґРёС‚Рµ РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ [default:%s]: ", DEFAULT_PATH_TO_FILE.c_str());
 		std::getline(std::cin, pathToFile);
 		if (!pathToFile.compare(""))
 		{
@@ -444,8 +444,8 @@ void RectangleSet::readFromFile()
 				std::vector<std::string> rectangleProps = split(readData, ';');
 				if (rectangleProps.size() != 3)
 				{
-					std::printf("Строка %zu не соответствует требуемуму формату т.к."
-								"число ее свойств (%zu) должно быть равно 3!\n %s\n",
+					std::printf("РЎС‚СЂРѕРєР° %zu РЅРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ С‚СЂРµР±СѓРµРјСѓРјСѓ С„РѕСЂРјР°С‚Сѓ С‚.Рє."
+								"С‡РёСЃР»Рѕ РµРµ СЃРІРѕР№СЃС‚РІ (%zu) РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ СЂР°РІРЅРѕ 3!\n %s\n",
 								i, rectangleProps.size(), readData.c_str());
 					continue;
 				}
@@ -459,7 +459,7 @@ void RectangleSet::readFromFile()
 				this->recVector.push_back(newRectangle);
 			}
 			readFile.close();
-			std::printf("Файл '%s' прочитан.\n", pathToFile.c_str());
+			std::printf("Р¤Р°Р№Р» '%s' РїСЂРѕС‡РёС‚Р°РЅ.\n", pathToFile.c_str());
 
 			this->fillDoublyLinkedListFromRecVector();
 			this->recVector.clear();
@@ -468,7 +468,7 @@ void RectangleSet::readFromFile()
 		}
 		else
 		{
-			std::printf("Поток для чтения из файла '%s' закрыт! \n", pathToFile.c_str());
+			std::printf("РџРѕС‚РѕРє РґР»СЏ С‡С‚РµРЅРёСЏ РёР· С„Р°Р№Р»Р° '%s' Р·Р°РєСЂС‹С‚! \n", pathToFile.c_str());
 			return;
 		}
 		continue;
@@ -504,11 +504,11 @@ void RectangleSet::search()
 	{
 		if (this->size <= 0)
 		{
-			std::printf("Ваш набор пуст. Size: %zu\n", this->size);
+			std::printf("Р’Р°С€ РЅР°Р±РѕСЂ РїСѓСЃС‚. Size: %zu\n", this->size);
 			return;
 		}
 
-		std::printf("Введите площадь прямоугольника который нужно найти: ");
+		std::printf("Р’РІРµРґРёС‚Рµ РїР»РѕС‰Р°РґСЊ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР° РєРѕС‚РѕСЂС‹Р№ РЅСѓР¶РЅРѕ РЅР°Р№С‚Рё: ");
 		std::scanf("%f", &findArea);
 		std::cin.ignore();
 
@@ -532,7 +532,7 @@ void RectangleSet::search()
 		} while (rectangle != nullptr);
 		if (res.recVector.size() == 0)
 		{
-			std::printf("Ни одного прямоугольника с площадью %f не найдено.\n", findArea);
+			std::printf("РќРё РѕРґРЅРѕРіРѕ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР° СЃ РїР»РѕС‰Р°РґСЊСЋ %f РЅРµ РЅР°Р№РґРµРЅРѕ.\n", findArea);
 		}
 		else
 		{
@@ -542,7 +542,7 @@ void RectangleSet::search()
 		while (true)
 		{
 			std::string command = "";
-			std::printf("Желаете продолжить? [Y/n]: ");
+			std::printf("Р–РµР»Р°РµС‚Рµ РїСЂРѕРґРѕР»Р¶РёС‚СЊ? [Y/n]: ");
 			std::getline(std::cin, command);
 			if (!command.compare("") | !command.compare("Y") || !command.compare("y"))
 			{
@@ -608,15 +608,15 @@ void RectangleSet::initSort()
 	if (this->size <= 1)
 	{
 		this->print();
-		std::printf("Для сортировки необходимо чтобы прямоугольников было больше 1!\n");
+		std::printf("Р”Р»СЏ СЃРѕСЂС‚РёСЂРѕРІРєРё РЅРµРѕР±С…РѕРґРёРјРѕ С‡С‚РѕР±С‹ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєРѕРІ Р±С‹Р»Рѕ Р±РѕР»СЊС€Рµ 1!\n");
 		return;
 	}
 	while (true)
 	{
 		std::string otherBy = "";
 		std::printf(
-			"Перечислите через запятую названия колонок (кроме '%s') по которым будет производиться сортировка \n"
-			"Например %s %s,%s %s (%s можно не писать): ",
+			"РџРµСЂРµС‡РёСЃР»РёС‚Рµ С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ РЅР°Р·РІР°РЅРёСЏ РєРѕР»РѕРЅРѕРє (РєСЂРѕРјРµ '%s') РїРѕ РєРѕС‚РѕСЂС‹Рј Р±СѓРґРµС‚ РїСЂРѕРёР·РІРѕРґРёС‚СЊСЃСЏ СЃРѕСЂС‚РёСЂРѕРІРєР° \n"
+			"РќР°РїСЂРёРјРµСЂ %s %s,%s %s (%s РјРѕР¶РЅРѕ РЅРµ РїРёСЃР°С‚СЊ): ",
 			COLUMN_INDEX_TITLE.c_str(),
 			COLUMN_WIDTH_TITLE.c_str(), SORT_DESC.c_str(),
 			COLUMN_AREA_TITLE.c_str(), SORT_DESC.c_str(),
@@ -624,12 +624,12 @@ void RectangleSet::initSort()
 		std::getline(std::cin, otherBy);
 		if (!otherBy.compare(""))
 		{
-			std::printf("Перечисление не может быть пустым!\n");
+			std::printf("РџРµСЂРµС‡РёСЃР»РµРЅРёРµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј!\n");
 			bool isContinue = false;
 			while (true)
 			{
 				std::string command = "";
-				std::printf("Желаете продолжить? [y/N]: ");
+				std::printf("Р–РµР»Р°РµС‚Рµ РїСЂРѕРґРѕР»Р¶РёС‚СЊ? [y/N]: ");
 				std::getline(std::cin, command);
 				if (!command.compare("Y") || !command.compare("y"))
 				{
@@ -665,7 +665,7 @@ void RectangleSet::initSort()
 		while (true)
 		{
 			std::string command = "";
-			std::printf("Желаете продолжить? [Y/n]: ");
+			std::printf("Р–РµР»Р°РµС‚Рµ РїСЂРѕРґРѕР»Р¶РёС‚СЊ? [Y/n]: ");
 			std::getline(std::cin, command);
 			if (!command.compare("") || !command.compare("Y") || !command.compare("y"))
 			{
@@ -736,14 +736,14 @@ bool RectangleSet::parseSortString(const std::string str)
 		//std::printf("Size: (%d)\n", colAndTypeOper.size());
 		if (colAndTypeOper.size() > 2)
 		{
-			std::printf("Не удалось распознать строку '%s'!\n", splitString[i].c_str());
+			std::printf("РќРµ СѓРґР°Р»РѕСЃСЊ СЂР°СЃРїРѕР·РЅР°С‚СЊ СЃС‚СЂРѕРєСѓ '%s'!\n", splitString[i].c_str());
 			return false;
 		}
 		else if (colAndTypeOper.size() == 2)
 		{
 			if (!validateColumnTitle(colAndTypeOper[0]))
 			{
-				std::printf("Не удалось распознать название колонки '%s'!\n", colAndTypeOper[0].c_str());
+				std::printf("РќРµ СѓРґР°Р»РѕСЃСЊ СЂР°СЃРїРѕР·РЅР°С‚СЊ РЅР°Р·РІР°РЅРёРµ РєРѕР»РѕРЅРєРё '%s'!\n", colAndTypeOper[0].c_str());
 				return false;
 			}
 			this->sortMap[colAndTypeOper[0]] = false;
@@ -754,7 +754,7 @@ bool RectangleSet::parseSortString(const std::string str)
 			}
 			else if (colAndTypeOper[1].compare(SORT_ASC))
 			{
-				std::printf("Не удалось распознать тип сортироваки '%s'!\n", colAndTypeOper[1].c_str());
+				std::printf("РќРµ СѓРґР°Р»РѕСЃСЊ СЂР°СЃРїРѕР·РЅР°С‚СЊ С‚РёРї СЃРѕСЂС‚РёСЂРѕРІР°РєРё '%s'!\n", colAndTypeOper[1].c_str());
 				return false;
 			}
 		}
@@ -762,7 +762,7 @@ bool RectangleSet::parseSortString(const std::string str)
 		{
 			if (!validateColumnTitle(colAndTypeOper[0]))
 			{
-				std::printf("Не удалось распознать название колонки '%s'!\n", colAndTypeOper[0].c_str());
+				std::printf("РќРµ СѓРґР°Р»РѕСЃСЊ СЂР°СЃРїРѕР·РЅР°С‚СЊ РЅР°Р·РІР°РЅРёРµ РєРѕР»РѕРЅРєРё '%s'!\n", colAndTypeOper[0].c_str());
 				return false;
 			}
 			this->sortMap[colAndTypeOper[0]] = false;
@@ -783,12 +783,12 @@ void RectangleSet::sortBook()
 		for (size_t j = i + 1; j < this->recVector.size(); j++)
 		{
 			std::pair<int, bool> cmpRes = this->cmpRectangleRecursive(posMaxElem, j, 0);
-			//std::printf("Результат сравнения: '%d' \n", cmpRes);
+			//std::printf("Р РµР·СѓР»СЊС‚Р°С‚ СЃСЂР°РІРЅРµРЅРёСЏ: '%d' \n", cmpRes);
 			//this->print();
 
 			if (cmpRes.first == 0)
 			{
-				//std::printf("Прямоугольники равны\n");
+				//std::printf("РџСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєРё СЂР°РІРЅС‹\n");
 				continue;
 			}
 			else if (cmpRes.first > 0 && cmpRes.second)
@@ -822,7 +822,7 @@ std::pair<int, bool> RectangleSet::cmpRectangleRecursive(const size_t firstVecto
 	{
 		if (secondBook.width == firstBook.width)
 		{
-			//std::printf("Значения ширин прямоугольников равны\n");
+			//std::printf("Р—РЅР°С‡РµРЅРёСЏ С€РёСЂРёРЅ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєРѕРІ СЂР°РІРЅС‹\n");
 			size_t newSortIndex = sortIndex;
 			if (newSortIndex < this->sortVector.size() - 1)
 			{
@@ -847,7 +847,7 @@ std::pair<int, bool> RectangleSet::cmpRectangleRecursive(const size_t firstVecto
 	{
 		if (secondBook.height == firstBook.height)
 		{
-			//std::printf("Значения высот прямоугольников равны\n");
+			//std::printf("Р—РЅР°С‡РµРЅРёСЏ РІС‹СЃРѕС‚ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєРѕРІ СЂР°РІРЅС‹\n");
 			size_t newSortIndex = sortIndex;
 			if (newSortIndex < this->sortVector.size() - 1)
 			{
@@ -872,7 +872,7 @@ std::pair<int, bool> RectangleSet::cmpRectangleRecursive(const size_t firstVecto
 	{
 		if (secondBook.area == firstBook.area)
 		{
-			//std::printf("Значения площадей прямоугольников равны\n");
+			//std::printf("Р—РЅР°С‡РµРЅРёСЏ РїР»РѕС‰Р°РґРµР№ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєРѕРІ СЂР°РІРЅС‹\n");
 			size_t newSortIndex = sortIndex;
 			if (newSortIndex < this->sortVector.size() - 1)
 			{

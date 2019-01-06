@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
-project(cw11)
+project(cw_11)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -45,4 +45,10 @@ if ((CMAKE_GENERATOR MATCHES "Visual Studio") AND (CMAKE_GENERATOR_TOOLSET STREQ
             "host compiler, pass -Thost=x64 on the CMake command line.")
 endif()
 
-add_executable(cw11 main.cpp rectangle.cpp other.cpp)
+file(GLOB ALL_SRC_FILES
+    "./src/*.h"
+    "./src/*.c"
+    "./src/*.cpp"
+)
+
+add_executable(cw_11 ${ALL_SRC_FILES})
