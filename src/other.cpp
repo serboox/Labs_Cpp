@@ -393,7 +393,7 @@ void saveToFile(RectangleDLL *&recDLL)
 	while (true)
 	{
 		std::string pathToFile = "";
-		std::printf("Введите путь к файлу [default:%s]: ", DEFAULT_PATH_TO_FILE.c_str());
+		std::printf("Введите путь к файлу [default:%s]: ", DEFAULT_PATH_TO_FILE);
 		std::getline(std::cin, pathToFile);
 		if (!pathToFile.compare(""))
 		{
@@ -423,7 +423,7 @@ void readFromFile(RectangleDLL *&recDLL)
 	while (true)
 	{
 		std::string pathToFile = "";
-		std::printf("Введите путь к файлу [default:%s]: ", DEFAULT_PATH_TO_FILE.c_str());
+		std::printf("Введите путь к файлу [default:%s]: ", DEFAULT_PATH_TO_FILE);
 		std::getline(std::cin, pathToFile);
 		if (!pathToFile.compare(""))
 		{

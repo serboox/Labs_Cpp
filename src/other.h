@@ -27,10 +27,10 @@ const char
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 // DEFAULT_PATH_TO_FILE константа хранящая путь для сохраняемого/считываемого файла по умолчанию
-const std::string DEFAULT_PATH_TO_FILE = "C:\\Users\\Public\\rectangleSet.txt";
+const char DEFAULT_PATH_TO_FILE[] = "C:\\Users\\Public\\rectangleSet.txt";
 #else
 // DEFAULT_PATH_TO_FILE константа хранящая путь для сохраняемого/считываемого файла по умолчанию
-const std::string DEFAULT_PATH_TO_FILE = "./rectangleSet.txt";
+const char DEFAULT_PATH_TO_FILE[] = "./rectangleSet.txt";
 #endif
 // SORT_ASC сотировака в порядке возрастания
 const std::string SORT_ASC = "ASC";
