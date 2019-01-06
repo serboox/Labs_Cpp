@@ -44,4 +44,10 @@ if ((CMAKE_GENERATOR MATCHES "Visual Studio") AND (CMAKE_GENERATOR_TOOLSET STREQ
             "host compiler, pass -Thost=x64 on the CMake command line.")
 endif()
 
-add_executable(lab_c ./src/main.c ./src/other.c)
+file(GLOB ALL_SRC_FILES
+    "./src/*.h"
+    "./src/*.c"
+    "./src/*.cpp"
+)
+
+add_executable(lab_c ${ALL_SRC_FILES})
