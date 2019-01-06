@@ -53,24 +53,6 @@ struct RectangleDLL
 	std::map<std::string, bool> sortMap;
 	// sortVector хранит имена колонок в порядке котором следует производить сортировку
 	std::vector<std::string> sortVector;
-
-	/*
-		parseSortString преобразует строку(std:cin) в данные необходимые для сортировки,
-		заполняет поля sortMap и sortVector, возвращает false в случае ошибки
-	 */
-	bool parseSortString(std::string str);
-	// sortBook сортирует имеющиеся в картатеке книги
-	void sortBook();
-	/*
-		cmpRectangleRecursive рекурсивно проходит по sortVector проверяя какое из значений больше
-		1 если firstVectorIndex > secondVectorIndex
-		0 если firstVectorIndex == secondVectorIndex
-		-1 если firstVectorIndex < secondVectorIndex
-	*/
-	std::pair<int, bool> cmpRectangleRecursive(
-		const size_t firstVectorIndex,
-		const size_t secondVectorIndex,
-		const size_t sortIndex);
 };
 
 // run запускает программы
@@ -110,6 +92,25 @@ void initRectangleSort(RectangleDLL *&recDLL);
 void fillRecVectorFromDoublyLinkedList(RectangleDLL *&recDLL);
 // fillDoublyLinkedListFromRecVector формирует двухсвязанный список из вуктора recVector
 void fillDoublyLinkedListFromRecVector(RectangleDLL *&recDLL);
+
+/*
+	parseRectangleSortString преобразует строку(std:cin) в данные необходимые для сортировки,
+	заполняет поля sortMap и sortVector, возвращает false в случае ошибки
+*/
+bool parseRectangleSortString(RectangleDLL *&recDLL, std::string str);
+// sortRectangleDLL сортирует прямоугольники
+void sortRectangleDLL(RectangleDLL *&recDLL);
+/*
+	cmpRectangleRecursive рекурсивно проходит по sortVector проверяя какое из значений больше
+	1 если firstVectorIndex > secondVectorIndex
+	0 если firstVectorIndex == secondVectorIndex
+	-1 если firstVectorIndex < secondVectorIndex
+*/
+std::pair<int, bool> cmpRectangleRecursive(
+	RectangleDLL *&recDLL,
+	const size_t firstVectorIndex,
+	const size_t secondVectorIndex,
+	const size_t sortIndex);
 
 // strSpaceWrap добавляет пробел в начало и конец строки
 std::string strSpaceWrap(std::string str);

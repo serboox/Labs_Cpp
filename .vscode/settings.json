@@ -1,6 +1,16 @@
 {
     "files.associations": {
-        "other.h": "c"
+        "other.h": "c",
+        "__config": "c",
+        "__nullptr": "c",
+        "cstddef": "c",
+        "exception": "c",
+        "initializer_list": "c",
+        "new": "c",
+        "stdexcept": "c",
+        "type_traits": "c",
+        "typeinfo": "c",
+        "algorithm": "c"
     },
     "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools"
 }

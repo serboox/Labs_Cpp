@@ -647,7 +647,7 @@ void initRectangleSort(RectangleDLL *&recDLL)
 				continue;
 			}
 		}
-		if (!recDLL->parseSortString(otherBy))
+		if (!parseRectangleSortString(recDLL, otherBy))
 		{
 			continue;
 		}
@@ -656,7 +656,7 @@ void initRectangleSort(RectangleDLL *&recDLL)
 		//this->printSortMap();
 		//this->printSortVector();
 
-		recDLL->sortBook();
+		sortRectangleDLL(recDLL);
 		recDLL->sortMap.clear();
 		recDLL->sortVector.clear();
 
@@ -728,7 +728,7 @@ void fillDoublyLinkedListFromRecVector(RectangleDLL *&recDLL)
 	//std::printf("Finish fillDoublyLinkedListFromRecVector size: %zu\n", this->size);
 }
 
-bool RectangleDLL::parseSortString(const std::string str)
+bool parseRectangleSortString(RectangleDLL *&recDLL, const std::string str)
 {
 	std::vector<std::string> splitString = split(str, ',');
 	for (size_t i = 0; i < splitString.size(); i++)
@@ -747,11 +747,11 @@ bool RectangleDLL::parseSortString(const std::string str)
 				std::printf("Не удалось распознать название колонки '%s'!\n", colAndTypeOper[0].c_str());
 				return false;
 			}
-			this->sortMap[colAndTypeOper[0]] = false;
-			this->sortVector.push_back(colAndTypeOper[0]);
+			recDLL->sortMap[colAndTypeOper[0]] = false;
+			recDLL->sortVector.push_back(colAndTypeOper[0]);
 			if (!colAndTypeOper[1].compare(SORT_DESC))
 			{
-				this->sortMap[colAndTypeOper[0]] = true;
+				recDLL->sortMap[colAndTypeOper[0]] = true;
 			}
 			else if (colAndTypeOper[1].compare(SORT_ASC))
 			{
@@ -766,26 +766,26 @@ bool RectangleDLL::parseSortString(const std::string str)
 				std::printf("Не удалось распознать название колонки '%s'!\n", colAndTypeOper[0].c_str());
 				return false;
 			}
-			this->sortMap[colAndTypeOper[0]] = false;
-			this->sortVector.push_back(colAndTypeOper[0]);
+			recDLL->sortMap[colAndTypeOper[0]] = false;
+			recDLL->sortVector.push_back(colAndTypeOper[0]);
 		}
 	}
 	return true;
 }
 
-void RectangleDLL::sortBook()
+void sortRectangleDLL(RectangleDLL *&recDLL)
 {
-	const std::string beginKey = sortVector[0];
-	for (size_t i = 0; i < this->recVector.size() - 1; i++)
+	const std::string beginKey = recDLL->sortVector[0];
+	for (size_t i = 0; i < recDLL->recVector.size() - 1; i++)
 	{
-		Rectangle maxElement = this->recVector[i];
-		bool isDesc = this->sortMap[beginKey];
+		Rectangle maxElement = recDLL->recVector[i];
+		bool isDesc = recDLL->sortMap[beginKey];
 		size_t posMaxElem = i;
-		for (size_t j = i + 1; j < this->recVector.size(); j++)
+		for (size_t j = i + 1; j < recDLL->recVector.size(); j++)
 		{
-			std::pair<int, bool> cmpRes = this->cmpRectangleRecursive(posMaxElem, j, 0);
+			std::pair<int, bool> cmpRes = cmpRectangleRecursive(recDLL, posMaxElem, j, 0);
 			//std::printf("Результат сравнения: '%d' \n", cmpRes);
-			//this->print();
+			//printRectangle(recDLL);
 
 			if (cmpRes.first == 0)
 			{
@@ -795,40 +795,44 @@ void RectangleDLL::sortBook()
 			else if (cmpRes.first > 0 && cmpRes.second)
 			{
 				// DESC
-				maxElement = this->recVector[j];
+				maxElement = recDLL->recVector[j];
 				posMaxElem = j;
 			}
 			else if (cmpRes.first < 0 && !cmpRes.second)
 			{
 				// ASC
-				maxElement = this->recVector[j];
+				maxElement = recDLL->recVector[j];
 				posMaxElem = j;
 			}
 		}
 		//std::printf("(i:%d;posMaxElem:%d)\n", i, posMaxElem);
-		Rectangle bookBuf = this->recVector[i];
-		this->recVector[i] = maxElement;
-		this->recVector[posMaxElem] = bookBuf;
+		Rectangle bookBuf = recDLL->recVector[i];
+		recDLL->recVector[i] = maxElement;
+		recDLL->recVector[posMaxElem] = bookBuf;
 	}
 }
 
-std::pair<int, bool> RectangleDLL::cmpRectangleRecursive(const size_t firstVectorIndex, const size_t secondVectorIndex, const size_t sortIndex)
+std::pair<int, bool> cmpRectangleRecursive(
+	RectangleDLL *&recDLL,
+	const size_t firstVectorIndex,
+	const size_t secondVectorIndex,
+	const size_t sortIndex)
 {
 	std::pair<int, bool> res;
-	Rectangle firstBook = this->recVector[firstVectorIndex];
-	Rectangle secondBook = this->recVector[secondVectorIndex];
-	const std::string key = sortVector[sortIndex];
-	res.second = this->sortMap[key];
+	Rectangle firstBook = recDLL->recVector[firstVectorIndex];
+	Rectangle secondBook = recDLL->recVector[secondVectorIndex];
+	const std::string key = recDLL->sortVector[sortIndex];
+	res.second = recDLL->sortMap[key];
 	if (!key.compare(COLUMN_WIDTH_TITLE.c_str()))
 	{
 		if (secondBook.width == firstBook.width)
 		{
 			//std::printf("Значения ширин прямоугольников равны\n");
 			size_t newSortIndex = sortIndex;
-			if (newSortIndex < this->sortVector.size() - 1)
+			if (newSortIndex < recDLL->sortVector.size() - 1)
 			{
 				newSortIndex++;
-				return this->cmpRectangleRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
+				return cmpRectangleRecursive(recDLL, firstVectorIndex, secondVectorIndex, newSortIndex);
 			}
 			res.first = 0;
 			return res;
@@ -850,10 +854,10 @@ std::pair<int, bool> RectangleDLL::cmpRectangleRecursive(const size_t firstVecto
 		{
 			//std::printf("Значения высот прямоугольников равны\n");
 			size_t newSortIndex = sortIndex;
-			if (newSortIndex < this->sortVector.size() - 1)
+			if (newSortIndex < recDLL->sortVector.size() - 1)
 			{
 				newSortIndex++;
-				return this->cmpRectangleRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
+				return cmpRectangleRecursive(recDLL, firstVectorIndex, secondVectorIndex, newSortIndex);
 			}
 			res.first = 0;
 			return res;
@@ -875,10 +879,10 @@ std::pair<int, bool> RectangleDLL::cmpRectangleRecursive(const size_t firstVecto
 		{
 			//std::printf("Значения площадей прямоугольников равны\n");
 			size_t newSortIndex = sortIndex;
-			if (newSortIndex < this->sortVector.size() - 1)
+			if (newSortIndex < recDLL->sortVector.size() - 1)
 			{
 				newSortIndex++;
-				return this->cmpRectangleRecursive(firstVectorIndex, secondVectorIndex, newSortIndex);
+				return cmpRectangleRecursive(recDLL, firstVectorIndex, secondVectorIndex, newSortIndex);
 			}
 			res.first = 0;
 			return res;
