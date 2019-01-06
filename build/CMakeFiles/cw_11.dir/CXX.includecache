@@ -6,31 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/Users/selectel/clang/serboox/Labs_Cpp/src/other.cpp
-other.h
-/Users/selectel/clang/serboox/Labs_Cpp/src/other.h
-
-/Users/selectel/clang/serboox/Labs_Cpp/src/other.h
-cstdio
--
-string
--
-iomanip
--
-sstream
--
-vector
--
-fstream
--
-algorithm
--
-cctype
--
-utility
--
-map
--
+/Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.cpp
 rectangle.h
 /Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.h
 

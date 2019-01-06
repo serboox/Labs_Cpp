@@ -73,15 +73,15 @@ void printRectangle(Rectangle *&rectangle)
 	названию одной одной из колонок */
 bool validateColumnTitle(const std::string str)
 {
-	if (!str.compare(COLUMN_WIDTH_TITLE.c_str()))
+	if (!str.compare(COLUMN_WIDTH_TITLE))
 	{
 		return true;
 	}
-	else if (!str.compare(COLUMN_HEIGHT_TITLE.c_str()))
+	else if (!str.compare(COLUMN_HEIGHT_TITLE))
 	{
 		return true;
 	}
-	else if (!str.compare(COLUMN_AREA_TITLE.c_str()))
+	else if (!str.compare(COLUMN_AREA_TITLE))
 	{
 		return true;
 	}

@@ -10,7 +10,8 @@
         "stdexcept": "c",
         "type_traits": "c",
         "typeinfo": "c",
-        "algorithm": "c"
+        "algorithm": "c",
+        "string": "cpp"
     },
     "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools"
 }

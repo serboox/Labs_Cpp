@@ -8,10 +8,10 @@
 
 // Перечисляем строковые константы для определеня названия колонок
 // Колонки используются при печати таблицы в консоль и при вводе названия колонки для сортировки
-const std::string COLUMN_INDEX_TITLE = "Index";
-const std::string COLUMN_WIDTH_TITLE = "Высота";
-const std::string COLUMN_HEIGHT_TITLE = "Ширина";
-const std::string COLUMN_AREA_TITLE = "Площадь";
+const char COLUMN_INDEX_TITLE[] = "Index",
+		   COLUMN_WIDTH_TITLE[] = "Высота",
+		   COLUMN_HEIGHT_TITLE[] = "Ширина",
+		   COLUMN_AREA_TITLE[] = "Площадь";
 
 // Rectangle, структура прямугольника
 // Поля и методы по умолчанию имеют модификатор доступа public

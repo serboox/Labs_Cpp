@@ -618,9 +618,9 @@ void initRectangleSort(RectangleDLL *&recDLL)
 		std::printf(
 			"Перечислите через запятую названия колонок (кроме '%s') по которым будет производиться сортировка \n"
 			"Например %s %s,%s %s (%s можно не писать): ",
-			COLUMN_INDEX_TITLE.c_str(),
-			COLUMN_WIDTH_TITLE.c_str(), SORT_DESC.c_str(),
-			COLUMN_AREA_TITLE.c_str(), SORT_DESC.c_str(),
+			COLUMN_INDEX_TITLE,
+			COLUMN_WIDTH_TITLE, SORT_DESC.c_str(),
+			COLUMN_AREA_TITLE, SORT_DESC.c_str(),
 			SORT_ASC.c_str());
 		std::getline(std::cin, otherBy);
 		if (!otherBy.compare(""))
@@ -823,7 +823,7 @@ std::pair<int, bool> cmpRectangleRecursive(
 	Rectangle secondBook = recDLL->recVector[secondVectorIndex];
 	const std::string key = recDLL->sortVector[sortIndex];
 	res.second = recDLL->sortMap[key];
-	if (!key.compare(COLUMN_WIDTH_TITLE.c_str()))
+	if (!key.compare(COLUMN_WIDTH_TITLE))
 	{
 		if (secondBook.width == firstBook.width)
 		{
@@ -848,7 +848,7 @@ std::pair<int, bool> cmpRectangleRecursive(
 			return res;
 		}
 	}
-	else if (!key.compare(COLUMN_HEIGHT_TITLE.c_str()))
+	else if (!key.compare(COLUMN_HEIGHT_TITLE))
 	{
 		if (secondBook.height == firstBook.height)
 		{
@@ -873,7 +873,7 @@ std::pair<int, bool> cmpRectangleRecursive(
 			return res;
 		}
 	}
-	else if (!key.compare(COLUMN_AREA_TITLE.c_str()))
+	else if (!key.compare(COLUMN_AREA_TITLE))
 	{
 		if (secondBook.area == firstBook.area)
 		{
