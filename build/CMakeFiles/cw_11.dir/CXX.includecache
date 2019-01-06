@@ -31,6 +31,12 @@ utility
 -
 map
 -
+cstring
+-
+string.h
+-
+cmath
+-
 rectangle.h
 /Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.h
 

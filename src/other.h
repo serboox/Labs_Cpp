@@ -9,6 +9,9 @@
 #include <cctype>
 #include <utility>
 #include <map>
+#include <cstring> // библиотека для работы со строками (используем для strcmp(), strlen())
+#include <string.h>
+#include <cmath> // для округления float значений
 
 #include "rectangle.h"
 
@@ -113,12 +116,8 @@ std::pair<int, bool> cmpRectangleRecursive(
 	const size_t sortIndex);
 
 // strSpaceWrap добавляет пробел в начало и конец строки
-std::string strSpaceWrap(std::string str);
+const char *strSpaceWrap(const char *str);
 // alignCenter печатает содержимое ячейки табицы по центру
-std::string alignCenter(const std::string s, const int w);
-// alignCenter печатает содержимое ячейки табицы по правому краю
-std::string alignRight(const std::string s, const int w);
-// alignCenter печатает содержимое ячейки табицы с левого края
-std::string alignLeft(const std::string s, const int w);
+const char *alignCenter(const char *s, const int w);
 // split разбивает строку по разделителю
 std::vector<std::string> split(const std::string &s, const char sep);

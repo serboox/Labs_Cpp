@@ -1,0 +1,17 @@
+[
+{
+  "directory": "/Users/selectel/clang/serboox/Labs_Cpp/build",
+  "command": "/usr/bin/clang++    -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -std=gnu++14 -o CMakeFiles/cw_11.dir/src/main.cpp.o -c /Users/selectel/clang/serboox/Labs_Cpp/src/main.cpp",
+  "file": "/Users/selectel/clang/serboox/Labs_Cpp/src/main.cpp"
+},
+{
+  "directory": "/Users/selectel/clang/serboox/Labs_Cpp/build",
+  "command": "/usr/bin/clang++    -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -std=gnu++14 -o CMakeFiles/cw_11.dir/src/other.cpp.o -c /Users/selectel/clang/serboox/Labs_Cpp/src/other.cpp",
+  "file": "/Users/selectel/clang/serboox/Labs_Cpp/src/other.cpp"
+},
+{
+  "directory": "/Users/selectel/clang/serboox/Labs_Cpp/build",
+  "command": "/usr/bin/clang++    -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -std=gnu++14 -o CMakeFiles/cw_11.dir/src/rectangle.cpp.o -c /Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.cpp",
+  "file": "/Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.cpp"
+}
+]

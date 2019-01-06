@@ -91,11 +91,16 @@ void run()
 	}
 }
 
-std::string strSpaceWrap(std::string str)
+const char *strSpaceWrap(const char *str)
 {
-	std::string res = " ";
-	res += str;
-	res += " ";
+	char *res = new char[strlen(str) + 2];
+	res[0] = ' ';
+	size_t i = 1;
+	for (; i <= strlen(str); i++)
+	{
+		res[i] = str[i - 1];
+	}
+	res[i] = ' ';
 	return res;
 }
 
@@ -112,38 +117,47 @@ void printRectangleDLL(RectangleDLL *&recDLL)
 		std::printf("Ваш набор пуст. Size: %zu\n", recDLL->size);
 		return;
 	}
-	size_t indexColumnSize = std::strlen(strSpaceWrap(COLUMN_INDEX_TITLE).c_str()),
-		   widthColumnSize = std::strlen(strSpaceWrap(COLUMN_WIDTH_TITLE).c_str()),
-		   heightColumnSize = std::strlen(strSpaceWrap(COLUMN_HEIGHT_TITLE).c_str()),
-		   areaColumnSize = std::strlen(strSpaceWrap(COLUMN_AREA_TITLE).c_str());
+	size_t indexColumnSize = strlen(strSpaceWrap(COLUMN_INDEX_TITLE)),
+		   widthColumnSize = strlen(strSpaceWrap(COLUMN_WIDTH_TITLE)),
+		   heightColumnSize = strlen(strSpaceWrap(COLUMN_HEIGHT_TITLE)),
+		   areaColumnSize = strlen(strSpaceWrap(COLUMN_AREA_TITLE));
 	size_t i = 0;
 	do
 	{
-		if (indexColumnSize < std::to_string(i).size())
+		char *index = new char[indexColumnSize];
+		sprintf(index, "%zu", i);
+		char *width = new char[widthColumnSize];
+		sprintf(width, "%f", rectangle->width);
+		char *height = new char[heightColumnSize];
+		sprintf(height, "%f", rectangle->height);
+		char *area = new char[areaColumnSize];
+		sprintf(area, "%f", rectangle->area);
+
+		if (indexColumnSize < strlen(index))
 		{
-			indexColumnSize = std::to_string(i).size();
+			indexColumnSize = strlen(index);
 		}
-		if (widthColumnSize < std::to_string(rectangle->width).size())
+		if (widthColumnSize < strlen(width))
 		{
-			widthColumnSize = std::to_string(rectangle->width).size();
+			widthColumnSize = strlen(width);
 		}
-		if (heightColumnSize < std::to_string(rectangle->height).size())
+		if (heightColumnSize < strlen(height))
 		{
-			heightColumnSize = std::to_string(rectangle->height).size();
+			heightColumnSize = strlen(height);
 		}
-		if (areaColumnSize < std::to_string(rectangle->area).size())
+		if (areaColumnSize < strlen(area))
 		{
-			areaColumnSize = std::to_string(rectangle->area).size();
+			areaColumnSize = strlen(area);
 		}
 		i++;
 
 		rectangle = rectangle->nextRectangle;
-		//std::printf("Titles: %zu : %zu : %d\n", i, this->size, rectangle != nullptr);
+		//std::printf("Titles: %zu : %zu : %d\n", i, recDLL->size, rectangle == nullptr);
 	} while (rectangle != nullptr);
 	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
-			  << alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize) << " | "
-			  << alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize) << " | "
-			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize) << " |\n";
+			  << alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize + floor((float)strlen(COLUMN_WIDTH_TITLE) / 2)) << " | "
+			  << alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize + floor((float)strlen(COLUMN_HEIGHT_TITLE) / 2)) << " | "
+			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize + floor((float)strlen(COLUMN_AREA_TITLE) / 2)) << " |\n";
 	size_t totalSize = indexColumnSize + widthColumnSize + heightColumnSize + areaColumnSize;
 	totalSize += totalSize * 0.21;
 	for (size_t i = 0; i <= totalSize; i++)
@@ -153,10 +167,20 @@ void printRectangleDLL(RectangleDLL *&recDLL)
 	i = 0;
 	do
 	{
-		std::cout << alignCenter(std::to_string(i), indexColumnSize) << " | "
-				  << alignCenter(std::to_string(rectangle->width), widthColumnSize) << " | "
-				  << alignCenter(std::to_string(rectangle->height), heightColumnSize) << " | "
-				  << alignCenter(std::to_string(rectangle->area), areaColumnSize) << " |\n";
+		char *index = new char[indexColumnSize];
+		sprintf(index, "%zu", i);
+		char *width = new char[widthColumnSize];
+		sprintf(width, "%f", rectangle->width);
+		char *height = new char[heightColumnSize];
+		sprintf(height, "%f", rectangle->height);
+		char *area = new char[areaColumnSize];
+		sprintf(area, "%f", rectangle->area);
+
+		std::cout
+			<< alignCenter(index, indexColumnSize) << " | "
+			<< alignCenter(width, widthColumnSize) << " | "
+			<< alignCenter(height, heightColumnSize) << " | "
+			<< alignCenter(area, areaColumnSize) << " |\n";
 		i++;
 		rectangle = rectangle->nextRectangle;
 	} while (rectangle != nullptr);
@@ -164,10 +188,10 @@ void printRectangleDLL(RectangleDLL *&recDLL)
 
 void printRecVector(RectangleDLL *&recleDLL)
 {
-	size_t indexColumnSize = std::strlen(strSpaceWrap(COLUMN_INDEX_TITLE).c_str()),
-		   widthColumnSize = std::strlen(strSpaceWrap(COLUMN_WIDTH_TITLE).c_str()),
-		   heightColumnSize = std::strlen(strSpaceWrap(COLUMN_HEIGHT_TITLE).c_str()),
-		   areaColumnSize = std::strlen(strSpaceWrap(COLUMN_AREA_TITLE).c_str());
+	size_t indexColumnSize = strlen(strSpaceWrap(COLUMN_INDEX_TITLE)),
+		   widthColumnSize = strlen(strSpaceWrap(COLUMN_WIDTH_TITLE)),
+		   heightColumnSize = strlen(strSpaceWrap(COLUMN_HEIGHT_TITLE)),
+		   areaColumnSize = strlen(strSpaceWrap(COLUMN_AREA_TITLE));
 	size_t i = 0;
 	for (Rectangle rectangle : recleDLL->recVector)
 	{
@@ -201,10 +225,10 @@ void printRecVector(RectangleDLL *&recleDLL)
 	i = 0;
 	for (Rectangle rectangle : recleDLL->recVector)
 	{
-		std::cout << alignCenter(std::to_string(i), indexColumnSize) << " | "
-				  << alignCenter(std::to_string(rectangle.width), widthColumnSize) << " | "
-				  << alignCenter(std::to_string(rectangle.height), heightColumnSize) << " | "
-				  << alignCenter(std::to_string(rectangle.area), areaColumnSize) << " |\n";
+		std::cout << alignCenter(std::to_string(i).c_str(), indexColumnSize) << " | "
+				  << alignCenter(std::to_string(rectangle.width).c_str(), widthColumnSize) << " | "
+				  << alignCenter(std::to_string(rectangle.height).c_str(), heightColumnSize) << " | "
+				  << alignCenter(std::to_string(rectangle.area).c_str(), areaColumnSize) << " |\n";
 		i++;
 	}
 }
@@ -225,36 +249,37 @@ void printSortVector(RectangleDLL *&recDLL)
 	}
 }
 
-std::string alignCenter(const std::string s, const int w)
+const char *alignCenter(const char *s, const int w)
 {
-	std::stringstream ss, spaces;
-	int padding = w - s.size();
-	for (int i = 0; i < padding / 2; ++i)
-		spaces << " ";
-	ss << spaces.str() << s << spaces.str();
+	int padding = w - strlen(s);
+	//std::printf("w:%d;s:%zu;pad:%d; ", w, strlen(s), padding);
+	size_t endSpace = 0;
 	if (padding > 0 && padding % 2 != 0)
-		ss << " ";
-	return ss.str();
-}
+	{
+		endSpace = 1;
+	}
+	padding /= 2;
 
-std::string alignRight(const std::string s, const int w)
-{
-	std::stringstream ss, spaces;
-	int padding = w - s.size();
-	for (int i = 0; i < padding; ++i)
-		spaces << " ";
-	ss << spaces.str() << s;
-	return ss.str();
-}
-
-std::string alignLeft(const std::string s, const int w)
-{
-	std::stringstream ss, spaces;
-	int padding = w - s.size();
-	for (int i = 0; i < padding; ++i)
-		spaces << " ";
-	ss << s << spaces.str();
-	return ss.str();
+	size_t resSize = padding + strlen(s) + padding + endSpace;
+	char *res = nullptr;
+	res = new char[resSize];
+	size_t i = 0;
+	for (i = 0; i < padding; i++)
+	{
+		res[i] = ' ';
+	}
+	i = padding;
+	for (size_t j = 0; j < strlen(s); j++)
+	{
+		res[i] = s[j];
+		i++;
+	}
+	i = padding + strlen(s);
+	for (; i < padding + strlen(s) + padding + endSpace; i++)
+	{
+		res[i] = ' ';
+	}
+	return res;
 }
 
 void addRectangle(RectangleDLL *&recDLL)
