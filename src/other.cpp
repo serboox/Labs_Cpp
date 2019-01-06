@@ -619,9 +619,9 @@ void initRectangleSort(RectangleDLL *&recDLL)
 			"Перечислите через запятую названия колонок (кроме '%s') по которым будет производиться сортировка \n"
 			"Например %s %s,%s %s (%s можно не писать): ",
 			COLUMN_INDEX_TITLE,
-			COLUMN_WIDTH_TITLE, SORT_DESC.c_str(),
-			COLUMN_AREA_TITLE, SORT_DESC.c_str(),
-			SORT_ASC.c_str());
+			COLUMN_WIDTH_TITLE, SORT_DESC,
+			COLUMN_AREA_TITLE, SORT_DESC,
+			SORT_ASC);
 		std::getline(std::cin, otherBy);
 		if (!otherBy.compare(""))
 		{

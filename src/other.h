@@ -33,9 +33,9 @@ const char DEFAULT_PATH_TO_FILE[] = "C:\\Users\\Public\\rectangleSet.txt";
 const char DEFAULT_PATH_TO_FILE[] = "./rectangleSet.txt";
 #endif
 // SORT_ASC сотировака в порядке возрастания
-const std::string SORT_ASC = "ASC";
+const char SORT_ASC[] = "ASC";
 // SORT_DESC сортировака в порядке  убывания
-const std::string SORT_DESC = "DESC";
+const char SORT_DESC[] = "DESC";
 
 // RectangleDLL структура набора прямоугольников (DLL -> doubly linked list)
 struct RectangleDLL
