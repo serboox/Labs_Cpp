@@ -1,5 +1,6 @@
 {
     "files.associations": {
         "other.h": "c"
-    }
+    },
+    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools"
 }

@@ -60,41 +60,41 @@ include CMakeFiles/cw_11.dir/flags.make
 CMakeFiles/cw_11.dir/src/main.cpp.o: CMakeFiles/cw_11.dir/flags.make
 CMakeFiles/cw_11.dir/src/main.cpp.o: ../src/main.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/selectel/clang/serboox/Labs_Cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/cw_11.dir/src/main.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/cw_11.dir/src/main.cpp.o -c /Users/selectel/clang/serboox/Labs_Cpp/src/main.cpp
+	/usr/bin/clang++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/cw_11.dir/src/main.cpp.o -c /Users/selectel/clang/serboox/Labs_Cpp/src/main.cpp
 
 CMakeFiles/cw_11.dir/src/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cw_11.dir/src/main.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/selectel/clang/serboox/Labs_Cpp/src/main.cpp > CMakeFiles/cw_11.dir/src/main.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/selectel/clang/serboox/Labs_Cpp/src/main.cpp > CMakeFiles/cw_11.dir/src/main.cpp.i
 
 CMakeFiles/cw_11.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cw_11.dir/src/main.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/selectel/clang/serboox/Labs_Cpp/src/main.cpp -o CMakeFiles/cw_11.dir/src/main.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/selectel/clang/serboox/Labs_Cpp/src/main.cpp -o CMakeFiles/cw_11.dir/src/main.cpp.s
 
 CMakeFiles/cw_11.dir/src/other.cpp.o: CMakeFiles/cw_11.dir/flags.make
 CMakeFiles/cw_11.dir/src/other.cpp.o: ../src/other.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/selectel/clang/serboox/Labs_Cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/cw_11.dir/src/other.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/cw_11.dir/src/other.cpp.o -c /Users/selectel/clang/serboox/Labs_Cpp/src/other.cpp
+	/usr/bin/clang++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/cw_11.dir/src/other.cpp.o -c /Users/selectel/clang/serboox/Labs_Cpp/src/other.cpp
 
 CMakeFiles/cw_11.dir/src/other.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cw_11.dir/src/other.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/selectel/clang/serboox/Labs_Cpp/src/other.cpp > CMakeFiles/cw_11.dir/src/other.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/selectel/clang/serboox/Labs_Cpp/src/other.cpp > CMakeFiles/cw_11.dir/src/other.cpp.i
 
 CMakeFiles/cw_11.dir/src/other.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cw_11.dir/src/other.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/selectel/clang/serboox/Labs_Cpp/src/other.cpp -o CMakeFiles/cw_11.dir/src/other.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/selectel/clang/serboox/Labs_Cpp/src/other.cpp -o CMakeFiles/cw_11.dir/src/other.cpp.s
 
 CMakeFiles/cw_11.dir/src/rectangle.cpp.o: CMakeFiles/cw_11.dir/flags.make
 CMakeFiles/cw_11.dir/src/rectangle.cpp.o: ../src/rectangle.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/selectel/clang/serboox/Labs_Cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/cw_11.dir/src/rectangle.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/cw_11.dir/src/rectangle.cpp.o -c /Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.cpp
+	/usr/bin/clang++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/cw_11.dir/src/rectangle.cpp.o -c /Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.cpp
 
 CMakeFiles/cw_11.dir/src/rectangle.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cw_11.dir/src/rectangle.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.cpp > CMakeFiles/cw_11.dir/src/rectangle.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.cpp > CMakeFiles/cw_11.dir/src/rectangle.cpp.i
 
 CMakeFiles/cw_11.dir/src/rectangle.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cw_11.dir/src/rectangle.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.cpp -o CMakeFiles/cw_11.dir/src/rectangle.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.cpp -o CMakeFiles/cw_11.dir/src/rectangle.cpp.s
 
 # Object files for target cw_11
 cw_11_OBJECTS = \

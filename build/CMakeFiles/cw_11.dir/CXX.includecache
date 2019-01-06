@@ -20,6 +20,10 @@ Windows.h
 unistd.h
 -
 
+/Users/selectel/clang/serboox/Labs_Cpp/src/other.cpp
+other.h
+/Users/selectel/clang/serboox/Labs_Cpp/src/other.h
+
 /Users/selectel/clang/serboox/Labs_Cpp/src/other.h
 cstdio
 -
@@ -41,6 +45,10 @@ utility
 -
 map
 -
+rectangle.h
+/Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.h
+
+/Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.cpp
 rectangle.h
 /Users/selectel/clang/serboox/Labs_Cpp/src/rectangle.h
 

@@ -17,25 +17,22 @@ const std::string COLUMN_AREA_TITLE = "Площадь";
 // Поля и методы по умолчанию имеют модификатор доступа public
 struct Rectangle
 {
-
 	// width ширина прямоугольника
 	float width;  // 4 bytes
 				  // height высота прямоугольника
 	float height; // 4 bytes
 	// area площадь прямоугольника, высчитывается автоматически area=width*height
 	float area; // 4 bytes
-
 	// *prevRectangle - указатель на предыдущий прямоугольник
 	Rectangle *prevRectangle = nullptr;
 	// *nextRectangle - указатель на следующий прямоугольник
 	Rectangle *nextRectangle = nullptr;
-
-	// fillBookFields метод заполняет поля прямогулольника через stdin
-	void fillFromStdIn();
-	// print метод печати прямоугольника в stdout
-	void print();
 };
 
-/* validateColumnTitle производит проверку соответствует ли строка 
+/* fillRectangleFromStdIn заполняет поля прямогулольника через stdin */
+void fillRectangleFromStdIn(Rectangle *&rectangle);
+/* printRectangle печатает информацию о прямоугольнике в stdout */
+void printRectangle(Rectangle *&rectangle);
+/* validateColumnTitle производит проверку соответствует ли строка
 	названию одной одной из колонок */
 bool validateColumnTitle(const std::string str);

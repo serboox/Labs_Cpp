@@ -261,7 +261,7 @@ void RectangleSet::add()
 {
 	Rectangle *newRectangle;
 	newRectangle = (struct Rectangle *)malloc(sizeof(struct Rectangle));
-	newRectangle->fillFromStdIn();
+	fillRectangleFromStdIn(newRectangle);
 	if (this->firstRectangle == nullptr)
 	{
 
@@ -317,7 +317,7 @@ void RectangleSet::deleteCards()
 		}
 
 		Rectangle *deleteRectangle = this->searchFromIndex(i);
-		deleteRectangle->print();
+		printRectangle(deleteRectangle);
 		bool remove = false;
 		while (true)
 		{
