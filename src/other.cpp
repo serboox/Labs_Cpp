@@ -4,6 +4,7 @@
 void run()
 {
 	RectangleDLL *recDLL = new RectangleDLL;
+	recDLL->recDinArr = new RectangleDinArr;
 
 	while (true)
 	{
@@ -185,6 +186,76 @@ void printRectangleDLL(RectangleDLL *&recDLL)
 		i++;
 		rectangle = rectangle->nextRectangle;
 	} while (rectangle != nullptr);
+}
+
+void printRectangleDinArr(RectangleDLL *&recDLL)
+{
+	if (recDLL->recDinArr->size <= 0)
+	{
+		std::printf("Ваш набор пуст. Size: %zu\n", recDLL->recDinArr->size);
+		return;
+	}
+	size_t indexColumnSize = strlen(strSpaceWrap(COLUMN_INDEX_TITLE)),
+		   widthColumnSize = strlen(strSpaceWrap(COLUMN_WIDTH_TITLE)),
+		   heightColumnSize = strlen(strSpaceWrap(COLUMN_HEIGHT_TITLE)),
+		   areaColumnSize = strlen(strSpaceWrap(COLUMN_AREA_TITLE));
+	for (size_t i = 0; i < recDLL->recDinArr->size; i++)
+	{
+		Rectangle *rectangle = recDLL->recDinArr->arr[i];
+		char *index = new char[indexColumnSize];
+		sprintf(index, "%zu", i);
+		char *width = new char[widthColumnSize];
+		sprintf(width, "%f", rectangle->width);
+		char *height = new char[heightColumnSize];
+		sprintf(height, "%f", rectangle->height);
+		char *area = new char[areaColumnSize];
+		sprintf(area, "%f", rectangle->area);
+
+		if (indexColumnSize < strlen(index))
+		{
+			indexColumnSize = strlen(index);
+		}
+		if (widthColumnSize < strlen(width))
+		{
+			widthColumnSize = strlen(width);
+		}
+		if (heightColumnSize < strlen(height))
+		{
+			heightColumnSize = strlen(height);
+		}
+		if (areaColumnSize < strlen(area))
+		{
+			areaColumnSize = strlen(area);
+		}
+		i++;
+	}
+	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
+			  << alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize + floor((float)strlen(COLUMN_WIDTH_TITLE) / 2)) << " | "
+			  << alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize + floor((float)strlen(COLUMN_HEIGHT_TITLE) / 2)) << " | "
+			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize + floor((float)strlen(COLUMN_AREA_TITLE) / 2)) << " |\n";
+	size_t totalSize = indexColumnSize + widthColumnSize + heightColumnSize + areaColumnSize;
+	totalSize += totalSize * 0.21;
+	for (size_t i = 0; i <= totalSize; i++)
+		std::cout << "—";
+	std::cout << std::endl;
+	for (size_t i = 0; i < recDLL->recDinArr->size; i++)
+	{
+		Rectangle *rectangle = recDLL->recDinArr->arr[i];
+		char *index = new char[indexColumnSize];
+		sprintf(index, "%zu", i);
+		char *width = new char[widthColumnSize];
+		sprintf(width, "%f", rectangle->width);
+		char *height = new char[heightColumnSize];
+		sprintf(height, "%f", rectangle->height);
+		char *area = new char[areaColumnSize];
+		sprintf(area, "%f", rectangle->area);
+
+		std::cout
+			<< alignCenter(index, indexColumnSize) << " | "
+			<< alignCenter(width, widthColumnSize) << " | "
+			<< alignCenter(height, heightColumnSize) << " | "
+			<< alignCenter(area, areaColumnSize) << " |\n";
+	}
 }
 
 // FIXME: Deprecated
@@ -564,43 +635,49 @@ void searchRectangle(RectangleDLL *&recDLL)
 		std::scanf("%f", &findArea);
 		std::cin.ignore();
 
-		//std::printf("Find rectangle with area: %f\n", findArea);
-		RectangleDLL *res = new RectangleDLL;
-		for (size_t i = 0; i < recDLL->recVector.size(); i++)
+		std::printf("recDinArr size: %zu\n", recDLL->recDinArr->size);
+		// Сбрасываем начальный размер массива
+		if (recDLL->recDinArr->size != 0)
 		{
-			if (findArea == recDLL->recVector[i].area)
-			{
-				res->recVector.push_back(recDLL->recVector[i]);
-			}
+			recDLL->recDinArr->size = 0;
 		}
+		Rectangle **recDinArr = new Rectangle *[recDLL->size];
+		recDLL->recDinArr->arr = recDinArr;
+
+		/* Находим совпавшие по площади прямоугольники и заносим
+			их указатели во временный буфер */
+		//std::printf("Find rectangle with area: %f\n", findArea);
 		Rectangle *rectangle = recDLL->firstRectangle;
 		do
 		{
 			if (rectangle->area == findArea)
 			{
-				res->recVector.push_back(*rectangle);
+				recDLL->recDinArr->arr[recDLL->recDinArr->size] = rectangle;
+				recDLL->recDinArr->size++;
 			}
 			rectangle = rectangle->nextRectangle;
 		} while (rectangle != nullptr);
-		if (res->recVector.size() == 0)
+		if (recDLL->recDinArr->size == 0)
 		{
 			std::printf("Ни одного прямоугольника с площадью %f не найдено.\n", findArea);
 		}
 		else
 		{
-			printRecVector(res);
+			// Печатаем результаты поиска на экран
+			printRectangleDinArr(recDLL);
 		}
 
 		while (true)
 		{
-			std::string command = "";
+			char command[10];
 			std::printf("Желаете продолжить? [Y/n]: ");
-			std::getline(std::cin, command);
-			if (!command.compare("") | !command.compare("Y") || !command.compare("y"))
+			std::cin.getline(command, 10);
+			std::cin.clear();
+			if (strcmp(command, "") == 0 | strcmp(command, "Y") == 0 || strcmp(command, "y") == 0)
 			{
 				break;
 			}
-			else if (!command.compare("n") || !command.compare("N"))
+			else if (strcmp(command, "n") == 0 || strcmp(command, "N") == 0)
 			{
 				return;
 			}

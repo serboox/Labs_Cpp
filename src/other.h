@@ -40,6 +40,12 @@ const char SORT_ASC[] = "ASC";
 // SORT_DESC сортировака в порядке  убывания
 const char SORT_DESC[] = "DESC";
 
+struct RectangleDinArr
+{
+	size_t size = 0;
+	Rectangle **arr = new Rectangle *[0];
+};
+
 // RectangleDLL структура набора прямоугольников (DLL -> doubly linked list)
 struct RectangleDLL
 {
@@ -50,12 +56,15 @@ struct RectangleDLL
 	// size - хранит количество прямоугольников в наборе
 	size_t size = 0;
 
-	// recVector содержит вектор с промежуточным буффером прямоугольников (структур Rectangle),
-	std::vector<Rectangle> recVector;
+	// recDinArr содержит структуру с промежуточным буффером прямоугольников (структур Rectangle)
+	RectangleDinArr *recDinArr;
+
+	// recVector содержит вектор с промежуточным буффером прямоугольников (структур Rectangle)
+	std::vector<Rectangle> recVector; //FIXME:Deprecated
 	// sortMap содержит данные для сортировки map[название поля]isDesc
-	std::map<std::string, bool> sortMap;
+	std::map<std::string, bool> sortMap; //FIXME:Deprecated
 	// sortVector хранит имена колонок в порядке котором следует производить сортировку
-	std::vector<std::string> sortVector;
+	std::vector<std::string> sortVector; //FIXME:Deprecated
 };
 
 // run запускает программы
@@ -63,13 +72,15 @@ void run();
 
 // printRectangleDLL печатает содержимое набора прямоуголников в консоль
 void printRectangleDLL(RectangleDLL *&recDLL);
+/* printRectangleDinArr печатает содержимое промежуточного буфера прямоуголников в консоль */
+void printRectangleDinArr(RectangleDLL *&recDLL);
 
 /* printRecVector печатает содержимое промежуточного вектора прямоуголников в консоль */
-void printRecVector(RectangleDLL *&recleDLL); // TODO:: Сделать сэтим что-то
+void printRecVector(RectangleDLL *&recleDLL); //FIXME:Deprecated
 // printSortMap печатает содержимое карты для сортировки в консоль
-void printSortMap(RectangleDLL *&recDLL); // TODO:: Сделать сэтим что-то
+void printSortMap(RectangleDLL *&recDLL); //FIXME:Deprecated
 // print печатает содержимое вектора для сортировки в консоль
-void printSortVector(RectangleDLL *&recDLL); // TODO:: Сделать сэтим что-то
+void printSortVector(RectangleDLL *&recDLL); //FIXME:Deprecated
 
 // add добавляет новый прямоугольник в набор
 void addRectangle(RectangleDLL *&recDLL);
