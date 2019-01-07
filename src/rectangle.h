@@ -13,8 +13,9 @@ const char COLUMN_INDEX_TITLE[] = "Index",
 		   COLUMN_HEIGHT_TITLE[] = "Ширина",
 		   COLUMN_AREA_TITLE[] = "Площадь";
 
-// Rectangle, структура прямугольника
-// Поля и методы по умолчанию имеют модификатор доступа public
+/*
+* Rectangle, структура прямугольника
+*/
 struct Rectangle
 {
 	// width ширина прямоугольника
@@ -27,6 +28,15 @@ struct Rectangle
 	Rectangle *prevRectangle = nullptr;
 	// *nextRectangle - указатель на следующий прямоугольник
 	Rectangle *nextRectangle = nullptr;
+};
+
+/*
+* RectangleDinArr структура описывающая динамический массив прямоугольников
+*/
+struct RectangleDinArr
+{
+	size_t size = 0;
+	Rectangle **arr = new Rectangle *[0];
 };
 
 /* fillRectangleFromStdIn заполняет поля прямогулольника через stdin */

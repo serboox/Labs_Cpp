@@ -40,12 +40,6 @@ const char SORT_ASC[] = "ASC";
 // SORT_DESC сортировака в порядке  убывания
 const char SORT_DESC[] = "DESC";
 
-struct RectangleDinArr
-{
-	size_t size = 0;
-	Rectangle **arr = new Rectangle *[0];
-};
-
 // RectangleDLL структура набора прямоугольников (DLL -> doubly linked list)
 struct RectangleDLL
 {
@@ -65,6 +59,15 @@ struct RectangleDLL
 	std::map<std::string, bool> sortMap; //FIXME:Deprecated
 	// sortVector хранит имена колонок в порядке котором следует производить сортировку
 	std::vector<std::string> sortVector; //FIXME:Deprecated
+};
+
+/*
+* StringDinArr структура описывающая динамический массив char строк
+*/
+struct StringDinArr
+{
+	size_t size = 0;
+	char **arr = new char *[0];
 };
 
 // run запускает программы
@@ -88,8 +91,8 @@ void addRectangle(RectangleDLL *&recDLL);
 void deleteRectangle(RectangleDLL *&recDLL);
 // saveToFile сохраняет данные в файл
 void saveToFile(RectangleDLL *&recDLL);
-// readFromFile считывает данные из файла
-void readFromFile(RectangleDLL *&recDLL);
+// loadFromFile считывает данные из файла
+void loadFromFile(RectangleDLL *&recDLL);
 /*
 		search находит один или несколько прямоугольников из набора площадь
 		которых соответствует указанному (stdin) числу
@@ -104,8 +107,10 @@ void clearDLL(RectangleDLL *&recDLL);
 void initRectangleSort(RectangleDLL *&recDLL);
 // fillRecVectorFromDoublyLinkedList формирует вектор recVector из данных двухсвязанного списка
 void fillRecVectorFromDoublyLinkedList(RectangleDLL *&recDLL);
-// fillDoublyLinkedListFromRecVector формирует двухсвязанный список из вуктора recVector
-void fillDoublyLinkedListFromRecVector(RectangleDLL *&recDLL);
+// fillDoublyLinkedListFromRecVector формирует двухсвязанный список из вектора recVector
+void fillDoublyLinkedListFromRecVector(RectangleDLL *&recDLL); //FIXME:Deprecated
+// fillDoublyLinkedListFromRecDinArray формирует двухсвязанный список из динамического массива recDinArr
+void fillDoublyLinkedListFromRecDinArray(RectangleDLL *&recDLL);
 
 /*
 	parseRectangleSortString преобразует строку(std:cin) в данные необходимые для сортировки,
@@ -131,4 +136,4 @@ const char *strSpaceWrap(const char *str);
 // alignCenter печатает содержимое ячейки табицы по центру
 const char *alignCenter(const char *s, const int w);
 // split разбивает строку по разделителю
-std::vector<std::string> split(const std::string &s, const char sep);
+StringDinArr *split(const char *s, const char sep);

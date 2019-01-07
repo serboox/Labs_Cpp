@@ -61,7 +61,7 @@ void run()
 		else if (!command.compare(COMMAND_LOAD))
 		{
 			std::printf("Считать из файла: \n");
-			readFromFile(recDLL);
+			loadFromFile(recDLL);
 		}
 		else if (!command.compare(COMMAND_SEARCH))
 		{
@@ -539,84 +539,101 @@ void saveToFile(RectangleDLL *&recDLL)
 	}
 }
 
-void readFromFile(RectangleDLL *&recDLL)
+void loadFromFile(RectangleDLL *&recDLL)
 {
-	std::string readData;
-	std::ifstream readFile;
+	char *readData = new char[1000];
+	std::ifstream input;
 	while (true)
 	{
-		std::string pathToFile = "";
+		char *pathToFile = new char[1000];
 		std::printf("Введите путь к файлу [default:%s]: ", DEFAULT_PATH_TO_FILE);
-		std::getline(std::cin, pathToFile);
-		if (!pathToFile.compare(""))
+		std::cin.getline(pathToFile, 1000);
+		std::cin.clear();
+		if (strcmp(pathToFile, "") == 0)
 		{
-			pathToFile = DEFAULT_PATH_TO_FILE;
+			strcpy(pathToFile, DEFAULT_PATH_TO_FILE);
 		}
-		readFile.open(pathToFile, std::fstream::out);
-		if (readFile.is_open())
+		input.open(pathToFile, std::fstream::out);
+		if (input.is_open())
 		{
 			size_t i = 0;
-			recDLL->recVector.clear();
-			while (std::getline(readFile, readData))
+			recDLL->recDinArr->size = 0;
+			Rectangle **recArr = new Rectangle *[1];
+			while (input.getline(readData, 1000))
 			{
-				if (!readData.compare(""))
+				if (strcmp(readData, "") == 0)
 				{
 					continue;
 				}
-				//std::printf("%s\n", readData.c_str());
-				std::vector<std::string> rectangleProps = split(readData, ';');
-				if (rectangleProps.size() != 3)
+				//std::printf("%s\n", readData);
+				StringDinArr *rectangleProps = split(readData, ';');
+				if (rectangleProps->size != 3)
 				{
 					std::printf("Строка %zu не соответствует требуемуму формату т.к."
 								"число ее свойств (%zu) должно быть равно 3!\n %s\n",
-								i, rectangleProps.size(), readData.c_str());
+								i, rectangleProps->size, readData);
 					continue;
 				}
 
-				Rectangle newRectangle;
-				newRectangle.width = std::stof(rectangleProps[0].c_str());
-				newRectangle.height = std::stof(rectangleProps[1].c_str());
-				newRectangle.area = std::stof(rectangleProps[2].c_str());
-				newRectangle.prevRectangle = nullptr;
-				newRectangle.nextRectangle = nullptr;
-				recDLL->recVector.push_back(newRectangle);
-			}
-			readFile.close();
-			std::printf("Файл '%s' прочитан.\n", pathToFile.c_str());
+				if (i != 0)
+				{
+					recArr = (Rectangle **)realloc(recArr, sizeof(struct Rectangle) * (i + 1));
+				}
+				Rectangle *newRectangle = new Rectangle;
+				newRectangle->width = std::stof(rectangleProps->arr[0]);
+				newRectangle->height = std::stof(rectangleProps->arr[1]);
+				newRectangle->area = std::stof(rectangleProps->arr[2]);
+				newRectangle->prevRectangle = nullptr;
+				newRectangle->nextRectangle = nullptr;
 
-			fillDoublyLinkedListFromRecVector(recDLL);
-			recDLL->recVector.clear();
+				recArr[i] = newRectangle;
+				i++;
+				recDLL->recDinArr->size++;
+			}
+			recDLL->recDinArr->arr = recArr;
+			input.close();
+			std::printf("Файл '%s' прочитан.\n", pathToFile);
+
+			fillDoublyLinkedListFromRecDinArray(recDLL);
 			printRectangleDLL(recDLL);
 			return;
 		}
 		else
 		{
-			std::printf("Поток для чтения из файла '%s' закрыт! \n", pathToFile.c_str());
+			std::printf("Поток для чтения из файла '%s' закрыт! \n", pathToFile);
 			return;
 		}
 		continue;
 	}
 }
 
-std::vector<std::string> split(const std::string &s, const char sep)
+StringDinArr *split(const char *s, const char sep)
 {
-	typedef std::string::const_iterator iter;
-	std::vector<std::string> ret;
-	iter i = s.begin();
-	while (i != s.end())
+	//std::printf("strlen:%zu->s:%s\n", strlen(s), s);
+	StringDinArr *ret = new StringDinArr;
+	ret->arr = new char *[strlen(s)];
+	ret->arr[ret->size] = new char[strlen(s)];
+	ret->size++;
+	char *buff = new char[strlen(s)];
+	size_t j = 0;
+	for (size_t i = 0; i < strlen(s); i++)
 	{
-		i = std::find_if(i, s.end(), [sep](char c) -> bool {
-			return sep != c;
-		});
-		iter j = std::find_if(i, s.end(), [sep](char c) -> bool {
-			return sep == c;
-		});
-		if (i != s.end())
+		//std::printf("'%c'=='%c'->%s\n", s[i], sep, s[i] == sep ? "true" : "false");
+		if (s[i] == sep)
 		{
-			ret.push_back(std::string(i, j));
-			i = j;
+			//std::printf("ret->arr[%zu]=%s\n", ret->size - 1, buff);
+			j = 0;
+			ret->arr[ret->size - 1] = buff;
+			ret->arr[ret->size] = new char[strlen(s)];
+			ret->size++;
+			buff = new char[strlen(s)];
+			continue;
 		}
+		buff[j] = s[i];
+		//std::printf("buff:%s\n", buff);
+		j++;
 	}
+	ret->arr[ret->size - 1] = buff;
 	return ret;
 }
 
@@ -828,6 +845,7 @@ void fillRecVectorFromDoublyLinkedList(RectangleDLL *&recDLL)
 	} while (rectangle != nullptr);
 }
 
+//FIXME:Deprecated
 void fillDoublyLinkedListFromRecVector(RectangleDLL *&recDLL)
 {
 	//std::printf("Start fillDoublyLinkedListFromRecVector size: %zu\n", this->size);
@@ -857,12 +875,45 @@ void fillDoublyLinkedListFromRecVector(RectangleDLL *&recDLL)
 	//std::printf("Finish fillDoublyLinkedListFromRecVector size: %zu\n", this->size);
 }
 
+void fillDoublyLinkedListFromRecDinArray(RectangleDLL *&recDLL)
+{
+	//std::printf("Start fillDoublyLinkedListFromRecDinArray size: %zu\n", recDLL->size);
+	clearDLL(recDLL);
+	Rectangle *newRectangle = nullptr;
+	Rectangle *lastRectangle = nullptr;
+	for (size_t i = 0; i < recDLL->recDinArr->size; i++)
+	{
+		newRectangle = recDLL->recDinArr->arr[i];
+		newRectangle->prevRectangle = nullptr;
+		newRectangle->nextRectangle = nullptr;
+		if (recDLL->firstRectangle == nullptr)
+		{
+			recDLL->firstRectangle = newRectangle;
+			recDLL->lastRectangle = newRectangle;
+		}
+		else
+		{
+			lastRectangle = recDLL->lastRectangle;
+			newRectangle->prevRectangle = lastRectangle;
+			lastRectangle->nextRectangle = newRectangle;
+			recDLL->lastRectangle = nullptr;
+			recDLL->lastRectangle = newRectangle;
+		}
+		++recDLL->size;
+	}
+	//std::printf("Finish fillDoublyLinkedListFromRecDinArray size: %zu\n", recDLL->size);
+}
+
 bool parseRectangleSortString(RectangleDLL *&recDLL, const std::string str)
 {
-	std::vector<std::string> splitString = split(str, ',');
+	//FIXME:Deprecated
+	std::vector<std::string> splitString;
+	//std::vector<std::string> splitString = split(str, ',');
 	for (size_t i = 0; i < splitString.size(); i++)
 	{
-		std::vector<std::string> colAndTypeOper = split(splitString[i], ' ');
+		//FIXME::Deprecated
+		std::vector<std::string> colAndTypeOper;
+		//std::vector<std::string> colAndTypeOper = split(splitString[i], ' ');
 		//std::printf("Size: (%d)\n", colAndTypeOper.size());
 		if (colAndTypeOper.size() > 2)
 		{
