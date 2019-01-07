@@ -423,40 +423,45 @@ void deleteRectangle(RectangleDLL *&recDLL)
 
 void saveToFile(RectangleDLL *&recDLL)
 {
-	std::string saveData;
-	Rectangle *rectangle = recDLL->firstRectangle;
-	do
-	{
-		saveData += std::to_string(rectangle->width);
-		saveData += ";";
-		saveData += std::to_string(rectangle->height);
-		saveData += ";";
-		saveData += std::to_string(rectangle->area);
-		saveData += "\n";
-		rectangle = rectangle->nextRectangle;
-	} while (rectangle != nullptr);
-	//std::printf("%s", saveData.c_str());
 	std::ofstream saveFile;
 	while (true)
 	{
-		std::string pathToFile = "";
+		char pathToFile[1000];
 		std::printf("Введите путь к файлу [default:%s]: ", DEFAULT_PATH_TO_FILE);
-		std::getline(std::cin, pathToFile);
-		if (!pathToFile.compare(""))
+		std::cin.getline(pathToFile, 1000);
+		std::cin.clear();
+		if (!strcmp(pathToFile, ""))
 		{
-			pathToFile = DEFAULT_PATH_TO_FILE;
+			strcpy(pathToFile, DEFAULT_PATH_TO_FILE);
 		}
 		saveFile.open(pathToFile, std::fstream::in | std::fstream::out | std::fstream::trunc);
 		if (saveFile.is_open())
 		{
-			saveFile << saveData.c_str();
+			Rectangle *rectangle = recDLL->firstRectangle;
+			do
+			{
+				char *width = new char[64];
+				sprintf(width, "%f", rectangle->width);
+				char *height = new char[64];
+				sprintf(height, "%f", rectangle->height);
+				char *area = new char[64];
+				sprintf(area, "%f", rectangle->area);
+
+				saveFile << width;
+				saveFile << ";";
+				saveFile << height;
+				saveFile << ";";
+				saveFile << area;
+				saveFile << "\n";
+				rectangle = rectangle->nextRectangle;
+			} while (rectangle != nullptr);
 			saveFile.close();
-			std::printf("Файл сохранен по поти: '%s'\n", pathToFile.c_str());
+			std::printf("Файл сохранен по пути: '%s'\n", pathToFile);
 			return;
 		}
 		else
 		{
-			std::printf("Поток для записи в файл '%s' закрыт! \n", pathToFile.c_str());
+			std::printf("Поток для записи в файл '%s' закрыт! \n", pathToFile);
 			continue;
 		}
 		continue;
