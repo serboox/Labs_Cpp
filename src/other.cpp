@@ -10,6 +10,7 @@ void run()
 		std::string command;
 		std::printf("$ ");
 
+		std::cin.clear();
 		std::getline(std::cin, command);
 		//std::printf("---%s----%d--\n", command.c_str(), command.length());
 
@@ -186,6 +187,7 @@ void printRectangleDLL(RectangleDLL *&recDLL)
 	} while (rectangle != nullptr);
 }
 
+// FIXME: Deprecated
 void printRecVector(RectangleDLL *&recleDLL)
 {
 	size_t indexColumnSize = strlen(strSpaceWrap(COLUMN_INDEX_TITLE)),
@@ -233,6 +235,7 @@ void printRecVector(RectangleDLL *&recleDLL)
 	}
 }
 
+// FIXME: Deprecated
 void printSortMap(RectangleDLL *&recDLL)
 {
 	for (auto data = recDLL->sortMap.begin(); data != recDLL->sortMap.end(); ++data)
@@ -241,6 +244,7 @@ void printSortMap(RectangleDLL *&recDLL)
 	}
 }
 
+// FIXME: Deprecated
 void printSortVector(RectangleDLL *&recDLL)
 {
 	for (auto data = recDLL->sortVector.begin(); data != recDLL->sortVector.end(); ++data)
@@ -304,7 +308,7 @@ void addRectangle(RectangleDLL *&recDLL)
 
 void deleteRectangle(RectangleDLL *&recDLL)
 {
-	std::string command;
+	char command[10];
 	while (true)
 	{
 		if (recDLL->size <= 0)
@@ -325,14 +329,15 @@ void deleteRectangle(RectangleDLL *&recDLL)
 			std::printf("Такого прямоугольника не существует! \n");
 			while (true)
 			{
-				command = "";
+				strcpy(command, "");
 				std::printf("Желаете продолжить? [Y/n]: ");
-				std::getline(std::cin, command);
-				if (!command.compare("") || !command.compare("Y") || !command.compare("y"))
+				std::cin.getline(command, 10);
+				std::cin.clear();
+				if (strcmp(command, "") == 0 || strcmp(command, "Y") == 0 || strcmp(command, "y") == 0)
 				{
 					break;
 				}
-				else if (!command.compare("n") || !command.compare("N"))
+				else if (strcmp(command, "n") == 0 || strcmp(command, "N") == 0)
 				{
 					return;
 				}
@@ -346,21 +351,23 @@ void deleteRectangle(RectangleDLL *&recDLL)
 		bool remove = false;
 		while (true)
 		{
-			command = "";
+			strcpy(command, "");
 			std::printf("Вы действительно хотите удалить этот прямоугольник из набора? [Y/n]: ");
-			std::getline(std::cin, command);
-			if (!command.compare("") || !command.compare("Y") || !command.compare("y"))
+			std::cin.getline(command, 10);
+			std::cin.clear();
+			if (strcmp(command, "") == 0 || strcmp(command, "Y") == 0 || strcmp(command, "y") == 0)
 			{
 				remove = true;
 				break;
 			}
-			else if (!command.compare("n") || !command.compare("N"))
+			else if (strcmp(command, "n") == 0 || strcmp(command, "N") == 0)
 			{
 				remove = false;
 				break;
 			}
 			continue;
 		}
+		//std::printf("Remove: %s\n", remove ? "true" : "false");
 		if (remove)
 		{
 			//this->recVector.erase(this->recVector.begin() + i);
@@ -372,25 +379,40 @@ void deleteRectangle(RectangleDLL *&recDLL)
 				// переставляем указатель
 				prevRectangle->nextRectangle = deleteRectangle->nextRectangle;
 			}
+			else
+			{
+				recDLL->firstRectangle = nextRectangle;
+			}
 			if (nextRectangle != NULL)
 			{
 				// переставляем указатель
 				nextRectangle->prevRectangle = deleteRectangle->prevRectangle;
 			}
+			else
+			{
+				recDLL->lastRectangle = prevRectangle;
+			}
 			// освобождаем память удаляемого элемента
 			free(deleteRectangle);
+
+			std::printf("Прямоугольник удален! \n");
+			recDLL->size--;
+			if (recDLL->size == 0)
+			{
+				return;
+			}
 		}
-		std::printf("Прямоугольник удален! \n");
 		while (true)
 		{
-			command = "";
+			strcpy(command, "");
 			std::printf("Желаете продолжить? [y/N]: ");
-			std::getline(std::cin, command);
-			if (!command.compare("Y") || !command.compare("y"))
+			std::cin.getline(command, 10);
+			std::cin.clear();
+			if (strcmp(command, "Y") == 0 || strcmp(command, "y") == 0)
 			{
 				break;
 			}
-			else if (!command.compare("") || !command.compare("n") || !command.compare("N"))
+			else if (strcmp(command, "") == 0 || strcmp(command, "n") == 0 || strcmp(command, "N") == 0)
 			{
 				return;
 			}
