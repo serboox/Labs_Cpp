@@ -4,7 +4,6 @@
 void run()
 {
 	RectangleDLL *recDLL = new RectangleDLL;
-	recDLL->recDinArr = new RectangleDinArr;
 
 	while (true)
 	{
@@ -108,6 +107,7 @@ const char *strSpaceWrap(const char *str)
 
 void printRectangleDLL(RectangleDLL *&recDLL)
 {
+	//std::printf("Start printRectangleDLL\n");
 	if (recDLL->size <= 0)
 	{
 		std::printf("Ваш набор пуст. Size: %zu\n", recDLL->size);
@@ -186,10 +186,12 @@ void printRectangleDLL(RectangleDLL *&recDLL)
 		i++;
 		rectangle = rectangle->nextRectangle;
 	} while (rectangle != nullptr);
+	//std::printf("Finish printRectangleDLL\n");
 }
 
 void printRectangleDinArr(RectangleDLL *&recDLL)
 {
+	//std::printf("Start printRectangleDinArr\n");
 	if (recDLL->recDinArr->size <= 0)
 	{
 		std::printf("Ваш набор пуст. Size: %zu\n", recDLL->recDinArr->size);
@@ -256,71 +258,15 @@ void printRectangleDinArr(RectangleDLL *&recDLL)
 			<< alignCenter(height, heightColumnSize) << " | "
 			<< alignCenter(area, areaColumnSize) << " |\n";
 	}
+	//std::printf("Finish printRectangleDinArr\n");
 }
 
-// FIXME: Deprecated
-void printRecVector(RectangleDLL *&recleDLL)
-{
-	size_t indexColumnSize = strlen(strSpaceWrap(COLUMN_INDEX_TITLE)),
-		   widthColumnSize = strlen(strSpaceWrap(COLUMN_WIDTH_TITLE)),
-		   heightColumnSize = strlen(strSpaceWrap(COLUMN_HEIGHT_TITLE)),
-		   areaColumnSize = strlen(strSpaceWrap(COLUMN_AREA_TITLE));
-	size_t i = 0;
-	for (Rectangle rectangle : recleDLL->recVector)
-	{
-		if (indexColumnSize < std::to_string(i).size())
-		{
-			indexColumnSize = std::to_string(i).size();
-		}
-		if (widthColumnSize < std::to_string(rectangle.width).size())
-		{
-			widthColumnSize = std::to_string(rectangle.width).size();
-		}
-		if (heightColumnSize < std::to_string(rectangle.height).size())
-		{
-			heightColumnSize = std::to_string(rectangle.height).size();
-		}
-		if (areaColumnSize < std::to_string(rectangle.area).size())
-		{
-			areaColumnSize = std::to_string(rectangle.area).size();
-		}
-		i++;
-	}
-	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
-			  << alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize) << " | "
-			  << alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize) << " | "
-			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize) << " |\n";
-	size_t totalSize = indexColumnSize + widthColumnSize + heightColumnSize + areaColumnSize;
-	totalSize += totalSize * 0.21;
-	for (size_t i = 0; i <= totalSize; i++)
-		std::cout << "—";
-	std::cout << std::endl;
-	i = 0;
-	for (Rectangle rectangle : recleDLL->recVector)
-	{
-		std::cout << alignCenter(std::to_string(i).c_str(), indexColumnSize) << " | "
-				  << alignCenter(std::to_string(rectangle.width).c_str(), widthColumnSize) << " | "
-				  << alignCenter(std::to_string(rectangle.height).c_str(), heightColumnSize) << " | "
-				  << alignCenter(std::to_string(rectangle.area).c_str(), areaColumnSize) << " |\n";
-		i++;
-	}
-}
-
-// FIXME: Deprecated
 void printSortMap(RectangleDLL *&recDLL)
 {
-	for (auto data = recDLL->sortMap.begin(); data != recDLL->sortMap.end(); ++data)
+	for (size_t i = 0; i < recDLL->sortMap->size; i++)
 	{
-		std::printf("Map: %s => %s\n", data->first.c_str(), data->second ? "true" : "false");
-	}
-}
-
-// FIXME: Deprecated
-void printSortVector(RectangleDLL *&recDLL)
-{
-	for (auto data = recDLL->sortVector.begin(); data != recDLL->sortVector.end(); ++data)
-	{
-		std::printf("Vector: %s\n", data->c_str());
+		SortMapItem *data = recDLL->sortMap->arr[i];
+		std::printf("sortMap: %s => %s\n", data->columnName, data->isDesc ? "true" : "false");
 	}
 }
 
@@ -501,7 +447,7 @@ void saveToFile(RectangleDLL *&recDLL)
 		std::printf("Введите путь к файлу [default:%s]: ", DEFAULT_PATH_TO_FILE);
 		std::cin.getline(pathToFile, 1000);
 		std::cin.clear();
-		if (!strcmp(pathToFile, ""))
+		if (strcmp(pathToFile, "") == 0)
 		{
 			strcpy(pathToFile, DEFAULT_PATH_TO_FILE);
 		}
@@ -753,14 +699,13 @@ void initRectangleSort(RectangleDLL *&recDLL)
 {
 	if (recDLL->size <= 1)
 	{
-		//this->print();
 		printRectangleDLL(recDLL);
 		std::printf("Для сортировки необходимо чтобы прямоугольников было больше 1!\n");
 		return;
 	}
 	while (true)
 	{
-		std::string otherBy = "";
+		char *otherBy = new char[1000];
 		std::printf(
 			"Перечислите через запятую названия колонок (кроме '%s') по которым будет производиться сортировка \n"
 			"Например %s %s,%s %s (%s можно не писать): ",
@@ -768,22 +713,24 @@ void initRectangleSort(RectangleDLL *&recDLL)
 			COLUMN_WIDTH_TITLE, SORT_DESC,
 			COLUMN_AREA_TITLE, SORT_DESC,
 			SORT_ASC);
-		std::getline(std::cin, otherBy);
-		if (!otherBy.compare(""))
+		std::cin.getline(otherBy, 1000);
+		std::cin.clear();
+		if (strcmp(otherBy, "") == 0)
 		{
 			std::printf("Перечисление не может быть пустым!\n");
 			bool isContinue = false;
 			while (true)
 			{
-				std::string command = "";
+				char *command = new char[10];
 				std::printf("Желаете продолжить? [y/N]: ");
-				std::getline(std::cin, command);
-				if (!command.compare("Y") || !command.compare("y"))
+				std::cin.getline(command, 10);
+				std::cin.clear();
+				if (strcmp(command, "Y") == 0 || strcmp(command, "y") == 0)
 				{
 					isContinue = true;
 					break;
 				}
-				else if (!command.compare("") || !command.compare("n") || !command.compare("N"))
+				else if (strcmp(command, "") == 0 || strcmp(command, "n") == 0 || strcmp(command, "N") == 0)
 				{
 					return;
 				}
@@ -798,27 +745,29 @@ void initRectangleSort(RectangleDLL *&recDLL)
 			continue;
 		}
 
-		fillRecVectorFromDoublyLinkedList(recDLL);
-		//this->printSortMap();
-		//this->printSortVector();
+		//TODO::Вот тут лежит сердце сортировки
+
+		fillRecDinArrayFromDoublyLinkedList(recDLL);
+		//printSortMap(recDLL);
+		//printRectangleDinArr(recDLL);
 
 		sortRectangleDLL(recDLL);
-		recDLL->sortMap.clear();
-		recDLL->sortVector.clear();
+		recDLL->sortMap = new SortMap;
 
-		printRecVector(recDLL);
-		fillDoublyLinkedListFromRecVector(recDLL);
-		recDLL->recVector.clear();
+		printRectangleDinArr(recDLL);
+		fillDoublyLinkedListFromRecDinArray(recDLL);
+		recDLL->recDinArr->size = 0;
 		while (true)
 		{
-			std::string command = "";
+			char *command = new char[10];
 			std::printf("Желаете продолжить? [Y/n]: ");
-			std::getline(std::cin, command);
-			if (!command.compare("") || !command.compare("Y") || !command.compare("y"))
+			std::cin.getline(command, 10);
+			std::cin.clear();
+			if (strcmp(command, "") == 0 || strcmp(command, "Y") == 0 || strcmp(command, "y") == 0)
 			{
 				break;
 			}
-			else if (!command.compare("n") || !command.compare("N"))
+			else if (strcmp(command, "n") == 0 || strcmp(command, "N") == 0)
 			{
 				return;
 			}
@@ -827,10 +776,12 @@ void initRectangleSort(RectangleDLL *&recDLL)
 	}
 }
 
-void fillRecVectorFromDoublyLinkedList(RectangleDLL *&recDLL)
+void fillRecDinArrayFromDoublyLinkedList(RectangleDLL *&recDLL)
 {
-	recDLL->recVector.clear();
+	recDLL->recDinArr->size = 0;
+	recDLL->recDinArr->arr = new Rectangle *[recDLL->size];
 	Rectangle *rectangle = recDLL->firstRectangle, *nextRectangle;
+	size_t i = 0;
 	do
 	{
 		nextRectangle = rectangle->nextRectangle;
@@ -840,39 +791,11 @@ void fillRecVectorFromDoublyLinkedList(RectangleDLL *&recDLL)
 		}
 		rectangle->prevRectangle = nullptr;
 		rectangle->nextRectangle = nullptr;
-		recDLL->recVector.push_back(*rectangle);
+		recDLL->recDinArr->arr[i] = rectangle;
+		recDLL->recDinArr->size++;
+		i++;
 		rectangle = nextRectangle;
 	} while (rectangle != nullptr);
-}
-
-//FIXME:Deprecated
-void fillDoublyLinkedListFromRecVector(RectangleDLL *&recDLL)
-{
-	//std::printf("Start fillDoublyLinkedListFromRecVector size: %zu\n", this->size);
-	clearDLL(recDLL);
-	Rectangle *newRectangle = nullptr;
-	Rectangle *lastRectangle = nullptr;
-	for (size_t i = 0; i < recDLL->recVector.size(); i++)
-	{
-		newRectangle = &recDLL->recVector[i];
-		newRectangle->prevRectangle = nullptr;
-		newRectangle->nextRectangle = nullptr;
-		if (recDLL->firstRectangle == nullptr)
-		{
-			recDLL->firstRectangle = newRectangle;
-			recDLL->lastRectangle = newRectangle;
-		}
-		else
-		{
-			lastRectangle = recDLL->lastRectangle;
-			newRectangle->prevRectangle = lastRectangle;
-			lastRectangle->nextRectangle = newRectangle;
-			recDLL->lastRectangle = nullptr;
-			recDLL->lastRectangle = newRectangle;
-		}
-		++recDLL->size;
-	}
-	//std::printf("Finish fillDoublyLinkedListFromRecVector size: %zu\n", this->size);
 }
 
 void fillDoublyLinkedListFromRecDinArray(RectangleDLL *&recDLL)
@@ -904,180 +827,200 @@ void fillDoublyLinkedListFromRecDinArray(RectangleDLL *&recDLL)
 	//std::printf("Finish fillDoublyLinkedListFromRecDinArray size: %zu\n", recDLL->size);
 }
 
-bool parseRectangleSortString(RectangleDLL *&recDLL, const std::string str)
+bool parseRectangleSortString(RectangleDLL *&recDLL, const char *str)
 {
-	//FIXME:Deprecated
-	std::vector<std::string> splitString;
-	//std::vector<std::string> splitString = split(str, ',');
-	for (size_t i = 0; i < splitString.size(); i++)
+	//std::printf("Start parseRectangleSortString\n");
+	struct StringDinArr *splitString = split(str, ',');
+	for (size_t i = 0; i < splitString->size; i++)
 	{
-		//FIXME::Deprecated
-		std::vector<std::string> colAndTypeOper;
-		//std::vector<std::string> colAndTypeOper = split(splitString[i], ' ');
-		//std::printf("Size: (%d)\n", colAndTypeOper.size());
-		if (colAndTypeOper.size() > 2)
+		struct StringDinArr *colAndTypeOper = split(splitString->arr[i], ' ');
+		//std::printf("Size: (%d)\n", colAndTypeOper->size);
+		if (colAndTypeOper->size > 2)
 		{
-			std::printf("Не удалось распознать строку '%s'!\n", splitString[i].c_str());
+			std::printf("Не удалось распознать строку '%s'!\n", splitString->arr[i]);
 			return false;
 		}
-		else if (colAndTypeOper.size() == 2)
+		else if (colAndTypeOper->size == 2)
 		{
-			if (!validateColumnTitle(colAndTypeOper[0].c_str()))
+			if (!validateColumnTitle(colAndTypeOper->arr[0]))
 			{
-				std::printf("Не удалось распознать название колонки '%s'!\n", colAndTypeOper[0].c_str());
+				std::printf("Не удалось распознать название колонки '%s'!\n", colAndTypeOper->arr[0]);
 				return false;
 			}
-			recDLL->sortMap[colAndTypeOper[0]] = false;
-			recDLL->sortVector.push_back(colAndTypeOper[0]);
-			if (!colAndTypeOper[1].compare(SORT_DESC))
+
+			if (strcmp(colAndTypeOper->arr[1], SORT_DESC) == 0)
 			{
-				recDLL->sortMap[colAndTypeOper[0]] = true;
+				addToSortMap(recDLL, colAndTypeOper->arr[0], true);
 			}
-			else if (colAndTypeOper[1].compare(SORT_ASC))
+			else if (strcmp(colAndTypeOper->arr[1], SORT_ASC) == 0)
 			{
-				std::printf("Не удалось распознать тип сортироваки '%s'!\n", colAndTypeOper[1].c_str());
+				addToSortMap(recDLL, colAndTypeOper->arr[0], false);
+			}
+			else
+			{
+				std::printf("Не удалось распознать тип сортироваки '%s'!\n", colAndTypeOper->arr[1]);
 				return false;
 			}
 		}
 		else
 		{
-			if (!validateColumnTitle(colAndTypeOper[0].c_str()))
+			if (!validateColumnTitle(colAndTypeOper->arr[0]))
 			{
-				std::printf("Не удалось распознать название колонки '%s'!\n", colAndTypeOper[0].c_str());
+				std::printf("Не удалось распознать название колонки '%s'!\n", colAndTypeOper->arr[0]);
 				return false;
 			}
-			recDLL->sortMap[colAndTypeOper[0]] = false;
-			recDLL->sortVector.push_back(colAndTypeOper[0]);
+			addToSortMap(recDLL, colAndTypeOper->arr[0], false);
 		}
 	}
+	//std::printf("Finish parseRectangleSortString\n");
 	return true;
+}
+
+void addToSortMap(RectangleDLL *&recDLL, char *columnName, bool isDesc)
+{
+	for (size_t i = 0; i < recDLL->sortMap->size; i++)
+	{
+		if (strcmp(recDLL->sortMap->arr[i]->columnName, columnName) == 0)
+		{
+			recDLL->sortMap->arr[i]->isDesc = isDesc;
+			return;
+		}
+	}
+	SortMapItem *item = new SortMapItem;
+	item->columnName = columnName;
+	item->isDesc = isDesc;
+	recDLL->sortMap->arr[recDLL->sortMap->size] = item;
+	recDLL->sortMap->size++;
 }
 
 void sortRectangleDLL(RectangleDLL *&recDLL)
 {
-	const std::string beginKey = recDLL->sortVector[0];
-	for (size_t i = 0; i < recDLL->recVector.size() - 1; i++)
+	//std::printf("Start sortRectangleDLL\n");
+	const char *beginKey = recDLL->sortMap->arr[0]->columnName;
+	bool isDesc = recDLL->sortMap->arr[0]->isDesc;
+	for (size_t i = 0; i < recDLL->recDinArr->size - 1; i++)
 	{
-		Rectangle maxElement = recDLL->recVector[i];
-		bool isDesc = recDLL->sortMap[beginKey];
+		Rectangle *maxElement = recDLL->recDinArr->arr[i];
 		size_t posMaxElem = i;
-		for (size_t j = i + 1; j < recDLL->recVector.size(); j++)
+		for (size_t j = i + 1; j < recDLL->recDinArr->size; j++)
 		{
-			std::pair<int, bool> cmpRes = cmpRectangleRecursive(recDLL, posMaxElem, j, 0);
+			SortPair *cmpRes = cmpRectangleRecursive(recDLL, posMaxElem, j, 0);
 			//std::printf("Результат сравнения: '%d' \n", cmpRes);
-			//printRectangle(recDLL);
 
-			if (cmpRes.first == 0)
+			if (cmpRes->resCmp == 0)
 			{
 				//std::printf("Прямоугольники равны\n");
 				continue;
 			}
-			else if (cmpRes.first > 0 && cmpRes.second)
+			else if (cmpRes->resCmp > 0 && cmpRes->isDesc)
 			{
 				// DESC
-				maxElement = recDLL->recVector[j];
+				maxElement = recDLL->recDinArr->arr[j];
 				posMaxElem = j;
 			}
-			else if (cmpRes.first < 0 && !cmpRes.second)
+			else if (cmpRes->resCmp < 0 && !cmpRes->isDesc)
 			{
 				// ASC
-				maxElement = recDLL->recVector[j];
+				maxElement = recDLL->recDinArr->arr[j];
 				posMaxElem = j;
 			}
 		}
 		//std::printf("(i:%d;posMaxElem:%d)\n", i, posMaxElem);
-		Rectangle bookBuf = recDLL->recVector[i];
-		recDLL->recVector[i] = maxElement;
-		recDLL->recVector[posMaxElem] = bookBuf;
+		Rectangle *bookBuf = recDLL->recDinArr->arr[i];
+		recDLL->recDinArr->arr[i] = maxElement;
+		recDLL->recDinArr->arr[posMaxElem] = bookBuf;
 	}
+	//std::printf("Finish sortRectangleDLL\n");
 }
 
-std::pair<int, bool> cmpRectangleRecursive(
+SortPair *cmpRectangleRecursive(
 	RectangleDLL *&recDLL,
-	const size_t firstVectorIndex,
-	const size_t secondVectorIndex,
+	const size_t firstSortIndex,
+	const size_t secondSortIndex,
 	const size_t sortIndex)
 {
-	std::pair<int, bool> res;
-	Rectangle firstBook = recDLL->recVector[firstVectorIndex];
-	Rectangle secondBook = recDLL->recVector[secondVectorIndex];
-	const std::string key = recDLL->sortVector[sortIndex];
-	res.second = recDLL->sortMap[key];
-	if (!key.compare(COLUMN_WIDTH_TITLE))
+	//std::printf("Start cmpRectangleRecursive->%zu:%zu:%zu\n", firstSortIndex, secondSortIndex, sortIndex);
+	SortPair *res = new SortPair;
+	Rectangle *firstBook = recDLL->recDinArr->arr[firstSortIndex];
+	Rectangle *secondBook = recDLL->recDinArr->arr[secondSortIndex];
+	const char *key = recDLL->sortMap->arr[sortIndex]->columnName;
+	res->isDesc = recDLL->sortMap->arr[sortIndex]->isDesc;
+	if (strcmp(key, COLUMN_WIDTH_TITLE) == 0)
 	{
-		if (secondBook.width == firstBook.width)
+		if (secondBook->width == firstBook->width)
 		{
 			//std::printf("Значения ширин прямоугольников равны\n");
 			size_t newSortIndex = sortIndex;
-			if (newSortIndex < recDLL->sortVector.size() - 1)
+			if (newSortIndex < recDLL->sortMap->size - 1)
 			{
 				newSortIndex++;
-				return cmpRectangleRecursive(recDLL, firstVectorIndex, secondVectorIndex, newSortIndex);
+				return cmpRectangleRecursive(recDLL, firstSortIndex, secondSortIndex, newSortIndex);
 			}
-			res.first = 0;
+			res->resCmp = 0;
 			return res;
 		}
-		else if (secondBook.width > firstBook.width)
+		else if (secondBook->width > firstBook->width)
 		{
-			res.first = 1;
+			res->resCmp = 1;
 			return res;
 		}
-		else if (secondBook.width < firstBook.width)
+		else if (secondBook->width < firstBook->width)
 		{
-			res.first = -1;
+			res->resCmp = -1;
 			return res;
 		}
 	}
-	else if (!key.compare(COLUMN_HEIGHT_TITLE))
+	else if (strcmp(key, COLUMN_HEIGHT_TITLE) == 0)
 	{
-		if (secondBook.height == firstBook.height)
+		if (secondBook->height == firstBook->height)
 		{
 			//std::printf("Значения высот прямоугольников равны\n");
 			size_t newSortIndex = sortIndex;
-			if (newSortIndex < recDLL->sortVector.size() - 1)
+			if (newSortIndex < recDLL->sortMap->size - 1)
 			{
 				newSortIndex++;
-				return cmpRectangleRecursive(recDLL, firstVectorIndex, secondVectorIndex, newSortIndex);
+				return cmpRectangleRecursive(recDLL, firstSortIndex, secondSortIndex, newSortIndex);
 			}
-			res.first = 0;
+			res->resCmp = 0;
 			return res;
 		}
-		else if (secondBook.height > firstBook.height)
+		else if (secondBook->height > firstBook->height)
 		{
-			res.first = 1;
+			res->resCmp = 1;
 			return res;
 		}
-		else if (secondBook.height < firstBook.height)
+		else if (secondBook->height < firstBook->height)
 		{
-			res.first = -1;
+			res->resCmp = -1;
 			return res;
 		}
 	}
-	else if (!key.compare(COLUMN_AREA_TITLE))
+	else if (strcmp(key, COLUMN_AREA_TITLE) == 0)
 	{
-		if (secondBook.area == firstBook.area)
+		if (secondBook->area == firstBook->area)
 		{
 			//std::printf("Значения площадей прямоугольников равны\n");
 			size_t newSortIndex = sortIndex;
-			if (newSortIndex < recDLL->sortVector.size() - 1)
+			if (newSortIndex < recDLL->sortMap->size - 1)
 			{
 				newSortIndex++;
-				return cmpRectangleRecursive(recDLL, firstVectorIndex, secondVectorIndex, newSortIndex);
+				return cmpRectangleRecursive(recDLL, firstSortIndex, secondSortIndex, newSortIndex);
 			}
-			res.first = 0;
+			res->resCmp = 0;
 			return res;
 		}
-		else if (secondBook.area > firstBook.area)
+		else if (secondBook->area > firstBook->area)
 		{
-			res.first = 1;
+			res->resCmp = 1;
 			return res;
 		}
-		else if (secondBook.area < firstBook.area)
+		else if (secondBook->area < firstBook->area)
 		{
-			res.first = -1;
+			res->resCmp = -1;
 			return res;
 		}
 	}
-	res.first = 0;
+	res->resCmp = 0;
+	//std::printf("Finish cmpRectangleRecursive\n");
 	return res;
 }

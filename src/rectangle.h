@@ -13,6 +13,9 @@ const char COLUMN_INDEX_TITLE[] = "Index",
 		   COLUMN_HEIGHT_TITLE[] = "Ширина",
 		   COLUMN_AREA_TITLE[] = "Площадь";
 
+// COLUMN_COUNT константа определяющая число колонок в таблице
+const size_t COLUMN_COUNT = 4;
+
 /*
 * Rectangle, структура прямугольника
 */

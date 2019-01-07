@@ -13,7 +13,8 @@
         "algorithm": "c",
         "string": "cpp",
         "cstring": "cpp",
-        "istream": "cpp"
+        "istream": "cpp",
+        "iosfwd": "c"
     },
     "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",
     "cSpell.language": "en,ru",

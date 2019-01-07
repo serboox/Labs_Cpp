@@ -11,7 +11,7 @@
 #include <map>
 #include <cstring> // библиотека для работы со строками (используем для strcmp(), strlen())
 #include <string.h>
-#include <cmath> // для округления float значений
+#include <cmath> // библиотека с математическими функциями, например для округления float значений
 
 #include "rectangle.h"
 
@@ -40,7 +40,31 @@ const char SORT_ASC[] = "ASC";
 // SORT_DESC сортировака в порядке  убывания
 const char SORT_DESC[] = "DESC";
 
-// RectangleDLL структура набора прямоугольников (DLL -> doubly linked list)
+/*
+* SortMapItem содержит struct{название поля, сортировать по DESC?}
+* columnName - значение одной из констант с названием колонки
+* isDesc - нужно ли сортировать эту колонку по убыванию (DESC)
+*/
+struct SortMapItem
+{
+	char *columnName = new char[100];
+	bool isDesc = false;
+};
+
+/*
+* SortMap содержит данные для сортировки
+* size - содержит значение размера динамического массива указателей на SortMapItem
+* arr - содержит динамический массив уникальных значений SortMapItem
+*/
+struct SortMap
+{
+	size_t size = 0;
+	SortMapItem **arr = new SortMapItem *[COLUMN_COUNT];
+};
+
+/*
+* RectangleDLL структура набора прямоугольников (DLL -> doubly linked list)
+*/
 struct RectangleDLL
 {
 	// *firstRectangle - указатель на первый прямоугольник в двухсвязанном списке
@@ -51,18 +75,26 @@ struct RectangleDLL
 	size_t size = 0;
 
 	// recDinArr содержит структуру с промежуточным буффером прямоугольников (структур Rectangle)
-	RectangleDinArr *recDinArr;
-
-	// recVector содержит вектор с промежуточным буффером прямоугольников (структур Rectangle)
-	std::vector<Rectangle> recVector; //FIXME:Deprecated
-	// sortMap содержит данные для сортировки map[название поля]isDesc
-	std::map<std::string, bool> sortMap; //FIXME:Deprecated
-	// sortVector хранит имена колонок в порядке котором следует производить сортировку
-	std::vector<std::string> sortVector; //FIXME:Deprecated
+	RectangleDinArr *recDinArr = new RectangleDinArr;
+	// sortMap содержит данные для сортировки struct{название поля, тип сортировки}
+	SortMap *sortMap = new SortMap;
 };
 
 /*
-* StringDinArr структура описывающая динамический массив char строк
+* SortPair используется для передачи результирующего значения у функции cmpRectangleRecursive
+* resCmp - содержит результат сравнения текущей и предыдущей колонки (-1<=resCmp<=1)
+* isDesc - содержит true если колонку необходимо сортировать по убыванию
+*/
+struct SortPair
+{
+	int resCmp = 0;
+	bool isDesc = false;
+};
+
+/*
+* StringDinArr структура содержащая динамический массив строк и размер массива
+* size - содержит значение числа строк в динамическом массиве
+* arr - динамический массив строк
 */
 struct StringDinArr
 {
@@ -70,70 +102,84 @@ struct StringDinArr
 	char **arr = new char *[0];
 };
 
-// run запускает программы
+// run запускает работу программы
 void run();
 
 // printRectangleDLL печатает содержимое набора прямоуголников в консоль
 void printRectangleDLL(RectangleDLL *&recDLL);
+
 /* printRectangleDinArr печатает содержимое промежуточного буфера прямоуголников в консоль */
 void printRectangleDinArr(RectangleDLL *&recDLL);
 
-/* printRecVector печатает содержимое промежуточного вектора прямоуголников в консоль */
-void printRecVector(RectangleDLL *&recleDLL); //FIXME:Deprecated
 // printSortMap печатает содержимое карты для сортировки в консоль
-void printSortMap(RectangleDLL *&recDLL); //FIXME:Deprecated
-// print печатает содержимое вектора для сортировки в консоль
-void printSortVector(RectangleDLL *&recDLL); //FIXME:Deprecated
+void printSortMap(RectangleDLL *&recDLL);
 
 // add добавляет новый прямоугольник в набор
 void addRectangle(RectangleDLL *&recDLL);
+
 // deleteRectangle удаляет один или несколько прямоугольников из набора
 void deleteRectangle(RectangleDLL *&recDLL);
+
 // saveToFile сохраняет данные в файл
 void saveToFile(RectangleDLL *&recDLL);
+
 // loadFromFile считывает данные из файла
 void loadFromFile(RectangleDLL *&recDLL);
+
 /*
 		search находит один или несколько прямоугольников из набора площадь
 		которых соответствует указанному (stdin) числу
 */
 void searchRectangle(RectangleDLL *&recDLL);
+
 // searchFromIndex находит прямоугольник по индексу
 Rectangle *searchRectangleFromIndex(RectangleDLL *&recDLL, size_t index);
 
 // clearDLL очищает память от данных по прямоугольнику
 void clearDLL(RectangleDLL *&recDLL);
+
 // initRectangleSort сортирует прямоугольники в определенном порядке
 void initRectangleSort(RectangleDLL *&recDLL);
-// fillRecVectorFromDoublyLinkedList формирует вектор recVector из данных двухсвязанного списка
-void fillRecVectorFromDoublyLinkedList(RectangleDLL *&recDLL);
-// fillDoublyLinkedListFromRecVector формирует двухсвязанный список из вектора recVector
-void fillDoublyLinkedListFromRecVector(RectangleDLL *&recDLL); //FIXME:Deprecated
+
+// fillRecDinArrayFromDoublyLinkedList формирует вектор recDinArray из данных двухсвязанного списка
+void fillRecDinArrayFromDoublyLinkedList(RectangleDLL *&recDLL);
+
 // fillDoublyLinkedListFromRecDinArray формирует двухсвязанный список из динамического массива recDinArr
 void fillDoublyLinkedListFromRecDinArray(RectangleDLL *&recDLL);
 
 /*
-	parseRectangleSortString преобразует строку(std:cin) в данные необходимые для сортировки,
-	заполняет поля sortMap и sortVector, возвращает false в случае ошибки
+*	parseRectangleSortString преобразует строку(std:cin) в данные необходимые для сортировки,
+*	заполняет поля sortMap и sortVector, возвращает false в случае ошибки
 */
-bool parseRectangleSortString(RectangleDLL *&recDLL, std::string str);
+bool parseRectangleSortString(RectangleDLL *&recDLL, const char *str);
+
+/*
+*	addToSortMap добавляет новый SortMapItem в динамический массив sortMap,
+*	если значение поля SortMapItem->columnName уже есть в массиве то просто
+*	обновляется значение SortMapItem->isDesc
+*/
+void addToSortMap(RectangleDLL *&recDLL, char *columnName, bool isDesc);
+
 // sortRectangleDLL сортирует прямоугольники
 void sortRectangleDLL(RectangleDLL *&recDLL);
+
 /*
-	cmpRectangleRecursive рекурсивно проходит по sortVector проверяя какое из значений больше
-	1 если firstVectorIndex > secondVectorIndex
-	0 если firstVectorIndex == secondVectorIndex
-	-1 если firstVectorIndex < secondVectorIndex
+*	cmpRectangleRecursive рекурсивно проходит по sortVector проверяя какое из значений больше
+*	1 если firstSortIndex > secondSortIndex
+*	0 если firstSortIndex == secondSortIndex
+*	-1 если firstSortIndex < secondSortIndex
 */
-std::pair<int, bool> cmpRectangleRecursive(
+SortPair *cmpRectangleRecursive(
 	RectangleDLL *&recDLL,
-	const size_t firstVectorIndex,
-	const size_t secondVectorIndex,
+	const size_t firstSortIndex,
+	const size_t secondSortIndex,
 	const size_t sortIndex);
 
 // strSpaceWrap добавляет пробел в начало и конец строки
 const char *strSpaceWrap(const char *str);
+
 // alignCenter печатает содержимое ячейки табицы по центру
 const char *alignCenter(const char *s, const int w);
+
 // split разбивает строку по разделителю
 StringDinArr *split(const char *s, const char sep);
