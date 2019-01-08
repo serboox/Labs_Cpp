@@ -215,8 +215,8 @@ void fillBookFromStdIn(BOOK *&book)
 	std::cout << std::endl;
 }
 
-// printBook печатает информацию о прямоугольнике в stdout (консоль)
-void printBook(BOOK *&book)
+// printBook печатает информацию о книге в stdout (консоль)
+void printBook(struct BOOK *&book)
 {
 	std::printf("Books{\n"
 				"\tauthorFirstName (string):%s\n"

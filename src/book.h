@@ -61,11 +61,11 @@ BookCategoryEnum getBookCategory(const char *category);
 void fillBookFromStdIn(struct BOOK *&book);
 
 /* printBook печатает информацию о книге в stdout */
-void printBook(struct BOOK *&rectangle);
+void printBook(struct BOOK *&book);
 
 /* validateColumnTitle производит проверку соответствует ли строка
 	названию одной одной из колонок */
-bool validateColumnTitle(const char str[]);
+bool validateColumnTitle(const char *str);
 
 // semicolonToSpace все знаки ';' на пробелы
 void semicolonToSpace(std::string &text);

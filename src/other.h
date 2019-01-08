@@ -19,7 +19,6 @@ const char
 	COMMAND_DELETE[] = "delete",
 	COMMAND_SAVE[] = "save",
 	COMMAND_LOAD[] = "load",
-	COMMAND_SEARCH[] = "search",
 	COMMAND_SORT[] = "sort",
 	COMMAND_HELP[] = "help",
 	COMMAND_EXIT[] = "exit",
@@ -72,19 +71,19 @@ struct BookDinArr
 
 /*
 * Card структура книжной картотеки
-* recDinArr - содержит указатель на структуру BookDinArr
+* bookDinArr - содержит указатель на структуру BookDinArr
 * sortMap - содержит указатель на структуру SortMap
 */
 struct Card
 {
-	// recDinArr содержит структуру с динамическим массивом книг (структур BOOK)
-	BookDinArr *recDinArr = new BookDinArr;
+	// bookDinArr содержит структуру с динамическим массивом книг (структур BOOK)
+	BookDinArr *bookDinArr = new BookDinArr;
 	// sortMap содержит данные для сортировки struct{название поля, тип сортировки}
 	SortMap *sortMap = new SortMap;
 };
 
 /*
-* SortPair используется для передачи результирующего значения у функции cmpRectangleRecursive
+* SortPair используется для передачи результирующего значения у функции cmpBookRecursive
 * resCmp - содержит результат сравнения текущей и предыдущей колонки (-1<=resCmp<=1)
 * isDesc - содержит true если колонку необходимо сортировать по убыванию
 */
@@ -108,72 +107,51 @@ struct StringDinArr
 // run запускает работу программы
 void run();
 
-// printRectangleDLL печатает содержимое набора прямоугольников в консоль
-void printRectangleDLL(Card *&recDLL);
-
-/* printRectangleDinArr печатает содержимое промежуточного буфера прямоугольников в консоль */
-void printRectangleDinArr(Card *&recDLL);
+/* printCard печатает содержимое картотеки книг в консоль */
+void printCard(Card *&card);
 
 // printSortMap печатает содержимое карты для сортировки в консоль
-void printSortMap(Card *&recDLL);
+void printSortMap(Card *&card);
 
-// add добавляет новый прямоугольник в набор
-void addRectangle(Card *&recDLL);
+// addBookToCard добавляет новую книгу в картотеку
+void addBookToCard(Card *&card);
 
-// deleteRectangle удаляет один или несколько прямоугольников из набора
-void deleteRectangle(Card *&recDLL);
+// deleteBook удаляет один или несколько выбранных книг из картотеки
+void deleteBook(Card *&card);
 
 // saveToFile сохраняет данные в файл
-void saveToFile(Card *&recDLL);
+void saveToFile(Card *&card);
 
 // loadFromFile считывает данные из файла
-void loadFromFile(Card *&recDLL);
+void loadFromFile(Card *&card);
+
+// initRectangleSort инициализирует процесс сортировки книг в картотеке
+void initCardSort(Card *&card);
 
 /*
-		search находит один или несколько прямоугольников из набора площадь
-		которых соответствует указанному (stdin) числу
+*	parseCardSortString преобразует строку(std:cin) в данные необходимые для сортировки,
+*	заполняет поля sortMap, возвращает false в случае ошибки
 */
-void searchRectangle(Card *&recDLL);
-
-// searchFromIndex находит прямоугольник по индексу
-struct BOOK *searchRectangleFromIndex(Card *&recDLL, size_t index);
-
-// clearDLL очищает память от данных по прямоугольнику
-void clearDLL(Card *&recDLL);
-
-// initRectangleSort сортирует прямоугольники в определенном порядке
-void initRectangleSort(Card *&recDLL);
-
-// fillRecDinArrayFromDoublyLinkedList формирует вектор recDinArray из данных двухсвязанного списка
-void fillRecDinArrayFromDoublyLinkedList(Card *&recDLL);
-
-// fillDoublyLinkedListFromRecDinArray формирует двухсвязанный список из динамического массива recDinArr
-void fillDoublyLinkedListFromRecDinArray(Card *&recDLL);
-
-/*
-*	parseRectangleSortString преобразует строку(std:cin) в данные необходимые для сортировки,
-*	заполняет поля sortMap и sortVector, возвращает false в случае ошибки
-*/
-bool parseRectangleSortString(Card *&recDLL, const char *str);
+bool parseCardSortString(Card *&card, const char *str);
 
 /*
 *	addToSortMap добавляет новый SortMapItem в динамический массив sortMap,
 *	если значение поля SortMapItem->columnName уже есть в массиве то просто
 *	обновляется значение SortMapItem->isDesc
 */
-void addToSortMap(Card *&recDLL, char *columnName, bool isDesc);
+void addToSortMap(Card *&card, char *columnName, bool isDesc);
 
-// sortRectangleDLL сортирует прямоугольники
-void sortRectangleDLL(Card *&recDLL);
+// sortCard сортирует книги в картотеке
+void sortCard(Card *&card);
 
 /*
-*	cmpRectangleRecursive рекурсивно проходит по sortVector проверяя какое из значений больше
+*	cmpBookRecursive рекурсивно проходит по sortMap проверяя какое из значений больше
 *	1 если firstSortIndex > secondSortIndex
 *	0 если firstSortIndex == secondSortIndex
 *	-1 если firstSortIndex < secondSortIndex
 */
-SortPair *cmpRectangleRecursive(
-	Card *&recDLL,
+SortPair *cmpBookRecursive(
+	Card *&card,
 	const size_t firstSortIndex,
 	const size_t secondSortIndex,
 	const size_t sortIndex);

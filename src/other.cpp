@@ -3,27 +3,25 @@
 
 void run()
 {
-	Card *card = new Card;
+	struct Card *card = new struct Card;
 
 	while (true)
 	{
-		char* command = new char[21];
+		char *command = new char[21];
 		std::printf("$ ");
 
 		std::cin.clear();
 		std::cin.getline(command, 20);
 		std::cin.clear();
-		//std::printf("---%s----%d--\n", command.c_str(), command.length());
 
 		if (strcmp(command, COMMAND_HELP) == 0)
 		{
 			std::printf(
-				"%s  Распечатать содержимое набора. \n"
-				"%s  Добавить новый прямоугольник. \n"
+				"%s  Распечатать содержимое картотеки. \n"
+				"%s  Добавить новую книгу. \n"
 				"%s  Удалить существующий(ие). \n"
 				"%s  Записать в файл. \n"
 				"%s  Считать из файла. \n"
-				"%s  Найти прямоугольник(и) площадь которого соответствует значениею. \n"
 				"%s  Сортировки набора по одному или нескольким полям. \n"
 				"%s  Отобразить список комманд. \n"
 				"%s  Выйти. \n",
@@ -32,26 +30,25 @@ void run()
 				COMMAND_DELETE,
 				COMMAND_SAVE,
 				COMMAND_LOAD,
-				COMMAND_SEARCH,
 				COMMAND_SORT,
 				COMMAND_HELP,
 				COMMAND_EXIT);
 		}
 		else if (strcmp(command, COMMAND_PRINT) == 0)
 		{
-			std::printf("Cодержимое набора прямоугольников: \n\n");
-			printRectangleDLL(card);
+			std::printf("Cодержимое картотеки: \n\n");
+			printCard(card);
 			std::printf("\n");
 		}
 		else if (strcmp(command, COMMAND_ADD) == 0)
 		{
-			std::printf("Добавить новый прямоугольник: \n\n");
-			addRectangle(card);
+			std::printf("Добавить новую книгу: \n\n");
+			addBookToCard(card);
 		}
 		else if (strcmp(command, COMMAND_DELETE) == 0)
 		{
 			std::printf("Удалить существующий(ие): \n");
-			deleteRectangle(card);
+			deleteBook(card);
 		}
 		else if (strcmp(command, COMMAND_SAVE) == 0)
 		{
@@ -63,15 +60,10 @@ void run()
 			std::printf("Считать из файла: \n");
 			loadFromFile(card);
 		}
-		else if (strcmp(command, COMMAND_SEARCH) == 0)
-		{
-			std::printf("Найти прямоугольник(и) площадь которого соответствует значениею: \n");
-			searchRectangle(card);
-		}
 		else if (strcmp(command, COMMAND_SORT) == 0)
 		{
 			std::printf("Сортировки набора по одному или нескольким полям: \n");
-			initRectangleSort(card);
+			initCardSort(card);
 		}
 		else if (strcmp(command, COMMAND_EXIT) == 0)
 		{
@@ -106,181 +98,114 @@ const char *strSpaceWrap(const char *str)
 	return res;
 }
 
-void printRectangleDLL(RectangleDLL *&recDLL)
+void printCard(struct Card *&card)
 {
-	//std::printf("Start printRectangleDLL\n");
-	if (recDLL->size <= 0)
+	//std::printf("Start printCard\n");
+	if (card->bookDinArr->size <= 0)
 	{
-		std::printf("Ваш набор пуст. Size: %zu\n", recDLL->size);
-		return;
-	}
-	BOOK *rectangle = recDLL->firstRectangle;
-	if (rectangle == nullptr)
-	{
-		std::printf("Ваш набор пуст. Size: %zu\n", recDLL->size);
+		std::printf("Ваш набор пуст. Size: %zu\n", card->bookDinArr->size);
 		return;
 	}
 	size_t indexColumnSize = strlen(strSpaceWrap(COLUMN_INDEX_TITLE)),
-		   widthColumnSize = strlen(strSpaceWrap(COLUMN_WIDTH_TITLE)),
-		   heightColumnSize = strlen(strSpaceWrap(COLUMN_HEIGHT_TITLE)),
-		   areaColumnSize = strlen(strSpaceWrap(COLUMN_AREA_TITLE));
-	size_t i = 0;
-	do
+		   firstNameColumnSize = strlen(strSpaceWrap(COLUMN_AUTHOR_FIRST_NAME_TITLE)),
+		   lastNameColumnSize = strlen(strSpaceWrap(COLUMN_AUTHOR_LAST_NAME_TITLE)),
+		   titleColumnSize = strlen(strSpaceWrap(COLUMN_BOOK_TITLE_TITLE)),
+		   yearColumnSize = strlen(strSpaceWrap(COLUMN_BOOK_YEAR_TITLE)),
+		   priceColumnSize = strlen(strSpaceWrap(COLUMN_BOOK_PRICE_TITLE)),
+		   categoryColumnSize = strlen(strSpaceWrap(COLUMN_BOOK_CATEGORY_TITLE));
+
+	for (size_t i = 0; i < card->bookDinArr->size; i++)
 	{
+		struct BOOK *book = card->bookDinArr->arr[i];
 		char *index = new char[indexColumnSize];
 		sprintf(index, "%zu", i);
-		char *width = new char[widthColumnSize];
-		sprintf(width, "%f", rectangle->width);
-		char *height = new char[heightColumnSize];
-		sprintf(height, "%f", rectangle->height);
-		char *area = new char[areaColumnSize];
-		sprintf(area, "%f", rectangle->area);
+		char *bookYear = new char[yearColumnSize];
+		sprintf(bookYear, "%d", book->bookYear);
+		char *bookPrice = new char[priceColumnSize];
+		sprintf(bookPrice, "%f", book->bookPrice);
 
 		if (indexColumnSize < strlen(index))
 		{
 			indexColumnSize = strlen(index);
 		}
-		if (widthColumnSize < strlen(width))
+		if (firstNameColumnSize < strlen(book->authorFirstName))
 		{
-			widthColumnSize = strlen(width);
+			firstNameColumnSize = strlen(book->authorFirstName);
 		}
-		if (heightColumnSize < strlen(height))
+		if (lastNameColumnSize < strlen(book->authorLastName))
 		{
-			heightColumnSize = strlen(height);
+			lastNameColumnSize = strlen(book->authorLastName);
 		}
-		if (areaColumnSize < strlen(area))
-		{
-			areaColumnSize = strlen(area);
-		}
-		i++;
 
-		rectangle = rectangle->nextRectangle;
-		//std::printf("Titles: %zu : %zu : %d\n", i, recDLL->size, rectangle == nullptr);
-	} while (rectangle != nullptr);
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
-			  << alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize) << " | "
-			  << alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize) << " | "
-			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize) << " |\n";
-#else
-	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
-			  << alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize + floor((float)strlen(COLUMN_WIDTH_TITLE) / 2)) << " | "
-			  << alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize + floor((float)strlen(COLUMN_HEIGHT_TITLE) / 2)) << " | "
-			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize + floor((float)strlen(COLUMN_AREA_TITLE) / 2)) << " |\n";
-#endif
-	size_t totalSize = indexColumnSize + widthColumnSize + heightColumnSize + areaColumnSize;
-	totalSize += totalSize * 0.21;
-	for (size_t i = 0; i <= totalSize; i++)
-		std::cout << "—";
-	std::cout << std::endl;
-	rectangle = recDLL->firstRectangle;
-	i = 0;
-	do
-	{
-		char *index = new char[indexColumnSize];
-		sprintf(index, "%zu", i);
-		char *width = new char[widthColumnSize];
-		sprintf(width, "%f", rectangle->width);
-		char *height = new char[heightColumnSize];
-		sprintf(height, "%f", rectangle->height);
-		char *area = new char[areaColumnSize];
-		sprintf(area, "%f", rectangle->area);
+		if (titleColumnSize < strlen(book->bookTitle))
+		{
+			titleColumnSize = strlen(book->bookTitle);
+		}
+		if (yearColumnSize < strlen(bookYear))
+		{
+			yearColumnSize = strlen(bookYear);
+		}
+		if (priceColumnSize < strlen(bookPrice))
+		{
+			priceColumnSize = strlen(bookPrice);
+		}
+		if (categoryColumnSize < strlen(getBookCategory(book)))
+		{
+			categoryColumnSize = strlen(getBookCategory(book));
+		}
 
-		std::cout
-			<< alignCenter(index, indexColumnSize) << " | "
-			<< alignCenter(width, widthColumnSize) << " | "
-			<< alignCenter(height, heightColumnSize) << " | "
-			<< alignCenter(area, areaColumnSize) << " |\n";
-		i++;
-		rectangle = rectangle->nextRectangle;
-	} while (rectangle != nullptr);
-	//std::printf("Finish printRectangleDLL\n");
-}
-
-void printRectangleDinArr(RectangleDLL *&recDLL)
-{
-	//std::printf("Start printRectangleDinArr\n");
-	if (recDLL->recDinArr->size <= 0)
-	{
-		std::printf("Ваш набор пуст. Size: %zu\n", recDLL->recDinArr->size);
-		return;
-	}
-	size_t indexColumnSize = strlen(strSpaceWrap(COLUMN_INDEX_TITLE)),
-		   widthColumnSize = strlen(strSpaceWrap(COLUMN_WIDTH_TITLE)),
-		   heightColumnSize = strlen(strSpaceWrap(COLUMN_HEIGHT_TITLE)),
-		   areaColumnSize = strlen(strSpaceWrap(COLUMN_AREA_TITLE));
-	for (size_t i = 0; i < recDLL->recDinArr->size; i++)
-	{
-		BOOK *rectangle = recDLL->recDinArr->arr[i];
-		char *index = new char[indexColumnSize];
-		sprintf(index, "%zu", i);
-		char *width = new char[widthColumnSize];
-		sprintf(width, "%f", rectangle->width);
-		char *height = new char[heightColumnSize];
-		sprintf(height, "%f", rectangle->height);
-		char *area = new char[areaColumnSize];
-		sprintf(area, "%f", rectangle->area);
-
-		if (indexColumnSize < strlen(index))
-		{
-			indexColumnSize = strlen(index);
-		}
-		if (widthColumnSize < strlen(width))
-		{
-			widthColumnSize = strlen(width);
-		}
-		if (heightColumnSize < strlen(height))
-		{
-			heightColumnSize = strlen(height);
-		}
-		if (areaColumnSize < strlen(area))
-		{
-			areaColumnSize = strlen(area);
-		}
 		i++;
 	}
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
-			  << alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize) << " | "
-			  << alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize) << " | "
-			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize) << " |\n";
+			  << alignCenter(COLUMN_AUTHOR_FIRST_NAME_TITLE, firstNameColumnSize) << " | "
+			  << alignCenter(COLUMN_AUTHOR_LAST_NAME_TITLE, lastNameColumnSize) << " | "
+			  << alignCenter(COLUMN_BOOK_TITLE_TITLE, titleColumnSize) << " | "
+			  << alignCenter(COLUMN_BOOK_YEAR_TITLE, yearColumnSize) << " | "
+			  << alignCenter(COLUMN_BOOK_PRICE_TITLE, priceColumnSize) << " | "
+			  << alignCenter(COLUMN_BOOK_CATEGORY_TITLE, categoryColumnSize) << " |\n";
 #else
 	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
-			  << alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize + floor((float)strlen(COLUMN_WIDTH_TITLE) / 2)) << " | "
-			  << alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize + floor((float)strlen(COLUMN_HEIGHT_TITLE) / 2)) << " | "
-			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize + floor((float)strlen(COLUMN_AREA_TITLE) / 2)) << " |\n";
+			  << alignCenter(COLUMN_AUTHOR_FIRST_NAME_TITLE, firstNameColumnSize + floor((float)strlen(COLUMN_AUTHOR_FIRST_NAME_TITLE) / 2)) << " | "
+			  << alignCenter(COLUMN_AUTHOR_LAST_NAME_TITLE, firstNameColumnSize + floor((float)strlen(COLUMN_AUTHOR_LAST_NAME_TITLE) / 2)) << " | "
+			  << alignCenter(COLUMN_BOOK_TITLE_TITLE, firstNameColumnSize + floor((float)strlen(COLUMN_BOOK_TITLE_TITLE) / 2)) << " | "
+			  << alignCenter(COLUMN_BOOK_YEAR_TITLE, firstNameColumnSize + floor((float)strlen(COLUMN_BOOK_YEAR_TITLE) / 2)) << " | "
+			  << alignCenter(COLUMN_BOOK_PRICE_TITLE, firstNameColumnSize + floor((float)strlen(COLUMN_BOOK_PRICE_TITLE) / 2)) << " | "
+			  << alignCenter(COLUMN_BOOK_CATEGORY_TITLE, categoryColumnSize + floor((float)strlen(COLUMN_BOOK_CATEGORY_TITLE) / 2)) << " |\n";
 #endif
-	size_t totalSize = indexColumnSize + widthColumnSize + heightColumnSize + areaColumnSize;
+	size_t totalSize = indexColumnSize + firstNameColumnSize + lastNameColumnSize + titleColumnSize;
+	totalSize += yearColumnSize + priceColumnSize + categoryColumnSize;
 	totalSize += totalSize * 0.21;
 	for (size_t i = 0; i <= totalSize; i++)
 		std::cout << "—";
 	std::cout << std::endl;
-	for (size_t i = 0; i < recDLL->recDinArr->size; i++)
+	for (size_t i = 0; i < card->bookDinArr->size; i++)
 	{
-		BOOK *rectangle = recDLL->recDinArr->arr[i];
+		BOOK *book = card->bookDinArr->arr[i];
+		struct BOOK *book = card->bookDinArr->arr[i];
 		char *index = new char[indexColumnSize];
 		sprintf(index, "%zu", i);
-		char *width = new char[widthColumnSize];
-		sprintf(width, "%f", rectangle->width);
-		char *height = new char[heightColumnSize];
-		sprintf(height, "%f", rectangle->height);
-		char *area = new char[areaColumnSize];
-		sprintf(area, "%f", rectangle->area);
+		char *bookYear = new char[yearColumnSize];
+		sprintf(bookYear, "%d", book->bookYear);
+		char *bookPrice = new char[priceColumnSize];
+		sprintf(bookPrice, "%f", book->bookPrice);
 
-		std::cout
-			<< alignCenter(index, indexColumnSize) << " | "
-			<< alignCenter(width, widthColumnSize) << " | "
-			<< alignCenter(height, heightColumnSize) << " | "
-			<< alignCenter(area, areaColumnSize) << " |\n";
+		std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
+				  << alignCenter(COLUMN_AUTHOR_FIRST_NAME_TITLE, firstNameColumnSize) << " | "
+				  << alignCenter(COLUMN_AUTHOR_LAST_NAME_TITLE, lastNameColumnSize) << " | "
+				  << alignCenter(COLUMN_BOOK_TITLE_TITLE, titleColumnSize) << " | "
+				  << alignCenter(COLUMN_BOOK_YEAR_TITLE, yearColumnSize) << " | "
+				  << alignCenter(COLUMN_BOOK_PRICE_TITLE, priceColumnSize) << " | "
+				  << alignCenter(COLUMN_BOOK_CATEGORY_TITLE, categoryColumnSize) << " |\n";
 	}
-	//std::printf("Finish printRectangleDinArr\n");
+	//std::printf("Finish printCard\n");
 }
 
-void printSortMap(RectangleDLL *&recDLL)
+void printSortMap(struct Card *&card)
 {
-	for (size_t i = 0; i < recDLL->sortMap->size; i++)
+	for (size_t i = 0; i < card->sortMap->size; i++)
 	{
-		SortMapItem *data = recDLL->sortMap->arr[i];
+		SortMapItem *data = card->sortMap->arr[i];
 		std::printf("sortMap: %s => %s\n", data->columnName, data->isDesc ? "true" : "false");
 	}
 }
@@ -315,47 +240,36 @@ const char *alignCenter(const char *s, const int w)
 	return res;
 }
 
-void addRectangle(RectangleDLL *&recDLL)
+void addBookToCard(struct Card *&card)
 {
-	BOOK *newRectangle;
-	newRectangle = (struct BOOK *)malloc(sizeof(struct BOOK));
-	fillBookFromStdIn(newRectangle);
-	if (recDLL->firstRectangle == nullptr)
-	{
-
-		recDLL->firstRectangle = newRectangle;
-		recDLL->lastRectangle = newRectangle;
-	}
-	else
-	{
-		newRectangle->prevRectangle = recDLL->lastRectangle;
-		recDLL->lastRectangle->nextRectangle = newRectangle;
-		recDLL->lastRectangle = newRectangle;
-	}
-	++recDLL->size;
+	BOOK *newBook;
+	newBook = (struct BOOK *)malloc(sizeof(struct BOOK));
+	fillBookFromStdIn(newBook);
+	card->bookDinArr->arr = (BOOK **)realloc(card->bookDinArr->arr, sizeof(struct BOOK) * card->bookDinArr->size);
+	++card->bookDinArr->size;
 }
 
-void deleteRectangle(RectangleDLL *&recDLL)
+void deleteBook(struct Card *&card)
 {
 	char command[10];
 	while (true)
 	{
-		if (recDLL->size <= 0)
+		if (card->bookDinArr->size <= 0)
 		{
-			std::printf("Ваш набор пуст. Size: %zu\n", recDLL->size);
+			std::printf("Ваш набор пуст. Size: %zu\n", card->bookDinArr->size);
 			return;
 		}
 
 		int i;
 		size_t firstIndex = 0,
-			   lastIndex = recDLL->size - 1;
-		std::printf("Пожалуйста введите Index удаляемого прямоугольника (от %zu до %zu): ", firstIndex, lastIndex);
+			   lastIndex = card->bookDinArr->size - 1;
+		std::printf("Пожалуйста введите Index удаляемой книги (от %zu до %zu): ", firstIndex, lastIndex);
 		std::scanf("%d", &i);
 		std::cin.ignore();
 
 		if (i < firstIndex || i > lastIndex)
 		{
-			std::printf("Такого прямоугольника не существует! \n");
+			std::printf("Такой книги не существует! \n");
 			while (true)
 			{
 				strcpy(command, "");
@@ -375,13 +289,13 @@ void deleteRectangle(RectangleDLL *&recDLL)
 			continue;
 		}
 
-		BOOK *deleteRectangle = searchRectangleFromIndex(recDLL, i);
-		printBook(deleteRectangle);
+		struct BOOK *deleteBook = card->bookDinArr->arr[i];
+		printBook(deleteBook);
 		bool remove = false;
 		while (true)
 		{
 			strcpy(command, "");
-			std::printf("Вы действительно хотите удалить этот прямоугольник из набора? [Y/n]: ");
+			std::printf("Вы действительно хотите удалить эту книгу из набора? [Y/n]: ");
 			std::cin.getline(command, 10);
 			std::cin.clear();
 			if (strcmp(command, "") == 0 || strcmp(command, "Y") == 0 || strcmp(command, "y") == 0)
@@ -399,37 +313,30 @@ void deleteRectangle(RectangleDLL *&recDLL)
 		//std::printf("Remove: %s\n", remove ? "true" : "false");
 		if (remove)
 		{
-			//this->recVector.erase(this->recVector.begin() + i);
-			BOOK *prevRectangle, *nextRectangle;
-			prevRectangle = deleteRectangle->prevRectangle;
-			nextRectangle = deleteRectangle->nextRectangle;
-			if (prevRectangle != NULL)
+			if (card->bookDinArr->size == 1)
 			{
-				// переставляем указатель
-				prevRectangle->nextRectangle = deleteRectangle->nextRectangle;
-			}
-			else
-			{
-				recDLL->firstRectangle = nextRectangle;
-			}
-			if (nextRectangle != NULL)
-			{
-				// переставляем указатель
-				nextRectangle->prevRectangle = deleteRectangle->prevRectangle;
-			}
-			else
-			{
-				recDLL->lastRectangle = prevRectangle;
-			}
-			// освобождаем память удаляемого элемента
-			free(deleteRectangle);
-
-			std::printf("Прямоугольник удален! \n");
-			recDLL->size--;
-			if (recDLL->size == 0)
-			{
+				std::printf("Книга удалена! \n");
+				card->bookDinArr = new BookDinArr;
+				// Освобождаем память от удаляемого элемента
+				free(deleteBook);
 				return;
 			}
+
+			struct BookDinArr *newBookDinArray = new BookDinArr[card->bookDinArr->size - 1];
+			newBookDinArray->size = card->bookDinArr->size - 1;
+			size_t k = 0;
+			for (size_t j; j < card->bookDinArr->size; j++)
+			{
+				if (i == j)
+				{
+					continue;
+				}
+				newBookDinArray->arr[k] = card->bookDinArr->arr[j];
+				k++;
+			}
+			// Освобождаем память от удаляемого элемента
+			free(deleteBook);
+			std::printf("Книга удалена! \n");
 		}
 		while (true)
 		{
@@ -450,7 +357,7 @@ void deleteRectangle(RectangleDLL *&recDLL)
 	}
 }
 
-void saveToFile(RectangleDLL *&recDLL)
+void saveToFile(struct Card *&card)
 {
 	std::ofstream saveFile;
 	while (true)
@@ -466,24 +373,31 @@ void saveToFile(RectangleDLL *&recDLL)
 		saveFile.open(pathToFile, std::fstream::in | std::fstream::out | std::fstream::trunc);
 		if (saveFile.is_open())
 		{
-			BOOK *rectangle = recDLL->firstRectangle;
-			do
-			{
-				char *width = new char[64];
-				sprintf(width, "%f", rectangle->width);
-				char *height = new char[64];
-				sprintf(height, "%f", rectangle->height);
-				char *area = new char[64];
-				sprintf(area, "%f", rectangle->area);
 
-				saveFile << width;
+			for (size_t i = 0; i < card->bookDinArr->size; i++)
+			{
+				struct BOOK *book = card->bookDinArr->arr[i];
+				char *index = new char[128];
+				sprintf(index, "%zu", i);
+				char *bookYear = new char[128];
+				sprintf(bookYear, "%d", book->bookYear);
+				char *bookPrice = new char[128];
+				sprintf(bookPrice, "%f", book->bookPrice);
+
+				saveFile << book->authorFirstName;
 				saveFile << ";";
-				saveFile << height;
+				saveFile << book->authorLastName;
 				saveFile << ";";
-				saveFile << area;
+				saveFile << book->bookTitle;
+				saveFile << ";";
+				saveFile << bookYear;
+				saveFile << ";";
+				saveFile << bookPrice;
+				saveFile << ";";
+				saveFile << getBookCategory(book);
+				saveFile << ";";
 				saveFile << "\n";
-				rectangle = rectangle->nextRectangle;
-			} while (rectangle != nullptr);
+			}
 			saveFile.close();
 			std::printf("Файл сохранен по пути: '%s'\n", pathToFile);
 			return;
@@ -497,7 +411,7 @@ void saveToFile(RectangleDLL *&recDLL)
 	}
 }
 
-void loadFromFile(RectangleDLL *&recDLL)
+void loadFromFile(Card *&card)
 {
 	char *readData = new char[1000];
 	std::ifstream input;
@@ -515,8 +429,8 @@ void loadFromFile(RectangleDLL *&recDLL)
 		if (input.is_open())
 		{
 			size_t i = 0;
-			recDLL->recDinArr->size = 0;
-			BOOK **recArr = new BOOK *[1];
+			card->bookDinArr->size = 0;
+			BOOK **bookDinArr = new BOOK *[1];
 			while (input.getline(readData, 1000))
 			{
 				if (strcmp(readData, "") == 0)
@@ -524,36 +438,36 @@ void loadFromFile(RectangleDLL *&recDLL)
 					continue;
 				}
 				//std::printf("%s\n", readData);
-				StringDinArr *rectangleProps = split(readData, ';');
-				if (rectangleProps->size != 3)
+				StringDinArr *bookProps = split(readData, ';');
+				if (bookProps->size != 3)
 				{
 					std::printf("Строка %zu не соответствует требуемуму формату т.к."
 								"число ее свойств (%zu) должно быть равно 3!\n %s\n",
-								i, rectangleProps->size, readData);
+								i, bookProps->size, readData);
 					continue;
 				}
 
 				if (i != 0)
 				{
-					recArr = (BOOK **)realloc(recArr, sizeof(struct BOOK) * (i + 1));
+					bookDinArr = (BOOK **)realloc(bookDinArr, sizeof(struct BOOK) * (i + 1));
 				}
-				BOOK *newRectangle = new BOOK;
-				newRectangle->width = std::stof(rectangleProps->arr[0]);
-				newRectangle->height = std::stof(rectangleProps->arr[1]);
-				newRectangle->area = std::stof(rectangleProps->arr[2]);
-				newRectangle->prevRectangle = nullptr;
-				newRectangle->nextRectangle = nullptr;
+				BOOK *newBook = new BOOK;
+				strcpy(newBook->authorFirstName, bookProps->arr[0]);
+				strcpy(newBook->authorLastName, bookProps->arr[1]);
+				strcpy(newBook->bookTitle, bookProps->arr[2]);
+				newBook->bookYear = static_cast<short int>(atoi(bookProps->arr[3]));
+				newBook->bookPrice = std::stof(bookProps->arr[4]);
+				newBook->bookCategory = getBookCategory(bookProps->arr[5]);
 
-				recArr[i] = newRectangle;
+				bookDinArr[i] = newBook;
 				i++;
-				recDLL->recDinArr->size++;
+				card->bookDinArr->size++;
 			}
-			recDLL->recDinArr->arr = recArr;
+			card->bookDinArr->arr = bookDinArr;
 			input.close();
 			std::printf("Файл '%s' прочитан.\n", pathToFile);
 
-			fillDoublyLinkedListFromRecDinArray(recDLL);
-			printRectangleDLL(recDLL);
+			printCard(card);
 			return;
 		}
 		else
@@ -594,124 +508,12 @@ StringDinArr *split(const char *s, const char sep)
 	return ret;
 }
 
-void searchRectangle(RectangleDLL *&recDLL)
+void initCardSort(Card *&card)
 {
-	float findArea;
-	while (true)
+	if (card->bookDinArr->size <= 1)
 	{
-		if (recDLL->size <= 0)
-		{
-			std::printf("Ваш набор пуст. Size: %zu\n", recDLL->size);
-			return;
-		}
-
-		std::printf("Введите площадь прямоугольника который нужно найти: ");
-		std::scanf("%f", &findArea);
-		std::cin.ignore();
-
-		std::printf("recDinArr size: %zu\n", recDLL->recDinArr->size);
-		// Сбрасываем начальный размер массива
-		if (recDLL->recDinArr->size != 0)
-		{
-			recDLL->recDinArr->size = 0;
-		}
-		BOOK **recDinArr = new BOOK *[recDLL->size];
-		recDLL->recDinArr->arr = recDinArr;
-
-		/* Находим совпавшие по площади прямоугольники и заносим
-			их указатели во временный буфер */
-		//std::printf("Find rectangle with area: %f\n", findArea);
-		BOOK *rectangle = recDLL->firstRectangle;
-		do
-		{
-			if (rectangle->area == findArea)
-			{
-				recDLL->recDinArr->arr[recDLL->recDinArr->size] = rectangle;
-				recDLL->recDinArr->size++;
-			}
-			rectangle = rectangle->nextRectangle;
-		} while (rectangle != nullptr);
-		if (recDLL->recDinArr->size == 0)
-		{
-			std::printf("Ни одного прямоугольника с площадью %f не найдено.\n", findArea);
-		}
-		else
-		{
-			// Печатаем результаты поиска на экран
-			printRectangleDinArr(recDLL);
-		}
-
-		while (true)
-		{
-			char command[10];
-			std::printf("Желаете продолжить? [Y/n]: ");
-			std::cin.getline(command, 10);
-			std::cin.clear();
-			if (strcmp(command, "") == 0 | strcmp(command, "Y") == 0 || strcmp(command, "y") == 0)
-			{
-				break;
-			}
-			else if (strcmp(command, "n") == 0 || strcmp(command, "N") == 0)
-			{
-				return;
-			}
-			continue;
-		}
-	}
-}
-
-BOOK *searchRectangleFromIndex(RectangleDLL *&recDLL, size_t index)
-{
-	size_t i = 0;
-	BOOK *rectangle = recDLL->firstRectangle;
-	do
-	{
-		if (index == i)
-		{
-			return rectangle;
-		}
-		i++;
-		rectangle = rectangle->nextRectangle;
-	} while (rectangle != nullptr);
-	return nullptr;
-}
-
-void clearDLL(RectangleDLL *&recDLL)
-{
-	//std::printf("Start clear size %zu\n", this->size);
-	if (recDLL->size == 0)
-	{
-		return;
-	}
-	if (recDLL->firstRectangle == nullptr)
-	{
-		return;
-	}
-
-	BOOK *rectangle = recDLL->firstRectangle, *nextRectangle;
-	do
-	{
-		nextRectangle = rectangle->nextRectangle;
-		if (nextRectangle == nullptr)
-		{
-			break;
-		}
-		free(rectangle);
-		rectangle = nextRectangle;
-	} while (rectangle != nullptr);
-
-	recDLL->firstRectangle = nullptr;
-	recDLL->lastRectangle = nullptr;
-	recDLL->size = 0;
-	//std::printf("Finish clear size %zu\n", this->size);
-}
-
-void initRectangleSort(RectangleDLL *&recDLL)
-{
-	if (recDLL->size <= 1)
-	{
-		printRectangleDLL(recDLL);
-		std::printf("Для сортировки необходимо чтобы прямоугольников было больше 1!\n");
+		printCard(card);
+		std::printf("Для сортировки необходимо чтобы книг было больше 1!\n");
 		return;
 	}
 	while (true)
@@ -719,10 +521,11 @@ void initRectangleSort(RectangleDLL *&recDLL)
 		char *otherBy = new char[1000];
 		std::printf(
 			"Перечислите через запятую названия колонок (кроме '%s') по которым будет производиться сортировка \n"
-			"Например %s %s,%s %s (%s можно не писать): ",
+			"Например %s %s,%s %s,%s %s (%s можно не писать): ",
 			COLUMN_INDEX_TITLE,
-			COLUMN_WIDTH_TITLE, SORT_DESC,
-			COLUMN_AREA_TITLE, SORT_DESC,
+			COLUMN_AUTHOR_FIRST_NAME_TITLE, SORT_DESC,
+			COLUMN_AUTHOR_LAST_NAME_TITLE, SORT_ASC,
+			COLUMN_BOOK_YEAR_TITLE, SORT_DESC,
 			SORT_ASC);
 		std::cin.getline(otherBy, 1000);
 		std::cin.clear();
@@ -751,21 +554,19 @@ void initRectangleSort(RectangleDLL *&recDLL)
 				continue;
 			}
 		}
-		if (!parseRectangleSortString(recDLL, otherBy))
+		if (!parseCardSortString(card, otherBy))
 		{
 			continue;
 		}
 
-		fillRecDinArrayFromDoublyLinkedList(recDLL);
-		//printSortMap(recDLL);
-		//printRectangleDinArr(recDLL);
+		printSortMap(card);
 
-		sortRectangleDLL(recDLL);
-		recDLL->sortMap = new SortMap;
+		sortCard(card);
+		card->sortMap = new SortMap;
 
-		printRectangleDinArr(recDLL);
-		fillDoublyLinkedListFromRecDinArray(recDLL);
-		recDLL->recDinArr->size = 0;
+		printCard(card);
+
+		card->bookDinArr->size = 0;
 		while (true)
 		{
 			char *command = new char[10];
@@ -785,60 +586,9 @@ void initRectangleSort(RectangleDLL *&recDLL)
 	}
 }
 
-void fillRecDinArrayFromDoublyLinkedList(RectangleDLL *&recDLL)
+bool parseCardSortString(Card *&card, const char *str)
 {
-	recDLL->recDinArr->size = 0;
-	recDLL->recDinArr->arr = new BOOK *[recDLL->size];
-	BOOK *rectangle = recDLL->firstRectangle, *nextRectangle;
-	size_t i = 0;
-	do
-	{
-		nextRectangle = rectangle->nextRectangle;
-		if (rectangle == nullptr)
-		{
-			return;
-		}
-		rectangle->prevRectangle = nullptr;
-		rectangle->nextRectangle = nullptr;
-		recDLL->recDinArr->arr[i] = rectangle;
-		recDLL->recDinArr->size++;
-		i++;
-		rectangle = nextRectangle;
-	} while (rectangle != nullptr);
-}
-
-void fillDoublyLinkedListFromRecDinArray(RectangleDLL *&recDLL)
-{
-	//std::printf("Start fillDoublyLinkedListFromRecDinArray size: %zu\n", recDLL->size);
-	clearDLL(recDLL);
-	BOOK *newRectangle = nullptr;
-	BOOK *lastRectangle = nullptr;
-	for (size_t i = 0; i < recDLL->recDinArr->size; i++)
-	{
-		newRectangle = recDLL->recDinArr->arr[i];
-		newRectangle->prevRectangle = nullptr;
-		newRectangle->nextRectangle = nullptr;
-		if (recDLL->firstRectangle == nullptr)
-		{
-			recDLL->firstRectangle = newRectangle;
-			recDLL->lastRectangle = newRectangle;
-		}
-		else
-		{
-			lastRectangle = recDLL->lastRectangle;
-			newRectangle->prevRectangle = lastRectangle;
-			lastRectangle->nextRectangle = newRectangle;
-			recDLL->lastRectangle = nullptr;
-			recDLL->lastRectangle = newRectangle;
-		}
-		++recDLL->size;
-	}
-	//std::printf("Finish fillDoublyLinkedListFromRecDinArray size: %zu\n", recDLL->size);
-}
-
-bool parseRectangleSortString(RectangleDLL *&recDLL, const char *str)
-{
-	//std::printf("Start parseRectangleSortString\n");
+	//std::printf("Start parseCardSortString\n");
 	struct StringDinArr *splitString = split(str, ',');
 	for (size_t i = 0; i < splitString->size; i++)
 	{
@@ -859,11 +609,11 @@ bool parseRectangleSortString(RectangleDLL *&recDLL, const char *str)
 
 			if (strcmp(colAndTypeOper->arr[1], SORT_DESC) == 0)
 			{
-				addToSortMap(recDLL, colAndTypeOper->arr[0], true);
+				addToSortMap(card, colAndTypeOper->arr[0], true);
 			}
 			else if (strcmp(colAndTypeOper->arr[1], SORT_ASC) == 0)
 			{
-				addToSortMap(recDLL, colAndTypeOper->arr[0], false);
+				addToSortMap(card, colAndTypeOper->arr[0], false);
 			}
 			else
 			{
@@ -878,158 +628,233 @@ bool parseRectangleSortString(RectangleDLL *&recDLL, const char *str)
 				std::printf("Не удалось распознать название колонки '%s'!\n", colAndTypeOper->arr[0]);
 				return false;
 			}
-			addToSortMap(recDLL, colAndTypeOper->arr[0], false);
+			addToSortMap(card, colAndTypeOper->arr[0], false);
 		}
 	}
-	//std::printf("Finish parseRectangleSortString\n");
+	//std::printf("Finish parseCardSortString\n");
 	return true;
 }
 
-void addToSortMap(RectangleDLL *&recDLL, char *columnName, bool isDesc)
+void addToSortMap(Card *&card, char *columnName, bool isDesc)
 {
-	for (size_t i = 0; i < recDLL->sortMap->size; i++)
+	for (size_t i = 0; i < card->sortMap->size; i++)
 	{
-		if (strcmp(recDLL->sortMap->arr[i]->columnName, columnName) == 0)
+		if (strcmp(card->sortMap->arr[i]->columnName, columnName) == 0)
 		{
-			recDLL->sortMap->arr[i]->isDesc = isDesc;
+			card->sortMap->arr[i]->isDesc = isDesc;
 			return;
 		}
 	}
 	SortMapItem *item = new SortMapItem;
 	item->columnName = columnName;
 	item->isDesc = isDesc;
-	recDLL->sortMap->arr[recDLL->sortMap->size] = item;
-	recDLL->sortMap->size++;
+	card->sortMap->arr[card->sortMap->size] = item;
+	card->sortMap->size++;
 }
 
-void sortRectangleDLL(RectangleDLL *&recDLL)
+void sortCard(Card *&card)
 {
-	//std::printf("Start sortRectangleDLL\n");
-	const char *beginKey = recDLL->sortMap->arr[0]->columnName;
-	bool isDesc = recDLL->sortMap->arr[0]->isDesc;
-	for (size_t i = 0; i < recDLL->recDinArr->size - 1; i++)
+	//std::printf("Start sortCard\n");
+	const char *beginKey = card->sortMap->arr[0]->columnName;
+	bool isDesc = card->sortMap->arr[0]->isDesc;
+	for (size_t i = 0; i < card->bookDinArr->size - 1; i++)
 	{
-		BOOK *maxElement = recDLL->recDinArr->arr[i];
+		BOOK *maxElement = card->bookDinArr->arr[i];
 		size_t posMaxElem = i;
-		for (size_t j = i + 1; j < recDLL->recDinArr->size; j++)
+		for (size_t j = i + 1; j < card->bookDinArr->size; j++)
 		{
-			SortPair *cmpRes = cmpRectangleRecursive(recDLL, posMaxElem, j, 0);
+			SortPair *cmpRes = cmpBookRecursive(card, posMaxElem, j, 0);
 			//std::printf("Результат сравнения: '%d' \n", cmpRes);
 
 			if (cmpRes->resCmp == 0)
 			{
-				//std::printf("Прямоугольники равны\n");
+				//std::printf("Книги равны\n");
 				continue;
 			}
 			else if (cmpRes->resCmp > 0 && cmpRes->isDesc)
 			{
 				// DESC
-				maxElement = recDLL->recDinArr->arr[j];
+				maxElement = card->bookDinArr->arr[j];
 				posMaxElem = j;
 			}
 			else if (cmpRes->resCmp < 0 && !cmpRes->isDesc)
 			{
 				// ASC
-				maxElement = recDLL->recDinArr->arr[j];
+				maxElement = card->bookDinArr->arr[j];
 				posMaxElem = j;
 			}
 		}
 		//std::printf("(i:%d;posMaxElem:%d)\n", i, posMaxElem);
-		BOOK *bookBuf = recDLL->recDinArr->arr[i];
-		recDLL->recDinArr->arr[i] = maxElement;
-		recDLL->recDinArr->arr[posMaxElem] = bookBuf;
+		BOOK *bookBuf = card->bookDinArr->arr[i];
+		card->bookDinArr->arr[i] = maxElement;
+		card->bookDinArr->arr[posMaxElem] = bookBuf;
 	}
-	//std::printf("Finish sortRectangleDLL\n");
+	//std::printf("Finish sortCard\n");
 }
 
-SortPair *cmpRectangleRecursive(
-	RectangleDLL *&recDLL,
+SortPair *cmpBookRecursive(
+	Card *&card,
 	const size_t firstSortIndex,
 	const size_t secondSortIndex,
 	const size_t sortIndex)
 {
-	//std::printf("Start cmpRectangleRecursive->%zu:%zu:%zu\n", firstSortIndex, secondSortIndex, sortIndex);
+	//std::printf("Start cmpBookRecursive->%zu:%zu:%zu\n", firstSortIndex, secondSortIndex, sortIndex);
 	SortPair *res = new SortPair;
-	BOOK *firstBook = recDLL->recDinArr->arr[firstSortIndex];
-	BOOK *secondBook = recDLL->recDinArr->arr[secondSortIndex];
-	const char *key = recDLL->sortMap->arr[sortIndex]->columnName;
-	res->isDesc = recDLL->sortMap->arr[sortIndex]->isDesc;
-	if (strcmp(key, COLUMN_WIDTH_TITLE) == 0)
+	BOOK *firstBook = card->bookDinArr->arr[firstSortIndex];
+	BOOK *secondBook = card->bookDinArr->arr[secondSortIndex];
+	const char *key = card->sortMap->arr[sortIndex]->columnName;
+	res->isDesc = card->sortMap->arr[sortIndex]->isDesc;
+	if (strcmp(key, COLUMN_AUTHOR_FIRST_NAME_TITLE) == 0)
 	{
-		if (secondBook->width == firstBook->width)
+		if (strcmp(secondBook->authorFirstName, firstBook->authorFirstName) == 0)
 		{
-			//std::printf("Значения ширин прямоугольников равны\n");
+			//std::printf("Значения имен равны\n");
 			size_t newSortIndex = sortIndex;
-			if (newSortIndex < recDLL->sortMap->size - 1)
+			if (newSortIndex < card->sortMap->size - 1)
 			{
 				newSortIndex++;
-				return cmpRectangleRecursive(recDLL, firstSortIndex, secondSortIndex, newSortIndex);
+				return cmpBookRecursive(card, firstSortIndex, secondSortIndex, newSortIndex);
 			}
 			res->resCmp = 0;
 			return res;
 		}
-		else if (secondBook->width > firstBook->width)
+		else if (strcmp(secondBook->authorFirstName, firstBook->authorFirstName) > 0)
 		{
 			res->resCmp = 1;
 			return res;
 		}
-		else if (secondBook->width < firstBook->width)
+		else if (strcmp(secondBook->authorFirstName, firstBook->authorFirstName) < 0)
 		{
 			res->resCmp = -1;
 			return res;
 		}
 	}
-	else if (strcmp(key, COLUMN_HEIGHT_TITLE) == 0)
+	else if (strcmp(key, COLUMN_AUTHOR_LAST_NAME_TITLE) == 0)
 	{
-		if (secondBook->height == firstBook->height)
+		if (strcmp(secondBook->authorLastName, firstBook->authorLastName) == 0)
 		{
-			//std::printf("Значения высот прямоугольников равны\n");
+			//std::printf("Значения фамилий равны\n");
 			size_t newSortIndex = sortIndex;
-			if (newSortIndex < recDLL->sortMap->size - 1)
+			if (newSortIndex < card->sortMap->size - 1)
 			{
 				newSortIndex++;
-				return cmpRectangleRecursive(recDLL, firstSortIndex, secondSortIndex, newSortIndex);
+				return cmpBookRecursive(card, firstSortIndex, secondSortIndex, newSortIndex);
 			}
 			res->resCmp = 0;
 			return res;
 		}
-		else if (secondBook->height > firstBook->height)
+		else if (strcmp(secondBook->authorLastName, firstBook->authorLastName) > 0)
 		{
 			res->resCmp = 1;
 			return res;
 		}
-		else if (secondBook->height < firstBook->height)
+		else if (strcmp(secondBook->authorLastName, firstBook->authorLastName) < 0)
 		{
 			res->resCmp = -1;
 			return res;
 		}
 	}
-	else if (strcmp(key, COLUMN_AREA_TITLE) == 0)
+	else if (strcmp(key, COLUMN_BOOK_TITLE_TITLE) == 0)
 	{
-		if (secondBook->area == firstBook->area)
+		if (strcmp(secondBook->bookTitle, firstBook->bookTitle) == 0)
 		{
-			//std::printf("Значения площадей прямоугольников равны\n");
+			//std::printf("Значения название книги равны\n");
 			size_t newSortIndex = sortIndex;
-			if (newSortIndex < recDLL->sortMap->size - 1)
+			if (newSortIndex < card->sortMap->size - 1)
 			{
 				newSortIndex++;
-				return cmpRectangleRecursive(recDLL, firstSortIndex, secondSortIndex, newSortIndex);
+				return cmpBookRecursive(card, firstSortIndex, secondSortIndex, newSortIndex);
 			}
 			res->resCmp = 0;
 			return res;
 		}
-		else if (secondBook->area > firstBook->area)
+		else if (strcmp(secondBook->bookTitle, firstBook->bookTitle) > 0)
 		{
 			res->resCmp = 1;
 			return res;
 		}
-		else if (secondBook->area < firstBook->area)
+		else if (strcmp(secondBook->bookTitle, firstBook->bookTitle) < 0)
+		{
+			res->resCmp = -1;
+			return res;
+		}
+	}
+	else if (strcmp(key, COLUMN_BOOK_YEAR_TITLE) == 0)
+	{
+		if (secondBook->bookYear == firstBook->bookYear)
+		{
+			//std::printf("Значения даты выпуска книги равны\n");
+			size_t newSortIndex = sortIndex;
+			if (newSortIndex < card->sortMap->size - 1)
+			{
+				newSortIndex++;
+				return cmpBookRecursive(card, firstSortIndex, secondSortIndex, newSortIndex);
+			}
+			res->resCmp = 0;
+			return res;
+		}
+		else if (secondBook->bookYear > firstBook->bookYear)
+		{
+			res->resCmp = 1;
+			return res;
+		}
+		else if (secondBook->bookYear < firstBook->bookYear)
+		{
+			res->resCmp = -1;
+			return res;
+		}
+	}
+	else if (strcmp(key, COLUMN_BOOK_PRICE_TITLE) == 0)
+	{
+		if (secondBook->bookPrice == firstBook->bookPrice)
+		{
+			//std::printf("Значения стоимостей книги равны\n");
+			size_t newSortIndex = sortIndex;
+			if (newSortIndex < card->sortMap->size - 1)
+			{
+				newSortIndex++;
+				return cmpBookRecursive(card, firstSortIndex, secondSortIndex, newSortIndex);
+			}
+			res->resCmp = 0;
+			return res;
+		}
+		else if (secondBook->bookPrice > firstBook->bookPrice)
+		{
+			res->resCmp = 1;
+			return res;
+		}
+		else if (secondBook->bookPrice < firstBook->bookPrice)
+		{
+			res->resCmp = -1;
+			return res;
+		}
+	}
+	else if (strcmp(key, COLUMN_BOOK_CATEGORY_TITLE) == 0)
+	{
+		if (strcmp(getBookCategory(secondBook), getBookCategory(firstBook)) == 0)
+		{
+			//std::printf("Значения категорий равны\n");
+			size_t newSortIndex = sortIndex;
+			if (newSortIndex < card->sortMap->size - 1)
+			{
+				newSortIndex++;
+				return cmpBookRecursive(card, firstSortIndex, secondSortIndex, newSortIndex);
+			}
+			res->resCmp = 0;
+			return res;
+		}
+		else if (strcmp(getBookCategory(secondBook), getBookCategory(firstBook)) > 0)
+		{
+			res->resCmp = 1;
+			return res;
+		}
+		else if (strcmp(getBookCategory(secondBook), getBookCategory(firstBook)) < 0)
 		{
 			res->resCmp = -1;
 			return res;
 		}
 	}
 	res->resCmp = 0;
-	//std::printf("Finish cmpRectangleRecursive\n");
+	//std::printf("Finish cmpBookRecursive\n");
 	return res;
 }
