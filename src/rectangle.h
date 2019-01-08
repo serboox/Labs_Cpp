@@ -39,13 +39,13 @@ struct Rectangle
 struct RectangleDinArr
 {
 	size_t size = 0;
-	Rectangle **arr = new Rectangle *[0];
+	struct Rectangle **arr = new struct Rectangle *[0];
 };
 
 /* fillRectangleFromStdIn заполняет поля прямогулольника через stdin */
-void fillRectangleFromStdIn(Rectangle *&rectangle);
+void fillRectangleFromStdIn(struct Rectangle *&rectangle);
 /* printRectangle печатает информацию о прямоугольнике в stdout */
-void printRectangle(Rectangle *&rectangle);
+void printRectangle(struct Rectangle *&rectangle);
 /* validateColumnTitle производит проверку соответствует ли строка
 	названию одной одной из колонок */
 bool validateColumnTitle(const char str[]);

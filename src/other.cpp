@@ -558,28 +558,27 @@ StringDinArr *split(const char *s, const char sep)
 	//std::printf("strlen:%zu->s:%s\n", strlen(s), s);
 	StringDinArr *ret = new StringDinArr;
 	ret->arr = new char *[strlen(s)];
-	ret->arr[ret->size] = new char[strlen(s)];
-	ret->size++;
-	char *buff = new char[strlen(s)];
-	size_t j = 0;
+	std::stringstream buff;
 	for (size_t i = 0; i < strlen(s); i++)
 	{
 		//std::printf("'%c'=='%c'->%s\n", s[i], sep, s[i] == sep ? "true" : "false");
 		if (s[i] == sep)
 		{
 			//std::printf("ret->arr[%zu]=%s\n", ret->size - 1, buff);
-			j = 0;
-			ret->arr[ret->size - 1] = buff;
-			ret->arr[ret->size] = new char[strlen(s)];
+			ret->arr[ret->size] = new char[buff.str().length()+1];
+			strcpy(ret->arr[ret->size], buff.str().c_str());
+			buff.str("");
 			ret->size++;
-			buff = new char[strlen(s)];
 			continue;
 		}
-		buff[j] = s[i];
-		//std::printf("buff:%s\n", buff);
-		j++;
+		buff << s[i];
+		//std::printf("buff:%s\n", buff.str().c_str());
 	}
-	ret->arr[ret->size - 1] = buff;
+	
+	ret->arr[ret->size] = new char[buff.str().length() + 1];
+	strcpy(ret->arr[ret->size], buff.str().c_str());
+	ret->size++;
+	buff.str("");
 	return ret;
 }
 

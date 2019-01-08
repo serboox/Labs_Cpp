@@ -68,9 +68,9 @@ struct SortMap
 struct RectangleDLL
 {
 	// *firstRectangle - указатель на первый прямоугольник в двухсвязанном списке
-	Rectangle *firstRectangle = nullptr;
+	struct Rectangle *firstRectangle = nullptr;
 	// *lastRectangle - указатель на последний прямоугольник в двухсвязанном списке
-	Rectangle *lastRectangle = nullptr;
+	struct Rectangle *lastRectangle = nullptr;
 	// size - хранит количество прямоугольников в наборе
 	size_t size = 0;
 
@@ -133,7 +133,7 @@ void loadFromFile(RectangleDLL *&recDLL);
 void searchRectangle(RectangleDLL *&recDLL);
 
 // searchFromIndex находит прямоугольник по индексу
-Rectangle *searchRectangleFromIndex(RectangleDLL *&recDLL, size_t index);
+struct Rectangle *searchRectangleFromIndex(RectangleDLL *&recDLL, size_t index);
 
 // clearDLL очищает память от данных по прямоугольнику
 void clearDLL(RectangleDLL *&recDLL);
