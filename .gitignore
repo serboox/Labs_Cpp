@@ -32,6 +32,7 @@ rectangleSet.txt
 # CMake
 cmake-build-debug/
 cmake-build-release/
+build/
 
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
