@@ -399,7 +399,6 @@ void deleteRectangle(RectangleDLL *&recDLL)
 		//std::printf("Remove: %s\n", remove ? "true" : "false");
 		if (remove)
 		{
-			//this->recVector.erase(this->recVector.begin() + i);
 			Rectangle *prevRectangle, *nextRectangle;
 			prevRectangle = deleteRectangle->prevRectangle;
 			nextRectangle = deleteRectangle->nextRectangle;

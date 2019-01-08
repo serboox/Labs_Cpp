@@ -146,7 +146,7 @@ void fillDoublyLinkedListFromRecDinArray(RectangleDLL *&recDLL);
 
 /*
 *	parseRectangleSortString преобразует строку(std:cin) в данные необходимые для сортировки,
-*	заполняет поля sortMap и sortVector, возвращает false в случае ошибки
+*	заполняет поля sortMap и возвращает false в случае ошибки
 */
 bool parseRectangleSortString(RectangleDLL *&recDLL, const char *str);
 
@@ -161,7 +161,7 @@ void addToSortMap(RectangleDLL *&recDLL, char *columnName, bool isDesc);
 void sortRectangleDLL(RectangleDLL *&recDLL);
 
 /*
-*	cmpRectangleRecursive рекурсивно проходит по sortVector проверяя какое из значений больше
+*	cmpRectangleRecursive рекурсивно проходит по sortMap проверяя которое из значений больше
 *	1 если firstSortIndex > secondSortIndex
 *	0 если firstSortIndex == secondSortIndex
 *	-1 если firstSortIndex < secondSortIndex
