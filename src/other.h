@@ -10,7 +10,7 @@
 #include <string.h>
 #include <cmath> // библиотека с математическими функциями, например для округления float значений
 
-#include "rectangle.h"
+#include "book.h"
 
 // Перечисляем констаны для комманд используемых в консоли
 const char
@@ -27,14 +27,14 @@ const char
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 // DEFAULT_PATH_TO_FILE константа хранящая путь для сохраняемого/считываемого файла по умолчанию
-const char DEFAULT_PATH_TO_FILE[] = "C:\\Users\\Public\\rectangleSet.txt";
+const char DEFAULT_PATH_TO_FILE[] = "C:\\Users\\Public\\card.txt";
 #else
 // DEFAULT_PATH_TO_FILE константа хранящая путь для сохраняемого/считываемого файла по умолчанию
-const char DEFAULT_PATH_TO_FILE[] = "./rectangleSet.txt";
+const char DEFAULT_PATH_TO_FILE[] = "./card.txt";
 #endif
-// SORT_ASC сотировака в порядке возрастания
+// SORT_ASC сортировка в порядке возрастания
 const char SORT_ASC[] = "ASC";
-// SORT_DESC сортировака в порядке  убывания
+// SORT_DESC сортировка в порядке  убывания
 const char SORT_DESC[] = "DESC";
 
 /*
@@ -60,19 +60,25 @@ struct SortMap
 };
 
 /*
-* RectangleDLL структура набора прямоугольников (DLL -> doubly linked list)
+* BookDinArr структура описывающая динамический массив книг
+* size - размер картотеки
+* arr - динамический массив с книгами
 */
-struct RectangleDLL
+struct BookDinArr
 {
-	// *firstRectangle - указатель на первый прямоугольник в двухсвязанном списке
-	struct Rectangle *firstRectangle = nullptr;
-	// *lastRectangle - указатель на последний прямоугольник в двухсвязанном списке
-	struct Rectangle *lastRectangle = nullptr;
-	// size - хранит количество прямоугольников в наборе
 	size_t size = 0;
+	struct BOOK **arr = new struct BOOK *[0];
+};
 
-	// recDinArr содержит структуру с промежуточным буффером прямоугольников (структур Rectangle)
-	RectangleDinArr *recDinArr = new RectangleDinArr;
+/*
+* Card структура книжной картотеки
+* recDinArr - содержит указатель на структуру BookDinArr
+* sortMap - содержит указатель на структуру SortMap
+*/
+struct Card
+{
+	// recDinArr содержит структуру с динамическим массивом книг (структур BOOK)
+	BookDinArr *recDinArr = new BookDinArr;
 	// sortMap содержит данные для сортировки struct{название поля, тип сортировки}
 	SortMap *sortMap = new SortMap;
 };
@@ -102,63 +108,63 @@ struct StringDinArr
 // run запускает работу программы
 void run();
 
-// printRectangleDLL печатает содержимое набора прямоуголников в консоль
-void printRectangleDLL(RectangleDLL *&recDLL);
+// printRectangleDLL печатает содержимое набора прямоугольников в консоль
+void printRectangleDLL(Card *&recDLL);
 
-/* printRectangleDinArr печатает содержимое промежуточного буфера прямоуголников в консоль */
-void printRectangleDinArr(RectangleDLL *&recDLL);
+/* printRectangleDinArr печатает содержимое промежуточного буфера прямоугольников в консоль */
+void printRectangleDinArr(Card *&recDLL);
 
 // printSortMap печатает содержимое карты для сортировки в консоль
-void printSortMap(RectangleDLL *&recDLL);
+void printSortMap(Card *&recDLL);
 
 // add добавляет новый прямоугольник в набор
-void addRectangle(RectangleDLL *&recDLL);
+void addRectangle(Card *&recDLL);
 
 // deleteRectangle удаляет один или несколько прямоугольников из набора
-void deleteRectangle(RectangleDLL *&recDLL);
+void deleteRectangle(Card *&recDLL);
 
 // saveToFile сохраняет данные в файл
-void saveToFile(RectangleDLL *&recDLL);
+void saveToFile(Card *&recDLL);
 
 // loadFromFile считывает данные из файла
-void loadFromFile(RectangleDLL *&recDLL);
+void loadFromFile(Card *&recDLL);
 
 /*
 		search находит один или несколько прямоугольников из набора площадь
 		которых соответствует указанному (stdin) числу
 */
-void searchRectangle(RectangleDLL *&recDLL);
+void searchRectangle(Card *&recDLL);
 
 // searchFromIndex находит прямоугольник по индексу
-struct Rectangle *searchRectangleFromIndex(RectangleDLL *&recDLL, size_t index);
+struct BOOK *searchRectangleFromIndex(Card *&recDLL, size_t index);
 
 // clearDLL очищает память от данных по прямоугольнику
-void clearDLL(RectangleDLL *&recDLL);
+void clearDLL(Card *&recDLL);
 
 // initRectangleSort сортирует прямоугольники в определенном порядке
-void initRectangleSort(RectangleDLL *&recDLL);
+void initRectangleSort(Card *&recDLL);
 
 // fillRecDinArrayFromDoublyLinkedList формирует вектор recDinArray из данных двухсвязанного списка
-void fillRecDinArrayFromDoublyLinkedList(RectangleDLL *&recDLL);
+void fillRecDinArrayFromDoublyLinkedList(Card *&recDLL);
 
 // fillDoublyLinkedListFromRecDinArray формирует двухсвязанный список из динамического массива recDinArr
-void fillDoublyLinkedListFromRecDinArray(RectangleDLL *&recDLL);
+void fillDoublyLinkedListFromRecDinArray(Card *&recDLL);
 
 /*
 *	parseRectangleSortString преобразует строку(std:cin) в данные необходимые для сортировки,
 *	заполняет поля sortMap и sortVector, возвращает false в случае ошибки
 */
-bool parseRectangleSortString(RectangleDLL *&recDLL, const char *str);
+bool parseRectangleSortString(Card *&recDLL, const char *str);
 
 /*
 *	addToSortMap добавляет новый SortMapItem в динамический массив sortMap,
 *	если значение поля SortMapItem->columnName уже есть в массиве то просто
 *	обновляется значение SortMapItem->isDesc
 */
-void addToSortMap(RectangleDLL *&recDLL, char *columnName, bool isDesc);
+void addToSortMap(Card *&recDLL, char *columnName, bool isDesc);
 
 // sortRectangleDLL сортирует прямоугольники
-void sortRectangleDLL(RectangleDLL *&recDLL);
+void sortRectangleDLL(Card *&recDLL);
 
 /*
 *	cmpRectangleRecursive рекурсивно проходит по sortVector проверяя какое из значений больше
@@ -167,7 +173,7 @@ void sortRectangleDLL(RectangleDLL *&recDLL);
 *	-1 если firstSortIndex < secondSortIndex
 */
 SortPair *cmpRectangleRecursive(
-	RectangleDLL *&recDLL,
+	Card *&recDLL,
 	const size_t firstSortIndex,
 	const size_t secondSortIndex,
 	const size_t sortIndex);

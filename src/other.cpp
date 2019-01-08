@@ -3,18 +3,19 @@
 
 void run()
 {
-	RectangleDLL *recDLL = new RectangleDLL;
+	Card *card = new Card;
 
 	while (true)
 	{
-		std::string command;
+		char* command = new char[21];
 		std::printf("$ ");
 
 		std::cin.clear();
-		std::getline(std::cin, command);
+		std::cin.getline(command, 20);
+		std::cin.clear();
 		//std::printf("---%s----%d--\n", command.c_str(), command.length());
 
-		if (!command.compare(COMMAND_HELP))
+		if (strcmp(command, COMMAND_HELP) == 0)
 		{
 			std::printf(
 				"%s  Распечатать содержимое набора. \n"
@@ -36,43 +37,43 @@ void run()
 				COMMAND_HELP,
 				COMMAND_EXIT);
 		}
-		else if (!command.compare(COMMAND_PRINT))
+		else if (strcmp(command, COMMAND_PRINT) == 0)
 		{
 			std::printf("Cодержимое набора прямоугольников: \n\n");
-			printRectangleDLL(recDLL);
+			printRectangleDLL(card);
 			std::printf("\n");
 		}
-		else if (!command.compare(COMMAND_ADD))
+		else if (strcmp(command, COMMAND_ADD) == 0)
 		{
 			std::printf("Добавить новый прямоугольник: \n\n");
-			addRectangle(recDLL);
+			addRectangle(card);
 		}
-		else if (!command.compare(COMMAND_DELETE))
+		else if (strcmp(command, COMMAND_DELETE) == 0)
 		{
 			std::printf("Удалить существующий(ие): \n");
-			deleteRectangle(recDLL);
+			deleteRectangle(card);
 		}
-		else if (!command.compare(COMMAND_SAVE))
+		else if (strcmp(command, COMMAND_SAVE) == 0)
 		{
 			std::printf("Записать в файл: \n");
-			saveToFile(recDLL);
+			saveToFile(card);
 		}
-		else if (!command.compare(COMMAND_LOAD))
+		else if (strcmp(command, COMMAND_LOAD) == 0)
 		{
 			std::printf("Считать из файла: \n");
-			loadFromFile(recDLL);
+			loadFromFile(card);
 		}
-		else if (!command.compare(COMMAND_SEARCH))
+		else if (strcmp(command, COMMAND_SEARCH) == 0)
 		{
 			std::printf("Найти прямоугольник(и) площадь которого соответствует значениею: \n");
-			searchRectangle(recDLL);
+			searchRectangle(card);
 		}
-		else if (!command.compare(COMMAND_SORT))
+		else if (strcmp(command, COMMAND_SORT) == 0)
 		{
 			std::printf("Сортировки набора по одному или нескольким полям: \n");
-			initRectangleSort(recDLL);
+			initRectangleSort(card);
 		}
-		else if (!command.compare(COMMAND_EXIT))
+		else if (strcmp(command, COMMAND_EXIT) == 0)
 		{
 			break;
 		}
@@ -84,8 +85,8 @@ void run()
 				COMMAND_EXIT);
 		}
 
-		command.clear();
-		if (!command.compare(COMMAND_ENDL))
+		strcpy(command, "");
+		if (strcmp(command, COMMAND_ENDL) == 0)
 		{
 			std::cin.ignore();
 		}
@@ -113,7 +114,7 @@ void printRectangleDLL(RectangleDLL *&recDLL)
 		std::printf("Ваш набор пуст. Size: %zu\n", recDLL->size);
 		return;
 	}
-	Rectangle *rectangle = recDLL->firstRectangle;
+	BOOK *rectangle = recDLL->firstRectangle;
 	if (rectangle == nullptr)
 	{
 		std::printf("Ваш набор пуст. Size: %zu\n", recDLL->size);
@@ -163,9 +164,9 @@ void printRectangleDLL(RectangleDLL *&recDLL)
 			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize) << " |\n";
 #else
 	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
-		<< alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize + floor((float)strlen(COLUMN_WIDTH_TITLE) / 2)) << " | "
-		<< alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize + floor((float)strlen(COLUMN_HEIGHT_TITLE) / 2)) << " | "
-		<< alignCenter(COLUMN_AREA_TITLE, areaColumnSize + floor((float)strlen(COLUMN_AREA_TITLE) / 2)) << " |\n";
+			  << alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize + floor((float)strlen(COLUMN_WIDTH_TITLE) / 2)) << " | "
+			  << alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize + floor((float)strlen(COLUMN_HEIGHT_TITLE) / 2)) << " | "
+			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize + floor((float)strlen(COLUMN_AREA_TITLE) / 2)) << " |\n";
 #endif
 	size_t totalSize = indexColumnSize + widthColumnSize + heightColumnSize + areaColumnSize;
 	totalSize += totalSize * 0.21;
@@ -210,7 +211,7 @@ void printRectangleDinArr(RectangleDLL *&recDLL)
 		   areaColumnSize = strlen(strSpaceWrap(COLUMN_AREA_TITLE));
 	for (size_t i = 0; i < recDLL->recDinArr->size; i++)
 	{
-		Rectangle *rectangle = recDLL->recDinArr->arr[i];
+		BOOK *rectangle = recDLL->recDinArr->arr[i];
 		char *index = new char[indexColumnSize];
 		sprintf(index, "%zu", i);
 		char *width = new char[widthColumnSize];
@@ -245,9 +246,9 @@ void printRectangleDinArr(RectangleDLL *&recDLL)
 			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize) << " |\n";
 #else
 	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
-		<< alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize + floor((float)strlen(COLUMN_WIDTH_TITLE) / 2)) << " | "
-		<< alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize + floor((float)strlen(COLUMN_HEIGHT_TITLE) / 2)) << " | "
-		<< alignCenter(COLUMN_AREA_TITLE, areaColumnSize + floor((float)strlen(COLUMN_AREA_TITLE) / 2)) << " |\n";
+			  << alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize + floor((float)strlen(COLUMN_WIDTH_TITLE) / 2)) << " | "
+			  << alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize + floor((float)strlen(COLUMN_HEIGHT_TITLE) / 2)) << " | "
+			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize + floor((float)strlen(COLUMN_AREA_TITLE) / 2)) << " |\n";
 #endif
 	size_t totalSize = indexColumnSize + widthColumnSize + heightColumnSize + areaColumnSize;
 	totalSize += totalSize * 0.21;
@@ -256,7 +257,7 @@ void printRectangleDinArr(RectangleDLL *&recDLL)
 	std::cout << std::endl;
 	for (size_t i = 0; i < recDLL->recDinArr->size; i++)
 	{
-		Rectangle *rectangle = recDLL->recDinArr->arr[i];
+		BOOK *rectangle = recDLL->recDinArr->arr[i];
 		char *index = new char[indexColumnSize];
 		sprintf(index, "%zu", i);
 		char *width = new char[widthColumnSize];
@@ -309,16 +310,16 @@ const char *alignCenter(const char *s, const int w)
 	{
 		buff << " ";
 	}
-	char * res = new char[buff.str().length()+1];
+	char *res = new char[buff.str().length() + 1];
 	strcpy(res, buff.str().c_str());
 	return res;
 }
 
 void addRectangle(RectangleDLL *&recDLL)
 {
-	Rectangle *newRectangle;
-	newRectangle = (struct Rectangle *)malloc(sizeof(struct Rectangle));
-	fillRectangleFromStdIn(newRectangle);
+	BOOK *newRectangle;
+	newRectangle = (struct BOOK *)malloc(sizeof(struct BOOK));
+	fillBookFromStdIn(newRectangle);
 	if (recDLL->firstRectangle == nullptr)
 	{
 
@@ -374,8 +375,8 @@ void deleteRectangle(RectangleDLL *&recDLL)
 			continue;
 		}
 
-		Rectangle *deleteRectangle = searchRectangleFromIndex(recDLL, i);
-		printRectangle(deleteRectangle);
+		BOOK *deleteRectangle = searchRectangleFromIndex(recDLL, i);
+		printBook(deleteRectangle);
 		bool remove = false;
 		while (true)
 		{
@@ -399,7 +400,7 @@ void deleteRectangle(RectangleDLL *&recDLL)
 		if (remove)
 		{
 			//this->recVector.erase(this->recVector.begin() + i);
-			Rectangle *prevRectangle, *nextRectangle;
+			BOOK *prevRectangle, *nextRectangle;
 			prevRectangle = deleteRectangle->prevRectangle;
 			nextRectangle = deleteRectangle->nextRectangle;
 			if (prevRectangle != NULL)
@@ -465,7 +466,7 @@ void saveToFile(RectangleDLL *&recDLL)
 		saveFile.open(pathToFile, std::fstream::in | std::fstream::out | std::fstream::trunc);
 		if (saveFile.is_open())
 		{
-			Rectangle *rectangle = recDLL->firstRectangle;
+			BOOK *rectangle = recDLL->firstRectangle;
 			do
 			{
 				char *width = new char[64];
@@ -515,7 +516,7 @@ void loadFromFile(RectangleDLL *&recDLL)
 		{
 			size_t i = 0;
 			recDLL->recDinArr->size = 0;
-			Rectangle **recArr = new Rectangle *[1];
+			BOOK **recArr = new BOOK *[1];
 			while (input.getline(readData, 1000))
 			{
 				if (strcmp(readData, "") == 0)
@@ -534,9 +535,9 @@ void loadFromFile(RectangleDLL *&recDLL)
 
 				if (i != 0)
 				{
-					recArr = (Rectangle **)realloc(recArr, sizeof(struct Rectangle) * (i + 1));
+					recArr = (BOOK **)realloc(recArr, sizeof(struct BOOK) * (i + 1));
 				}
-				Rectangle *newRectangle = new Rectangle;
+				BOOK *newRectangle = new BOOK;
 				newRectangle->width = std::stof(rectangleProps->arr[0]);
 				newRectangle->height = std::stof(rectangleProps->arr[1]);
 				newRectangle->area = std::stof(rectangleProps->arr[2]);
@@ -576,7 +577,7 @@ StringDinArr *split(const char *s, const char sep)
 		if (s[i] == sep)
 		{
 			//std::printf("ret->arr[%zu]=%s\n", ret->size - 1, buff);
-			ret->arr[ret->size] = new char[buff.str().length()+1];
+			ret->arr[ret->size] = new char[buff.str().length() + 1];
 			strcpy(ret->arr[ret->size], buff.str().c_str());
 			buff.str("");
 			ret->size++;
@@ -585,7 +586,7 @@ StringDinArr *split(const char *s, const char sep)
 		buff << s[i];
 		//std::printf("buff:%s\n", buff.str().c_str());
 	}
-	
+
 	ret->arr[ret->size] = new char[buff.str().length() + 1];
 	strcpy(ret->arr[ret->size], buff.str().c_str());
 	ret->size++;
@@ -614,13 +615,13 @@ void searchRectangle(RectangleDLL *&recDLL)
 		{
 			recDLL->recDinArr->size = 0;
 		}
-		Rectangle **recDinArr = new Rectangle *[recDLL->size];
+		BOOK **recDinArr = new BOOK *[recDLL->size];
 		recDLL->recDinArr->arr = recDinArr;
 
 		/* Находим совпавшие по площади прямоугольники и заносим
 			их указатели во временный буфер */
 		//std::printf("Find rectangle with area: %f\n", findArea);
-		Rectangle *rectangle = recDLL->firstRectangle;
+		BOOK *rectangle = recDLL->firstRectangle;
 		do
 		{
 			if (rectangle->area == findArea)
@@ -659,10 +660,10 @@ void searchRectangle(RectangleDLL *&recDLL)
 	}
 }
 
-Rectangle *searchRectangleFromIndex(RectangleDLL *&recDLL, size_t index)
+BOOK *searchRectangleFromIndex(RectangleDLL *&recDLL, size_t index)
 {
 	size_t i = 0;
-	Rectangle *rectangle = recDLL->firstRectangle;
+	BOOK *rectangle = recDLL->firstRectangle;
 	do
 	{
 		if (index == i)
@@ -687,7 +688,7 @@ void clearDLL(RectangleDLL *&recDLL)
 		return;
 	}
 
-	Rectangle *rectangle = recDLL->firstRectangle, *nextRectangle;
+	BOOK *rectangle = recDLL->firstRectangle, *nextRectangle;
 	do
 	{
 		nextRectangle = rectangle->nextRectangle;
@@ -787,8 +788,8 @@ void initRectangleSort(RectangleDLL *&recDLL)
 void fillRecDinArrayFromDoublyLinkedList(RectangleDLL *&recDLL)
 {
 	recDLL->recDinArr->size = 0;
-	recDLL->recDinArr->arr = new Rectangle *[recDLL->size];
-	Rectangle *rectangle = recDLL->firstRectangle, *nextRectangle;
+	recDLL->recDinArr->arr = new BOOK *[recDLL->size];
+	BOOK *rectangle = recDLL->firstRectangle, *nextRectangle;
 	size_t i = 0;
 	do
 	{
@@ -810,8 +811,8 @@ void fillDoublyLinkedListFromRecDinArray(RectangleDLL *&recDLL)
 {
 	//std::printf("Start fillDoublyLinkedListFromRecDinArray size: %zu\n", recDLL->size);
 	clearDLL(recDLL);
-	Rectangle *newRectangle = nullptr;
-	Rectangle *lastRectangle = nullptr;
+	BOOK *newRectangle = nullptr;
+	BOOK *lastRectangle = nullptr;
 	for (size_t i = 0; i < recDLL->recDinArr->size; i++)
 	{
 		newRectangle = recDLL->recDinArr->arr[i];
@@ -908,7 +909,7 @@ void sortRectangleDLL(RectangleDLL *&recDLL)
 	bool isDesc = recDLL->sortMap->arr[0]->isDesc;
 	for (size_t i = 0; i < recDLL->recDinArr->size - 1; i++)
 	{
-		Rectangle *maxElement = recDLL->recDinArr->arr[i];
+		BOOK *maxElement = recDLL->recDinArr->arr[i];
 		size_t posMaxElem = i;
 		for (size_t j = i + 1; j < recDLL->recDinArr->size; j++)
 		{
@@ -934,7 +935,7 @@ void sortRectangleDLL(RectangleDLL *&recDLL)
 			}
 		}
 		//std::printf("(i:%d;posMaxElem:%d)\n", i, posMaxElem);
-		Rectangle *bookBuf = recDLL->recDinArr->arr[i];
+		BOOK *bookBuf = recDLL->recDinArr->arr[i];
 		recDLL->recDinArr->arr[i] = maxElement;
 		recDLL->recDinArr->arr[posMaxElem] = bookBuf;
 	}
@@ -949,8 +950,8 @@ SortPair *cmpRectangleRecursive(
 {
 	//std::printf("Start cmpRectangleRecursive->%zu:%zu:%zu\n", firstSortIndex, secondSortIndex, sortIndex);
 	SortPair *res = new SortPair;
-	Rectangle *firstBook = recDLL->recDinArr->arr[firstSortIndex];
-	Rectangle *secondBook = recDLL->recDinArr->arr[secondSortIndex];
+	BOOK *firstBook = recDLL->recDinArr->arr[firstSortIndex];
+	BOOK *secondBook = recDLL->recDinArr->arr[secondSortIndex];
 	const char *key = recDLL->sortMap->arr[sortIndex]->columnName;
 	res->isDesc = recDLL->sortMap->arr[sortIndex]->isDesc;
 	if (strcmp(key, COLUMN_WIDTH_TITLE) == 0)
