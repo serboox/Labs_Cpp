@@ -6,7 +6,7 @@
 #include <unistd.h> // библиотека для функции sleep() используемая в Unix
 #endif
 
-// Перечисляем строковые константы для определеня названия колонок
+// Перечисляем строковые константы для определения названия колонок
 // Колонки используются при печати таблицы в консоль и при вводе названия колонки для сортировки
 const char COLUMN_INDEX_TITLE[] = "Index",
 		   COLUMN_WIDTH_TITLE[] = "Высота",
@@ -42,7 +42,7 @@ struct RectangleDinArr
 	struct Rectangle **arr = new struct Rectangle *[0];
 };
 
-/* fillRectangleFromStdIn заполняет поля прямогулольника через stdin */
+/* fillRectangleFromStdIn заполняет поля прямоугольника через stdin */
 void fillRectangleFromStdIn(struct Rectangle *&rectangle);
 /* printRectangle печатает информацию о прямоугольнике в stdout */
 void printRectangle(struct Rectangle *&rectangle);

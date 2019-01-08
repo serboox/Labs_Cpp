@@ -32,9 +32,9 @@ const char DEFAULT_PATH_TO_FILE[] = "C:\\Users\\Public\\rectangleSet.txt";
 // DEFAULT_PATH_TO_FILE константа хранящая путь для сохраняемого/считываемого файла по умолчанию
 const char DEFAULT_PATH_TO_FILE[] = "./rectangleSet.txt";
 #endif
-// SORT_ASC сотировака в порядке возрастания
+// SORT_ASC сортировка в порядке возрастания
 const char SORT_ASC[] = "ASC";
-// SORT_DESC сортировака в порядке  убывания
+// SORT_DESC сортировка в порядке  убывания
 const char SORT_DESC[] = "DESC";
 
 /*
@@ -102,10 +102,10 @@ struct StringDinArr
 // run запускает работу программы
 void run();
 
-// printRectangleDLL печатает содержимое набора прямоуголников в консоль
+// printRectangleDLL печатает содержимое набора прямоугольников в консоль
 void printRectangleDLL(RectangleDLL *&recDLL);
 
-/* printRectangleDinArr печатает содержимое промежуточного буфера прямоуголников в консоль */
+/* printRectangleDinArr печатает содержимое промежуточного буфера прямоугольников в консоль */
 void printRectangleDinArr(RectangleDLL *&recDLL);
 
 // printSortMap печатает содержимое карты для сортировки в консоль

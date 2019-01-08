@@ -7,14 +7,15 @@ void run()
 
 	while (true)
 	{
-		std::string command;
+		char *command = new char[21];
 		std::printf("$ ");
 
 		std::cin.clear();
-		std::getline(std::cin, command);
+		std::cin.getline(command, 20);
+		std::cin.clear();
 		//std::printf("---%s----%d--\n", command.c_str(), command.length());
 
-		if (!command.compare(COMMAND_HELP))
+		if (strcmp(command, COMMAND_HELP) == 0)
 		{
 			std::printf(
 				"%s  Распечатать содержимое набора. \n"
@@ -36,43 +37,43 @@ void run()
 				COMMAND_HELP,
 				COMMAND_EXIT);
 		}
-		else if (!command.compare(COMMAND_PRINT))
+		else if (strcmp(command, COMMAND_PRINT) == 0)
 		{
 			std::printf("Cодержимое набора прямоугольников: \n\n");
 			printRectangleDLL(recDLL);
 			std::printf("\n");
 		}
-		else if (!command.compare(COMMAND_ADD))
+		else if (strcmp(command, COMMAND_ADD) == 0)
 		{
 			std::printf("Добавить новый прямоугольник: \n\n");
 			addRectangle(recDLL);
 		}
-		else if (!command.compare(COMMAND_DELETE))
+		else if (strcmp(command, COMMAND_DELETE) == 0)
 		{
 			std::printf("Удалить существующий(ие): \n");
 			deleteRectangle(recDLL);
 		}
-		else if (!command.compare(COMMAND_SAVE))
+		else if (strcmp(command, COMMAND_SAVE) == 0)
 		{
 			std::printf("Записать в файл: \n");
 			saveToFile(recDLL);
 		}
-		else if (!command.compare(COMMAND_LOAD))
+		else if (strcmp(command, COMMAND_LOAD) == 0)
 		{
 			std::printf("Считать из файла: \n");
 			loadFromFile(recDLL);
 		}
-		else if (!command.compare(COMMAND_SEARCH))
+		else if (strcmp(command, COMMAND_SEARCH) == 0)
 		{
 			std::printf("Найти прямоугольник(и) площадь которого соответствует значениею: \n");
 			searchRectangle(recDLL);
 		}
-		else if (!command.compare(COMMAND_SORT))
+		else if (strcmp(command, COMMAND_SORT) == 0)
 		{
 			std::printf("Сортировки набора по одному или нескольким полям: \n");
 			initRectangleSort(recDLL);
 		}
-		else if (!command.compare(COMMAND_EXIT))
+		else if (strcmp(command, COMMAND_EXIT) == 0)
 		{
 			break;
 		}
@@ -84,8 +85,8 @@ void run()
 				COMMAND_EXIT);
 		}
 
-		command.clear();
-		if (!command.compare(COMMAND_ENDL))
+		strcpy(command, "");
+		if (strcmp(command, COMMAND_ENDL) == 0)
 		{
 			std::cin.ignore();
 		}
@@ -163,9 +164,9 @@ void printRectangleDLL(RectangleDLL *&recDLL)
 			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize) << " |\n";
 #else
 	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
-		<< alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize + floor((float)strlen(COLUMN_WIDTH_TITLE) / 2)) << " | "
-		<< alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize + floor((float)strlen(COLUMN_HEIGHT_TITLE) / 2)) << " | "
-		<< alignCenter(COLUMN_AREA_TITLE, areaColumnSize + floor((float)strlen(COLUMN_AREA_TITLE) / 2)) << " |\n";
+			  << alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize + floor((float)strlen(COLUMN_WIDTH_TITLE) / 2)) << " | "
+			  << alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize + floor((float)strlen(COLUMN_HEIGHT_TITLE) / 2)) << " | "
+			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize + floor((float)strlen(COLUMN_AREA_TITLE) / 2)) << " |\n";
 #endif
 	size_t totalSize = indexColumnSize + widthColumnSize + heightColumnSize + areaColumnSize;
 	totalSize += totalSize * 0.21;
@@ -245,9 +246,9 @@ void printRectangleDinArr(RectangleDLL *&recDLL)
 			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize) << " |\n";
 #else
 	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
-		<< alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize + floor((float)strlen(COLUMN_WIDTH_TITLE) / 2)) << " | "
-		<< alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize + floor((float)strlen(COLUMN_HEIGHT_TITLE) / 2)) << " | "
-		<< alignCenter(COLUMN_AREA_TITLE, areaColumnSize + floor((float)strlen(COLUMN_AREA_TITLE) / 2)) << " |\n";
+			  << alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize + floor((float)strlen(COLUMN_WIDTH_TITLE) / 2)) << " | "
+			  << alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize + floor((float)strlen(COLUMN_HEIGHT_TITLE) / 2)) << " | "
+			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize + floor((float)strlen(COLUMN_AREA_TITLE) / 2)) << " |\n";
 #endif
 	size_t totalSize = indexColumnSize + widthColumnSize + heightColumnSize + areaColumnSize;
 	totalSize += totalSize * 0.21;
@@ -309,7 +310,7 @@ const char *alignCenter(const char *s, const int w)
 	{
 		buff << " ";
 	}
-	char * res = new char[buff.str().length()+1];
+	char *res = new char[buff.str().length() + 1];
 	strcpy(res, buff.str().c_str());
 	return res;
 }
@@ -576,7 +577,7 @@ StringDinArr *split(const char *s, const char sep)
 		if (s[i] == sep)
 		{
 			//std::printf("ret->arr[%zu]=%s\n", ret->size - 1, buff);
-			ret->arr[ret->size] = new char[buff.str().length()+1];
+			ret->arr[ret->size] = new char[buff.str().length() + 1];
 			strcpy(ret->arr[ret->size], buff.str().c_str());
 			buff.str("");
 			ret->size++;
@@ -585,7 +586,7 @@ StringDinArr *split(const char *s, const char sep)
 		buff << s[i];
 		//std::printf("buff:%s\n", buff.str().c_str());
 	}
-	
+
 	ret->arr[ret->size] = new char[buff.str().length() + 1];
 	strcpy(ret->arr[ret->size], buff.str().c_str());
 	ret->size++;
