@@ -755,8 +755,6 @@ void initRectangleSort(RectangleDLL *&recDLL)
 			continue;
 		}
 
-		//TODO::Вот тут лежит сердце сортировки
-
 		fillRecDinArrayFromDoublyLinkedList(recDLL);
 		//printSortMap(recDLL);
 		//printRectangleDinArr(recDLL);
