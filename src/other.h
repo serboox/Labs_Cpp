@@ -3,12 +3,9 @@
 #include <string>
 #include <iomanip>
 #include <sstream>
-#include <vector>
 #include <fstream>
-#include <algorithm>
 #include <cctype>
 #include <utility>
-#include <map>
 #include <cstring> // библиотека для работы со строками (используем для strcmp(), strlen())
 #include <string.h>
 #include <cmath> // библиотека с математическими функциями, например для округления float значений

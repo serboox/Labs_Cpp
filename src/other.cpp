@@ -156,10 +156,17 @@ void printRectangleDLL(RectangleDLL *&recDLL)
 		rectangle = rectangle->nextRectangle;
 		//std::printf("Titles: %zu : %zu : %d\n", i, recDLL->size, rectangle == nullptr);
 	} while (rectangle != nullptr);
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
-			  << alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize + floor((float)strlen(COLUMN_WIDTH_TITLE) / 2)) << " | "
-			  << alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize + floor((float)strlen(COLUMN_HEIGHT_TITLE) / 2)) << " | "
-			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize + floor((float)strlen(COLUMN_AREA_TITLE) / 2)) << " |\n";
+			  << alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize) << " | "
+			  << alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize) << " | "
+			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize) << " |\n";
+#else
+	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
+		<< alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize + floor((float)strlen(COLUMN_WIDTH_TITLE) / 2)) << " | "
+		<< alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize + floor((float)strlen(COLUMN_HEIGHT_TITLE) / 2)) << " | "
+		<< alignCenter(COLUMN_AREA_TITLE, areaColumnSize + floor((float)strlen(COLUMN_AREA_TITLE) / 2)) << " |\n";
+#endif
 	size_t totalSize = indexColumnSize + widthColumnSize + heightColumnSize + areaColumnSize;
 	totalSize += totalSize * 0.21;
 	for (size_t i = 0; i <= totalSize; i++)
@@ -231,10 +238,17 @@ void printRectangleDinArr(RectangleDLL *&recDLL)
 		}
 		i++;
 	}
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
-			  << alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize + floor((float)strlen(COLUMN_WIDTH_TITLE) / 2)) << " | "
-			  << alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize + floor((float)strlen(COLUMN_HEIGHT_TITLE) / 2)) << " | "
-			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize + floor((float)strlen(COLUMN_AREA_TITLE) / 2)) << " |\n";
+			  << alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize) << " | "
+			  << alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize) << " | "
+			  << alignCenter(COLUMN_AREA_TITLE, areaColumnSize) << " |\n";
+#else
+	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
+		<< alignCenter(COLUMN_WIDTH_TITLE, widthColumnSize + floor((float)strlen(COLUMN_WIDTH_TITLE) / 2)) << " | "
+		<< alignCenter(COLUMN_HEIGHT_TITLE, heightColumnSize + floor((float)strlen(COLUMN_HEIGHT_TITLE) / 2)) << " | "
+		<< alignCenter(COLUMN_AREA_TITLE, areaColumnSize + floor((float)strlen(COLUMN_AREA_TITLE) / 2)) << " |\n";
+#endif
 	size_t totalSize = indexColumnSize + widthColumnSize + heightColumnSize + areaColumnSize;
 	totalSize += totalSize * 0.21;
 	for (size_t i = 0; i <= totalSize; i++)
@@ -282,24 +296,21 @@ const char *alignCenter(const char *s, const int w)
 	padding /= 2;
 
 	size_t resSize = padding + strlen(s) + padding + endSpace;
-	char *res = nullptr;
-	res = new char[resSize];
-	size_t i = 0;
-	for (i = 0; i < padding; i++)
+	std::stringstream buff;
+	for (size_t i = 0; i < padding; i++)
 	{
-		res[i] = ' ';
+		buff << " ";
 	}
-	i = padding;
-	for (size_t j = 0; j < strlen(s); j++)
+	for (size_t i = 0; i < strlen(s); i++)
 	{
-		res[i] = s[j];
-		i++;
+		buff << s[i];
 	}
-	i = padding + strlen(s);
-	for (; i < padding + strlen(s) + padding + endSpace; i++)
+	for (size_t i = 0; i < padding + endSpace; i++)
 	{
-		res[i] = ' ';
+		buff << " ";
 	}
+	char * res = new char[buff.str().length()+1];
+	strcpy(res, buff.str().c_str());
 	return res;
 }
 
