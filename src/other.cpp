@@ -87,14 +87,15 @@ void run()
 
 const char *strSpaceWrap(const char *str)
 {
-	char *res = new char[strlen(str) + 2];
-	res[0] = ' ';
-	size_t i = 1;
-	for (; i <= strlen(str); i++)
+	std::stringstream buff;
+	buff << ' ';
+	for (size_t i = 0; i <= strlen(str); i++)
 	{
-		res[i] = str[i - 1];
+		buff << str[i];
 	}
-	res[i] = ' ';
+	buff << ' ';
+	char *res = new char[buff.str().length() + 1];
+	strcpy(res, buff.str().c_str());
 	return res;
 }
 
@@ -114,6 +115,7 @@ void printCard(struct Card *&card)
 		   priceColumnSize = strlen(strSpaceWrap(COLUMN_BOOK_PRICE_TITLE)),
 		   categoryColumnSize = strlen(strSpaceWrap(COLUMN_BOOK_CATEGORY_TITLE));
 
+	//std::printf("indexColumnSize1:%zu\n", indexColumnSize);
 	for (size_t i = 0; i < card->bookDinArr->size; i++)
 	{
 		//std::printf("i:%zu\n", i);
@@ -127,6 +129,7 @@ void printCard(struct Card *&card)
 
 		if (indexColumnSize < strlen(index))
 		{
+			//std::printf("indexColumnSize2:%zu\n", indexColumnSize);
 			indexColumnSize = strlen(index);
 		}
 		if (firstNameColumnSize < strlen(book->authorFirstName))
@@ -166,8 +169,9 @@ void printCard(struct Card *&card)
 	size_t totalSize = indexColumnSize + firstNameColumnSize + lastNameColumnSize + titleColumnSize;
 	totalSize += yearColumnSize + priceColumnSize + categoryColumnSize;
 	totalSize += totalSize * 0.21;
-	for (size_t i = 0; i <= totalSize; i++)
+	for (size_t i = 0; i <= totalSize; i++) {
 		std::cout << "—";
+	}
 	std::cout << std::endl;
 	for (size_t i = 0; i < card->bookDinArr->size; i++)
 	{
@@ -180,6 +184,7 @@ void printCard(struct Card *&card)
 		char *bookPrice = new char[priceColumnSize];
 		sprintf(bookPrice, "%f", book->bookPrice);
 
+		//std::printf("indexColumnSize3:%zu\n", indexColumnSize);
 		std::cout << alignCenter(index, indexColumnSize) << " | "
 				  << alignCenter(book->authorFirstName, firstNameColumnSize) << " | "
 				  << alignCenter(book->authorLastName, lastNameColumnSize) << " | "
@@ -202,8 +207,8 @@ void printSortMap(struct Card *&card)
 
 const char *alignCenter(const char *s, const int w)
 {
-	int padding = w - strlen(s);
-	//std::printf("w:%d;s:%zu;pad:%d; ", w, strlen(s), padding);
+	size_t padding = (size_t)w - strlen(s);
+	//std::printf("w:%d;s:%zu;pad:%d; \n", w, strlen(s), padding);
 	size_t endSpace = 0;
 	if (padding > 0 && padding % 2 != 0)
 	{
@@ -215,7 +220,7 @@ const char *alignCenter(const char *s, const int w)
 	std::stringstream buff;
 	for (size_t i = 0; i < padding; i++)
 	{
-		buff << " ";
+		buff << ' ';
 	}
 	for (size_t i = 0; i < strlen(s); i++)
 	{
@@ -223,7 +228,7 @@ const char *alignCenter(const char *s, const int w)
 	}
 	for (size_t i = 0; i < padding + endSpace; i++)
 	{
-		buff << " ";
+		buff << ' ';
 	}
 	char *res = new char[buff.str().length() + 1];
 	strcpy(res, buff.str().c_str());
@@ -308,8 +313,6 @@ void deleteBook(struct Card *&card)
 			{
 				std::printf("Книга удалена! \n");
 				card->bookDinArr = new BookDinArr;
-				// Освобождаем память от удаляемого элемента
-				delete deleteBook;
 				return;
 			}
 
@@ -326,8 +329,6 @@ void deleteBook(struct Card *&card)
 				k++;
 			}
 			card->bookDinArr = newBookDinArray;
-			// Освобождаем память от удаляемого элемента
-			delete deleteBook;
 			std::printf("Книга удалена! \n");
 		}
 		while (true)
@@ -428,7 +429,7 @@ void loadFromFile(Card *&card)
 				{
 					continue;
 				}
-				std::printf("%s\n", readData);
+				//std::printf("%s\n", readData);
 				StringDinArr *bookProps = split(readData, ';');
 				if (bookProps->size != 6)
 				{
@@ -443,14 +444,9 @@ void loadFromFile(Card *&card)
 					bookDinArr = (BOOK **)realloc(bookDinArr, sizeof(struct BOOK) * (i + 1));
 				}
 				BOOK *newBook = new BOOK;
-
-				//newBook->authorFirstName = new char[256];
 				strcpy(newBook->authorFirstName, bookProps->arr[0]);
-				//newBook->authorLastName = new char[256];
 				strcpy(newBook->authorLastName, bookProps->arr[1]);
-				//newBook->bookTitle = new char[1024];
 				strcpy(newBook->bookTitle, bookProps->arr[2]);
-
 				newBook->bookYear = static_cast<short int>(atoi(bookProps->arr[3]));
 				newBook->bookPrice = std::stof(bookProps->arr[4]);
 				newBook->bookCategory = getBookCategory(bookProps->arr[5]);
@@ -555,7 +551,7 @@ void initCardSort(Card *&card)
 			continue;
 		}
 
-		printSortMap(card);
+		//printSortMap(card);
 
 		sortCard(card);
 		card->sortMap = new SortMap;
