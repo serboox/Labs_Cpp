@@ -1,6 +1,7 @@
 #include <iostream> // заголовочный файл стандартной библиотеки для работы с вводом/выводом
 #include <stdlib.h> // заголовочный файл стандартной библиотеки
 #include <cstring>  // библиотека для работы со строками (используем для strcmp();)
+#include <sstream>  // библиотека для работы с потоком строк
 #if !defined(WIN32) && !defined(_WIN32) && !defined(_WIN64)
 #include <unistd.h> // библиотека для функции sleep() используемая в Unix
 #endif
@@ -45,7 +46,7 @@ struct BOOK
 {
 	char *authorFirstName = new char[256];
 	char *authorLastName = new char[256];
-	char *bookTitle = new char[256];
+	char *bookTitle = new char[1024];
 	short int bookYear;
 	float bookPrice;
 	BookCategoryEnum bookCategory;
@@ -68,4 +69,4 @@ void printBook(struct BOOK *&book);
 bool validateColumnTitle(const char *str);
 
 // semicolonToSpace все знаки ';' на пробелы
-void semicolonToSpace(std::string &text);
+const char *semicolonToSpace(const char *text);

@@ -100,7 +100,7 @@ const char *strSpaceWrap(const char *str)
 
 void printCard(struct Card *&card)
 {
-	//std::printf("Start printCard\n");
+	//std::printf("Start printCard->size:%zu\n", card->bookDinArr->size);
 	if (card->bookDinArr->size <= 0)
 	{
 		std::printf("Ваш набор пуст. Size: %zu\n", card->bookDinArr->size);
@@ -116,6 +116,7 @@ void printCard(struct Card *&card)
 
 	for (size_t i = 0; i < card->bookDinArr->size; i++)
 	{
+		//std::printf("i:%zu\n", i);
 		struct BOOK *book = card->bookDinArr->arr[i];
 		char *index = new char[indexColumnSize];
 		sprintf(index, "%zu", i);
@@ -153,10 +154,7 @@ void printCard(struct Card *&card)
 		{
 			categoryColumnSize = strlen(getBookCategory(book));
 		}
-
-		i++;
 	}
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
 			  << alignCenter(COLUMN_AUTHOR_FIRST_NAME_TITLE, firstNameColumnSize) << " | "
 			  << alignCenter(COLUMN_AUTHOR_LAST_NAME_TITLE, lastNameColumnSize) << " | "
@@ -164,15 +162,7 @@ void printCard(struct Card *&card)
 			  << alignCenter(COLUMN_BOOK_YEAR_TITLE, yearColumnSize) << " | "
 			  << alignCenter(COLUMN_BOOK_PRICE_TITLE, priceColumnSize) << " | "
 			  << alignCenter(COLUMN_BOOK_CATEGORY_TITLE, categoryColumnSize) << " |\n";
-#else
-	std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
-			  << alignCenter(COLUMN_AUTHOR_FIRST_NAME_TITLE, firstNameColumnSize + floor((float)strlen(COLUMN_AUTHOR_FIRST_NAME_TITLE) / 2)) << " | "
-			  << alignCenter(COLUMN_AUTHOR_LAST_NAME_TITLE, firstNameColumnSize + floor((float)strlen(COLUMN_AUTHOR_LAST_NAME_TITLE) / 2)) << " | "
-			  << alignCenter(COLUMN_BOOK_TITLE_TITLE, firstNameColumnSize + floor((float)strlen(COLUMN_BOOK_TITLE_TITLE) / 2)) << " | "
-			  << alignCenter(COLUMN_BOOK_YEAR_TITLE, firstNameColumnSize + floor((float)strlen(COLUMN_BOOK_YEAR_TITLE) / 2)) << " | "
-			  << alignCenter(COLUMN_BOOK_PRICE_TITLE, firstNameColumnSize + floor((float)strlen(COLUMN_BOOK_PRICE_TITLE) / 2)) << " | "
-			  << alignCenter(COLUMN_BOOK_CATEGORY_TITLE, categoryColumnSize + floor((float)strlen(COLUMN_BOOK_CATEGORY_TITLE) / 2)) << " |\n";
-#endif
+
 	size_t totalSize = indexColumnSize + firstNameColumnSize + lastNameColumnSize + titleColumnSize;
 	totalSize += yearColumnSize + priceColumnSize + categoryColumnSize;
 	totalSize += totalSize * 0.21;
@@ -181,7 +171,7 @@ void printCard(struct Card *&card)
 	std::cout << std::endl;
 	for (size_t i = 0; i < card->bookDinArr->size; i++)
 	{
-		BOOK *book = card->bookDinArr->arr[i];
+		//std::printf("i:%zu\n", i);
 		struct BOOK *book = card->bookDinArr->arr[i];
 		char *index = new char[indexColumnSize];
 		sprintf(index, "%zu", i);
@@ -190,13 +180,13 @@ void printCard(struct Card *&card)
 		char *bookPrice = new char[priceColumnSize];
 		sprintf(bookPrice, "%f", book->bookPrice);
 
-		std::cout << alignCenter(COLUMN_INDEX_TITLE, indexColumnSize) << " | "
-				  << alignCenter(COLUMN_AUTHOR_FIRST_NAME_TITLE, firstNameColumnSize) << " | "
-				  << alignCenter(COLUMN_AUTHOR_LAST_NAME_TITLE, lastNameColumnSize) << " | "
-				  << alignCenter(COLUMN_BOOK_TITLE_TITLE, titleColumnSize) << " | "
-				  << alignCenter(COLUMN_BOOK_YEAR_TITLE, yearColumnSize) << " | "
-				  << alignCenter(COLUMN_BOOK_PRICE_TITLE, priceColumnSize) << " | "
-				  << alignCenter(COLUMN_BOOK_CATEGORY_TITLE, categoryColumnSize) << " |\n";
+		std::cout << alignCenter(index, indexColumnSize) << " | "
+				  << alignCenter(book->authorFirstName, firstNameColumnSize) << " | "
+				  << alignCenter(book->authorLastName, lastNameColumnSize) << " | "
+				  << alignCenter(book->bookTitle, titleColumnSize) << " | "
+				  << alignCenter(bookYear, yearColumnSize) << " | "
+				  << alignCenter(bookPrice, priceColumnSize) << " | "
+				  << alignCenter(getBookCategory(book), categoryColumnSize) << " |\n";
 	}
 	//std::printf("Finish printCard\n");
 }
@@ -242,11 +232,12 @@ const char *alignCenter(const char *s, const int w)
 
 void addBookToCard(struct Card *&card)
 {
-	BOOK *newBook;
+	struct BOOK *newBook;
 	newBook = (struct BOOK *)malloc(sizeof(struct BOOK));
 	fillBookFromStdIn(newBook);
+	card->bookDinArr->size++;
 	card->bookDinArr->arr = (BOOK **)realloc(card->bookDinArr->arr, sizeof(struct BOOK) * card->bookDinArr->size);
-	++card->bookDinArr->size;
+	card->bookDinArr->arr[card->bookDinArr->size - 1] = newBook;
 }
 
 void deleteBook(struct Card *&card)
@@ -318,24 +309,25 @@ void deleteBook(struct Card *&card)
 				std::printf("Книга удалена! \n");
 				card->bookDinArr = new BookDinArr;
 				// Освобождаем память от удаляемого элемента
-				free(deleteBook);
+				delete deleteBook;
 				return;
 			}
 
 			struct BookDinArr *newBookDinArray = new BookDinArr[card->bookDinArr->size - 1];
-			newBookDinArray->size = card->bookDinArr->size - 1;
 			size_t k = 0;
-			for (size_t j; j < card->bookDinArr->size; j++)
+			for (size_t j = 0; j < card->bookDinArr->size; j++)
 			{
 				if (i == j)
 				{
 					continue;
 				}
 				newBookDinArray->arr[k] = card->bookDinArr->arr[j];
+				newBookDinArray->size++;
 				k++;
 			}
+			card->bookDinArr = newBookDinArray;
 			// Освобождаем память от удаляемого элемента
-			free(deleteBook);
+			delete deleteBook;
 			std::printf("Книга удалена! \n");
 		}
 		while (true)
@@ -395,7 +387,6 @@ void saveToFile(struct Card *&card)
 				saveFile << bookPrice;
 				saveFile << ";";
 				saveFile << getBookCategory(book);
-				saveFile << ";";
 				saveFile << "\n";
 			}
 			saveFile.close();
@@ -430,19 +421,19 @@ void loadFromFile(Card *&card)
 		{
 			size_t i = 0;
 			card->bookDinArr->size = 0;
-			BOOK **bookDinArr = new BOOK *[1];
+			struct BOOK **bookDinArr = new BOOK *[1];
 			while (input.getline(readData, 1000))
 			{
 				if (strcmp(readData, "") == 0)
 				{
 					continue;
 				}
-				//std::printf("%s\n", readData);
+				std::printf("%s\n", readData);
 				StringDinArr *bookProps = split(readData, ';');
-				if (bookProps->size != 3)
+				if (bookProps->size != 6)
 				{
 					std::printf("Строка %zu не соответствует требуемуму формату т.к."
-								"число ее свойств (%zu) должно быть равно 3!\n %s\n",
+								"число ее свойств (%zu) должно быть равно 6!\n %s\n",
 								i, bookProps->size, readData);
 					continue;
 				}
@@ -452,9 +443,14 @@ void loadFromFile(Card *&card)
 					bookDinArr = (BOOK **)realloc(bookDinArr, sizeof(struct BOOK) * (i + 1));
 				}
 				BOOK *newBook = new BOOK;
+
+				//newBook->authorFirstName = new char[256];
 				strcpy(newBook->authorFirstName, bookProps->arr[0]);
+				//newBook->authorLastName = new char[256];
 				strcpy(newBook->authorLastName, bookProps->arr[1]);
+				//newBook->bookTitle = new char[1024];
 				strcpy(newBook->bookTitle, bookProps->arr[2]);
+
 				newBook->bookYear = static_cast<short int>(atoi(bookProps->arr[3]));
 				newBook->bookPrice = std::stof(bookProps->arr[4]);
 				newBook->bookCategory = getBookCategory(bookProps->arr[5]);
@@ -563,10 +559,8 @@ void initCardSort(Card *&card)
 
 		sortCard(card);
 		card->sortMap = new SortMap;
-
 		printCard(card);
 
-		card->bookDinArr->size = 0;
 		while (true)
 		{
 			char *command = new char[10];
@@ -654,17 +648,23 @@ void addToSortMap(Card *&card, char *columnName, bool isDesc)
 
 void sortCard(Card *&card)
 {
-	//std::printf("Start sortCard\n");
+	//std::printf("Start sortCard: sortMapSize: %zu\n", card->sortMap->size);
+	if (card->bookDinArr->size == 0)
+	{
+		std::printf("sortMapSize: mast be over 2: Have: %zu\n", card->sortMap->size);
+		return;
+	}
+
 	const char *beginKey = card->sortMap->arr[0]->columnName;
 	bool isDesc = card->sortMap->arr[0]->isDesc;
-	for (size_t i = 0; i < card->bookDinArr->size - 1; i++)
+	for (int i = 0; i < card->bookDinArr->size - 1; i++)
 	{
-		BOOK *maxElement = card->bookDinArr->arr[i];
+		struct BOOK *maxElement = card->bookDinArr->arr[i];
 		size_t posMaxElem = i;
-		for (size_t j = i + 1; j < card->bookDinArr->size; j++)
+		for (int j = i + 1; j < card->bookDinArr->size; j++)
 		{
 			SortPair *cmpRes = cmpBookRecursive(card, posMaxElem, j, 0);
-			//std::printf("Результат сравнения: '%d' \n", cmpRes);
+			//std::printf("Результат сравнения: '%d' \n", cmpRes->resCmp);
 
 			if (cmpRes->resCmp == 0)
 			{
@@ -685,11 +685,11 @@ void sortCard(Card *&card)
 			}
 		}
 		//std::printf("(i:%d;posMaxElem:%d)\n", i, posMaxElem);
-		BOOK *bookBuf = card->bookDinArr->arr[i];
+		struct BOOK *bookBuf = card->bookDinArr->arr[i];
 		card->bookDinArr->arr[i] = maxElement;
 		card->bookDinArr->arr[posMaxElem] = bookBuf;
 	}
-	//std::printf("Finish sortCard\n");
+	std::printf("Finish sortCard\n");
 }
 
 SortPair *cmpBookRecursive(
@@ -699,9 +699,9 @@ SortPair *cmpBookRecursive(
 	const size_t sortIndex)
 {
 	//std::printf("Start cmpBookRecursive->%zu:%zu:%zu\n", firstSortIndex, secondSortIndex, sortIndex);
-	SortPair *res = new SortPair;
-	BOOK *firstBook = card->bookDinArr->arr[firstSortIndex];
-	BOOK *secondBook = card->bookDinArr->arr[secondSortIndex];
+	struct SortPair *res = new SortPair;
+	struct BOOK *firstBook = card->bookDinArr->arr[firstSortIndex];
+	struct BOOK *secondBook = card->bookDinArr->arr[secondSortIndex];
 	const char *key = card->sortMap->arr[sortIndex]->columnName;
 	res->isDesc = card->sortMap->arr[sortIndex]->isDesc;
 	if (strcmp(key, COLUMN_AUTHOR_FIRST_NAME_TITLE) == 0)

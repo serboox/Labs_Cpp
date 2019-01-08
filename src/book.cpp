@@ -58,14 +58,18 @@ void fillBookFromStdIn(BOOK *&book)
 {
 	const int YEAR_OF_WRITING = 988;
 
+	book->authorFirstName = new char[256];
+	book->authorLastName = new char[256];
+	book->bookTitle = new char[1024];
+
 	std::fprintf(stdout, "Please enter fields\n");
+
 	while (true)
 	{
 		std::fprintf(stdout, "authorFirstName (string): ");
-
 		std::cin.getline(book->authorFirstName, 255);
 		std::cin.clear();
-		semicolonToSpace(book->authorFirstName);
+		strcpy(book->authorFirstName, semicolonToSpace(book->authorFirstName));
 		if (strlen(book->authorFirstName) == 0)
 		{
 			std::fprintf(stderr, "The field 'authorFirstName' can not be empty!\n");
@@ -87,7 +91,7 @@ void fillBookFromStdIn(BOOK *&book)
 		std::fprintf(stdout, "authorLastName (string): ");
 		std::cin.getline(book->authorLastName, 255);
 		std::cin.clear();
-		semicolonToSpace(book->authorLastName);
+		strcpy(book->authorLastName, semicolonToSpace(book->authorLastName));
 		if (strlen(book->authorLastName) == 0)
 		{
 			std::fprintf(stderr, "The field 'authorLastName' can not be empty!\n");
@@ -107,9 +111,9 @@ void fillBookFromStdIn(BOOK *&book)
 	while (true)
 	{
 		std::fprintf(stdout, "bookTitle (string): ");
-		std::cin.getline(book->bookTitle, 255);
+		std::cin.getline(book->bookTitle, 1023);
 		std::cin.clear();
-		semicolonToSpace(book->bookTitle);
+		strcpy(book->bookTitle, semicolonToSpace(book->bookTitle));
 		if (strlen(book->bookTitle) == 0)
 		{
 			std::fprintf(stderr, "The field 'bookTitle' can not be empty!\n");
@@ -118,8 +122,6 @@ void fillBookFromStdIn(BOOK *&book)
 			 */
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 			_sleep(100);
-#else
-			sleep(200);
 #endif
 			continue;
 		}
@@ -141,8 +143,6 @@ void fillBookFromStdIn(BOOK *&book)
 			 */
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 			_sleep(100);
-#else
-			sleep(200);
 #endif
 			continue;
 		}
@@ -162,18 +162,16 @@ void fillBookFromStdIn(BOOK *&book)
 			 */
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 			_sleep(100);
-#else
-			sleep(200);
 #endif
 			continue;
 		}
 		break;
 	}
 
+	char *category = new char[256];
 	while (true)
 	{
 		std::fprintf(stdout, "bookCategory (strings): ");
-		char *category = new char[256];
 		std::cin.getline(category, 255);
 		std::cin.clear();
 		if (strlen(category) == 0)
@@ -184,8 +182,6 @@ void fillBookFromStdIn(BOOK *&book)
 			 */
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 			_sleep(100);
-#else
-			sleep(200);
 #endif
 			continue;
 		}
@@ -204,8 +200,6 @@ void fillBookFromStdIn(BOOK *&book)
 			 */
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 			_sleep(100);
-#else
-			sleep(200);
 #endif
 			continue;
 		}
@@ -264,11 +258,21 @@ bool validateColumnTitle(const char *str)
 	return false;
 }
 
-void semicolonToSpace(char *&text)
+const char *semicolonToSpace(const char *text)
 {
+	//std::printf("Start semicolonToSpace\n");
+	std::stringstream buff;
 	for (size_t i = 0; i < strlen(text); i++)
 	{
 		if (text[i] == ';')
-			text[i] = ' ';
+		{
+			buff << ' ';
+			continue;
+		}
+		buff << text[i];
 	}
+	char *res = new char[buff.str().length()];
+	strcpy(res, buff.str().c_str());
+	//std::printf("Finishmake semicolonToSpace\n");
+	return res;
 }
