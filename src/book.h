@@ -28,13 +28,13 @@ enum BookCategoryEnum
 
 // Перечисляем строковые константы для определеня названия колонок
 // Колонки используются при печати таблицы в консоль, при вводе названия колонки и для сортировки
-const char COLUMN_INDEX_TITLE[6] = "Index",
-		   COLUMN_AUTHOR_FIRST_NAME_TITLE[4] = "Имя",
-		   COLUMN_AUTHOR_LAST_NAME_TITLE[8] = "Фамилия",
-		   COLUMN_BOOK_TITLE_TITLE[10] = "Заголовок",
-		   COLUMN_BOOK_YEAR_TITLE[4] = "Год",
-		   COLUMN_BOOK_PRICE_TITLE[5] = "Цена",
-		   COLUMN_BOOK_CATEGORY_TITLE[10] = "Категория";
+const char COLUMN_INDEX_TITLE[] = "Index",
+		   COLUMN_AUTHOR_FIRST_NAME_TITLE[] = "Имя",
+		   COLUMN_AUTHOR_LAST_NAME_TITLE[] = "Фамилия",
+		   COLUMN_BOOK_TITLE_TITLE[] = "Заголовок",
+		   COLUMN_BOOK_YEAR_TITLE[] = "Год",
+		   COLUMN_BOOK_PRICE_TITLE[] = "Цена",
+		   COLUMN_BOOK_CATEGORY_TITLE[] = "Категория";
 
 // COLUMN_COUNT константа определяющая число колонок в таблице
 const size_t COLUMN_COUNT = 7;

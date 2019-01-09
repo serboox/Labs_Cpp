@@ -4,7 +4,7 @@
 
 .PHONY: build test asm
 
-APP_NAME?=cw_11
+APP_NAME?=lab_6
 CMAKE_FOLDER_NAME?=build
 
 # Default target executed when no arguments are given to make.
