@@ -84,24 +84,24 @@ enum BookCategoryEnum
 // BOOK, структура книги
 struct BOOK
 {
-	std::string authorFirstName; // 28 bytes
-	std::string authorLastName;  // 28 bytes
-	std::string bookTitle;		 // 28 bytes
-	short int bookYear;			 // 2 bytes
+	char *authorFirstName; // 8 bytes
+	char *authorLastName;  // 8 bytes
+	char *bookTitle;	   // 8 bytes
+	short int bookYear;	// 2 bytes
 	/* 2 padding byte */
 	float bookPrice;			   // 4 bytes
 	BookCategoryEnum bookCategory; // 4 bytes
 };
 
-// getBookCategory функцию для получения строкового ключа за место значения константы
-std::string getBookCategory(struct BOOK *&book);
-// Перегружаем функцию getBookCategory для получения значения константы за место строкового ключа
-BookCategoryEnum getBookCategory(struct BOOK *&book, std::string category);
+// getBookCategory функция для получения строкового ключа за место значения константы
+const char *getBookCategory(struct BOOK *&book);
+// Перегружаем функцию getBookCategory для получения значения костанты за место строкового ключа
+BookCategoryEnum getBookCategory(const char *category);
 // printBook функция для печати книги на экран
 void printBook(struct BOOK *&book);
 
-// fillBookFields, функция для заполнения полей книги через stdin
-void fillBookFields(struct BOOK *&book);
+// fillBookFromStdIn, функция для заполнения полей книги через stdin
+void fillBookFromStdIn(struct BOOK *&book);
 
 // printOneDimArray, печатает в stdout одноуровневый массив
 template <typename T>

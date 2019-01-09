@@ -450,52 +450,52 @@ const char *GetString5()
 	return "Five";
 }
 
-std::string getBookCategory(struct BOOK *&book)
+const char *getBookCategory(struct BOOK *&book)
 {
-	std::string category = BOOK_CATEGORY_ERROR_STRING;
+	char *category = new char[100];
+	strcpy(category, BOOK_CATEGORY_ERROR_STRING);
 	switch (book->bookCategory)
 	{
 	case BOOK_CATEGORY_HIST:
-		category = BOOK_CATEGORY_HIST_STRING;
+		strcpy(category, BOOK_CATEGORY_HIST_STRING);
 		break;
 	case BOOK_CATEGORY_MIDEVAL:
-		category = BOOK_CATEGORY_MIDEVAL_STRING;
+		strcpy(category, BOOK_CATEGORY_MIDEVAL_STRING);
 		break;
 	case BOOK_CATEGORY_DETECT:
-		category = BOOK_CATEGORY_DETECT_STRING;
+		strcpy(category, BOOK_CATEGORY_DETECT_STRING);
 		break;
 	case BOOK_CATEGORY_ACTION:
-		category = BOOK_CATEGORY_ACTION_STRING;
+		strcpy(category, BOOK_CATEGORY_ACTION_STRING);
 		break;
 	case BOOK_CATEGORY_TRAVEL:
-		category = BOOK_CATEGORY_TRAVEL_STRING;
+		strcpy(category, BOOK_CATEGORY_TRAVEL_STRING);
 		break;
 	case BOOK_CATEGORY_ERROR:
 		break;
 	}
-
 	return category;
 }
 
-BookCategoryEnum getBookCategory(struct BOOK *&book, std::string category)
+BookCategoryEnum getBookCategory(const char *category)
 {
-	if (!category.compare(BOOK_CATEGORY_HIST_STRING))
+	if (strcmp(category, BOOK_CATEGORY_HIST_STRING) == 0)
 	{
 		return BOOK_CATEGORY_HIST;
 	}
-	else if (!category.compare(BOOK_CATEGORY_MIDEVAL_STRING))
+	else if (strcmp(category, BOOK_CATEGORY_MIDEVAL_STRING) == 0)
 	{
 		return BOOK_CATEGORY_MIDEVAL;
 	}
-	else if (!category.compare(BOOK_CATEGORY_DETECT_STRING))
+	else if (strcmp(category, BOOK_CATEGORY_DETECT_STRING) == 0)
 	{
 		return BOOK_CATEGORY_DETECT;
 	}
-	else if (!category.compare(BOOK_CATEGORY_ACTION_STRING))
+	else if (strcmp(category, BOOK_CATEGORY_ACTION_STRING) == 0)
 	{
 		return BOOK_CATEGORY_ACTION;
 	}
-	else if (!category.compare(BOOK_CATEGORY_TRAVEL_STRING))
+	else if (strcmp(category, BOOK_CATEGORY_TRAVEL_STRING) == 0)
 	{
 		return BOOK_CATEGORY_TRAVEL;
 	}
@@ -511,27 +511,36 @@ void printBook(struct BOOK *&book)
 				"\tbookYear (short int): %d\n"
 				"\tbookPrice (float): %f\n"
 				"\tbookCategory (enum): %s\n}\n",
-				book->authorFirstName.c_str(),
-				book->authorLastName.c_str(),
-				book->bookTitle.c_str(),
+				book->authorFirstName,
+				book->authorLastName,
+				book->bookTitle,
 				book->bookYear,
 				book->bookPrice,
-				getBookCategory(book).c_str());
+				getBookCategory(book));
 };
 
-void fillBookFields(BOOK *&book)
+// fillBookFromStdIn заполняет поля книги через stdin
+void fillBookFromStdIn(struct BOOK *&book)
 {
 	const int YEAR_OF_WRITING = 988;
 
+	book->authorFirstName = new char[256];
+	book->authorLastName = new char[256];
+	book->bookTitle = new char[1024];
+
 	std::fprintf(stdout, "Please enter fields\n");
+
 	while (true)
 	{
 		std::fprintf(stdout, "authorFirstName (string): ");
-
-		std::getline(std::cin, book->authorFirstName);
-		if (book->authorFirstName.size() == 0)
+		std::cin.getline(book->authorFirstName, 255);
+		std::cin.clear();
+		if (strlen(book->authorFirstName) == 0)
 		{
 			std::fprintf(stderr, "The field 'authorFirstName' can not be empty!\n");
+			/*
+			 *  Делаем ожидание для корректного вывода текстовый полей в консоль иначе текст может поехать
+			 */
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 			_sleep(100);
 #endif
@@ -543,10 +552,14 @@ void fillBookFields(BOOK *&book)
 	while (true)
 	{
 		std::fprintf(stdout, "authorLastName (string): ");
-		std::getline(std::cin, book->authorLastName);
-		if (book->authorLastName.size() == 0)
+		std::cin.getline(book->authorLastName, 255);
+		std::cin.clear();
+		if (strlen(book->authorLastName) == 0)
 		{
 			std::fprintf(stderr, "The field 'authorLastName' can not be empty!\n");
+			/*
+			 *  Делаем ожидание для корректного вывода текстовый полей в консоль иначе текст может поехать
+			 */
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 			_sleep(100);
 #endif
@@ -558,10 +571,14 @@ void fillBookFields(BOOK *&book)
 	while (true)
 	{
 		std::fprintf(stdout, "bookTitle (string): ");
-		std::getline(std::cin, book->bookTitle);
-		if (book->bookTitle.size() == 0)
+		std::cin.getline(book->bookTitle, 1023);
+		std::cin.clear();
+		if (strlen(book->bookTitle) == 0)
 		{
 			std::fprintf(stderr, "The field 'bookTitle' can not be empty!\n");
+			/*
+			 *  Делаем ожидание для корректного вывода текстовый полей в консоль иначе текст может поехать
+			 */
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 			_sleep(100);
 #endif
@@ -580,6 +597,9 @@ void fillBookFields(BOOK *&book)
 			std::fprintf(stderr, "The date of writing the book can not be less "
 								 "than %d!\n",
 						 YEAR_OF_WRITING);
+			/*
+			 *  Делаем ожидание для корректного вывода текстовый полей в консоль иначе текст может поехать
+			 */
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 			_sleep(100);
 #endif
@@ -596,6 +616,9 @@ void fillBookFields(BOOK *&book)
 		if (book->bookPrice < 0)
 		{
 			std::fprintf(stderr, "The cost of the book can not be less than %d!\n", 0);
+			/*
+			 *  Делаем ожидание для корректного вывода текстовый полей в консоль иначе текст может поехать
+			 */
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 			_sleep(100);
 #endif
@@ -604,29 +627,36 @@ void fillBookFields(BOOK *&book)
 		break;
 	}
 
+	char *category = new char[256];
 	while (true)
 	{
 		std::fprintf(stdout, "bookCategory (strings): ");
-		std::string category;
-		std::getline(std::cin, category);
-		if (category.size() == 0)
+		std::cin.getline(category, 255);
+		std::cin.clear();
+		if (strlen(category) == 0)
 		{
 			std::fprintf(stderr, "The field 'bookCategory' can not be empty!\n");
+			/*
+			 *  Делаем ожидание для корректного вывода текстовый полей в консоль иначе текст может поехать
+			 */
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 			_sleep(100);
 #endif
 			continue;
 		}
 
-		std::printf("Input category: %s\n", category.c_str());
-		std::printf("Get category number: %d\n", getBookCategory(book, category));
+		std::printf("Input category: %s\n", category);
+		//std::printf("Get category number: %d\n", getBookCategory(category));
 
-		BookCategoryEnum bookCategoryEnum = getBookCategory(book, category);
+		BookCategoryEnum bookCategoryEnum = getBookCategory(category);
 		if (bookCategoryEnum == BOOK_CATEGORY_ERROR)
 		{
 			std::fprintf(stderr, "The field 'bookCategory' may contain only next values "
 								 "('hist','mideval', 'detect', 'action', 'travel')"
 								 "!\n");
+			/*
+			 *  Делаем ожидание для корректного вывода текстовый полей в консоль иначе текст может поехать
+			 */
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 			_sleep(100);
 #endif
