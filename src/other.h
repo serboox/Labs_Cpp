@@ -1,10 +1,9 @@
 
 //Прототипы (интерфесы) используемых в данном задании функций:
 
-// printEquation, печатает в виде таблицы результаты уравнения 
+// printEquation, печатает в виде таблицы результаты уравнения
 // в заданном диапазоне
-void printEquation(int A, int B, int C,
-	float from, float to, float step, float(*callback)(int A, int B, int C, float x));
+void printEquation(int A, int B, int C, float from, float to, float step);
 
 // Sum, функция выполняющая оперцию сложения
 double Sum(double x, double y);
@@ -20,7 +19,7 @@ void calculator();
 
 // Sort, сортирует пузырьком
 void Sort(char *pcFirst, int nNumber, int size,
-	void(*Swap)(void *, void *), int(*Compare)(void *, void *));
+		  void (*Swap)(void *, void *), int (*Compare)(void *, void *));
 
 // SwapInt, переставляет значения аргументов
 void SwapInt(void *p1, void *p2);
@@ -50,84 +49,64 @@ void SwapChar(void *p1, void *p2);
 int CmpChar(void *p1, void *p2);
 
 // GetString0, возвращает строку
-const char* GetString0();
+const char *GetString0();
 // GetString1, возвращает строку
-const char* GetString1();
+const char *GetString1();
 // GetString2, возвращает строку
-const char* GetString2();
+const char *GetString2();
 // GetString3, возвращает строку
-const char* GetString3();
+const char *GetString3();
 // GetString4, возвращает строку
-const char* GetString4();
+const char *GetString4();
 // GetString5, возвращает строку
-const char* GetString5();
+const char *GetString5();
 
-// Перечисляем строковые константы категорий у книги 
+// Перечисляем строковые константы категорий у книги
 const char
-BOOK_CATEGORY_ERROR_STRING[] = "",
-BOOK_CATEGORY_HIST_STRING[] = "hist",
-BOOK_CATEGORY_MIDEVAL_STRING[] = "mideval",
-BOOK_CATEGORY_DETECT_STRING[] = "detect",
-BOOK_CATEGORY_ACTION_STRING[] = "action",
-BOOK_CATEGORY_TRAVEL_STRING[] = "travel";
+	BOOK_CATEGORY_ERROR_STRING[] = "",
+	BOOK_CATEGORY_HIST_STRING[] = "hist",
+	BOOK_CATEGORY_MIDEVAL_STRING[] = "mideval",
+	BOOK_CATEGORY_DETECT_STRING[] = "detect",
+	BOOK_CATEGORY_ACTION_STRING[] = "action",
+	BOOK_CATEGORY_TRAVEL_STRING[] = "travel";
 
 // Объявляем enum с перечислением категорий книги
-enum BookCategoryEnum {
+enum BookCategoryEnum
+{
 	BOOK_CATEGORY_ERROR = -1, // Тип для ошибки
-	BOOK_CATEGORY_HIST, // Исторический роман
-	BOOK_CATEGORY_MIDEVAL, // Литература античная и средних веков
-	BOOK_CATEGORY_DETECT, //  Детективы, триллеры
-	BOOK_CATEGORY_ACTION, // Боевик, книга о войне
-	BOOK_CATEGORY_TRAVEL, // Приключения, путешествия
+	BOOK_CATEGORY_HIST,		  // Исторический роман
+	BOOK_CATEGORY_MIDEVAL,	// Литература античная и средних веков
+	BOOK_CATEGORY_DETECT,	 //  Детективы, триллеры
+	BOOK_CATEGORY_ACTION,	 // Боевик, книга о войне
+	BOOK_CATEGORY_TRAVEL,	 // Приключения, путешествия
 };
 
 // BOOK, структура книги
-// Поля и методы по умолчанию имеют модификатор доступа public
-struct BOOK {
+struct BOOK
+{
 	std::string authorFirstName; // 28 bytes
-	std::string authorLastName; // 28 bytes
-	std::string bookTitle; // 28 bytes
-	short int bookYear; // 2 bytes
+	std::string authorLastName;  // 28 bytes
+	std::string bookTitle;		 // 28 bytes
+	short int bookYear;			 // 2 bytes
 	/* 2 padding byte */
-	float bookPrice; // 4 bytes
+	float bookPrice;			   // 4 bytes
 	BookCategoryEnum bookCategory; // 4 bytes
-
-	// getBookCategory, метод для получения строкового ключа за место значения константы
-	std::string getBookCategory();
-	// Перегружаем метод getBookCategory для получения значения костанты за место строкового ключа
-	BookCategoryEnum getBookCategory(std::string category);
-	// print, метод печати книги на экран
-	void print();
 };
+
+// getBookCategory функцию для получения строкового ключа за место значения константы
+std::string getBookCategory(struct BOOK *&book);
+// Перегружаем функцию getBookCategory для получения значения константы за место строкового ключа
+BookCategoryEnum getBookCategory(struct BOOK *&book, std::string category);
+// printBook функция для печати книги на экран
+void printBook(struct BOOK *&book);
 
 // fillBookFields, функция для заполнения полей книги через stdin
-void fillBookFields(BOOK &book);
-
-// Объявим класс наследуясь от структуры BOOK
-class MyBook : public BOOK {
-public:
-	// Определяем тип super для обращения к родителю
-	typedef BOOK super;
-
-	// Объявляем конструктор класса
-	MyBook(std::string authorFirstName,
-		std::string authorLastName,
-		std::string bookTitle,
-		short int bookYear,
-		float bookPrice,
-		BookCategoryEnum bookCategory);
-
-	void print();
-protected:
-	// Нет защищенных полей и методов
-private:
-	// Нет приватных полей и методов
-};
+void fillBookFields(struct BOOK *&book);
 
 // printOneDimArray, печатает в stdout одноуровневый массив
-template<typename T>
+template <typename T>
 void printOneDimArray(const T arr, size_t values);
 
 // printTwoDimArray, печатает в stdout двухуровневый массив
-template<typename T>
+template <typename T>
 void printTwoDimArray(const T arr, size_t rows, size_t columns);

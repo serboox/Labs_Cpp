@@ -6,8 +6,8 @@
 
 ///////////////////////////////////////////////////
 
-void printEquation(int A, int B, int C,
-	float from, float to, float step, float(*callback)(int A, int B, int C, float x)) {
+void printEquation(int A, int B, int C, float from, float to, float step)
+{
 
 	float x = 0, y = 0;
 	// Находим из скольки символов максимум может состоять число х
@@ -19,83 +19,101 @@ void printEquation(int A, int B, int C,
 	std::printf("Max size y: %d\n", sizeY);
 
 	std::cout << "-";
-	for (int i = 1; i <= sizeX; i++) {
+	for (int i = 1; i <= sizeX; i++)
+	{
 		std::cout << "-";
 	}
 	std::cout << "-";
-	for (int i = 1; i <= sizeY; i++) {
+	for (int i = 1; i <= sizeY; i++)
+	{
 		std::cout << "-";
 	}
 	std::cout << "-\n";
 
 	std::cout << "|";
-	for (int i = 2; i <= sizeX / 2; i++) {
+	for (int i = 2; i <= sizeX / 2; i++)
+	{
 		std::cout << " ";
 	}
 	std::cout << "x";
-	for (int i = 1; i <= sizeX / 2; i++) {
+	for (int i = 1; i <= sizeX / 2; i++)
+	{
 		std::cout << " ";
 	}
 	std::cout << "|";
 
-	for (int i = 1; i <= sizeX / 2; i++) {
+	for (int i = 1; i <= sizeX / 2; i++)
+	{
 		std::cout << " ";
 	}
 	std::cout << "y";
-	for (int i = 2; i <= sizeX / 2; i++) {
+	for (int i = 2; i <= sizeX / 2; i++)
+	{
 		std::cout << " ";
 	}
 	std::cout << "|\n";
 
 	std::cout << "|-";
-	for (int i = 2; i <= sizeX; i++) {
+	for (int i = 2; i <= sizeX; i++)
+	{
 		std::cout << "-";
 	}
 	std::cout << "-";
-	for (int i = 1; i <= sizeY; i++) {
+	for (int i = 1; i <= sizeY; i++)
+	{
 		std::cout << "-";
 	}
 	std::cout << "|\n";
 
-	for (x = from; x <= to; x += step) {
+	for (x = from; x <= to; x += step)
+	{
 
 		int lenX = 3;
 		int paddingLeft = (sizeX / 2) - (lenX / 2);
 		int paddingRight = paddingLeft;
-		if (x < 0) {
+		if (x < 0)
+		{
 			lenX = (int)log10(abs(x)) + 4;
 			paddingLeft = (sizeX / 2) - (lenX / 2);
 		}
-		else if (x > 0) {
+		else if (x > 0)
+		{
 			lenX = (int)log10(abs(x)) + 3;
 		}
-		if ((lenX + paddingLeft + paddingRight) > sizeX + 1) {
+		if ((lenX + paddingLeft + paddingRight) > sizeX + 1)
+		{
 			--paddingRight;
 		}
 
 		std::cout << "|";
-		for (int i = 2; i <= paddingLeft; i++) {
+		for (int i = 2; i <= paddingLeft; i++)
+		{
 			std::cout << " ";
 		}
 		std::printf("%.1f", x);
-		for (int i = 1; i <= paddingRight; i++) {
+		for (int i = 1; i <= paddingRight; i++)
+		{
 			std::cout << " ";
 		}
 		std::cout << "|";
 
-		// Instead y = A * x * x + B * x + C;
-		y = callback(A, B, C, x);
+		// Квадратное уравнение
+		y = A * x * x + B * x + C;
+
 		int lenY = 3;
-		if (y < 0) {
+		if (y < 0)
+		{
 			lenY = (int)log10(abs(y)) + 4;
 		}
-		else if (y > 0) {
+		else if (y > 0)
+		{
 			lenY = (int)log10(abs(y)) + 3;
 		}
 
 		paddingLeft = (sizeY / 2) - (lenY / 2);
 		paddingRight = paddingLeft;
-		if ((lenY + paddingLeft + paddingRight) > sizeY) {
+		if ((lenY + paddingLeft + paddingRight) > sizeY)
+		{
 			--paddingRight;
 		}
 
@@ -103,45 +121,55 @@ void printEquation(int A, int B, int C,
 		//std::cout << "PL: " << paddingLeft << " ";
 		//std::cout << "PR: " << paddingRight << " ";
 
-		for (int i = 1; i <= paddingLeft; i++) {
+		for (int i = 1; i <= paddingLeft; i++)
+		{
 			std::cout << " ";
 		}
 		std::printf("%.1f", y);
-		for (int i = 1; i <= paddingRight; i++) {
+		for (int i = 1; i <= paddingRight; i++)
+		{
 			std::cout << " ";
 		}
 		std::cout << "|\n";
 	}
 	std::cout << "-";
-	for (int i = 1; i <= sizeX; i++) {
+	for (int i = 1; i <= sizeX; i++)
+	{
 		std::cout << "-";
 	}
 	std::cout << "-";
-	for (int i = 1; i <= sizeY; i++) {
+	for (int i = 1; i <= sizeY; i++)
+	{
 		std::cout << "-";
 	}
 	std::cout << "-\n";
 }
 
-double Sum(double x, double y) {
+double Sum(double x, double y)
+{
 	return x + y;
 }
-double Sub(double x, double y) {
+double Sub(double x, double y)
+{
 	return x - y;
 }
-double Mul(double x, double y) {
+double Mul(double x, double y)
+{
 	return x * y;
 }
-double Div(double x, double y) {
+double Div(double x, double y)
+{
 	return x / y;
 }
-double Pow(double x, double y) {
+double Pow(double x, double y)
+{
 	return pow(x, y);
 }
 
-void calculator() {
+void calculator()
+{
 
-	// Определяем константя для операций
+	// Определяем константы для операций
 	const char OPERATION_SUM = '+';
 	const char OPERATION_SUB = '-';
 	const char OPERATION_MUL = '*';
@@ -151,9 +179,10 @@ void calculator() {
 	// Вводим ограничение на число символов у аргумента
 	const size_t MAX_NUM_SIZE = 1024;
 	double x = 0.0, y = 0.0;
-	double(*operation)(double x, double y);
+	double (*operation)(double x, double y);
 
-	while (true) {
+	while (true)
+	{
 		std::printf("Please enter an expression using a space (example 1+2=):\n");
 
 		std::string buffX, buffY;
@@ -161,32 +190,37 @@ void calculator() {
 		size_t indexX = 0, indexY = 0;
 		bool xIsFill = false, yIsFill = false, operationIsFill = false;
 		// Находим все значения выражения
-		while (std::cin >> buff) {
-			if (buff == '\n') {
+		while (std::cin >> buff)
+		{
+			if (buff == '\n')
+			{
 				continue;
 			}
-			if (buff == '=') {
+			if (buff == '=')
+			{
 				std::cin.ignore();
 				std::cin.clear();
 				break;
 			}
-			if (!xIsFill && indexX < MAX_NUM_SIZE
-				&& ((indexX == 0 && buff == '-') ||
-				(buff >= '0' && buff <= '9') || (buff == '.'))) {
+			if (!xIsFill && indexX < MAX_NUM_SIZE && ((indexX == 0 && buff == '-') || (buff >= '0' && buff <= '9') || (buff == '.')))
+			{
 				buffX += buff;
 				indexX++;
 				continue;
 			}
-			if (!operationIsFill) {
+			if (!operationIsFill)
+			{
 				operationChar = buff;
 				xIsFill = true;
 				operationIsFill = true;
 				continue;
 			}
-			if (indexY < MAX_NUM_SIZE) {
+			if (indexY < MAX_NUM_SIZE)
+			{
 				buffY += buff;
 				indexY++;
-				if (buff >= '0' && buff <= '9') {
+				if (buff >= '0' && buff <= '9')
+				{
 					yIsFill = true;
 				}
 				continue;
@@ -200,24 +234,43 @@ void calculator() {
 		//std::printf("Y(string): %s\n", buffY.c_str());
 		//std::printf("OperationChar (symbol): %c\n", operationChar);
 
-		if (!xIsFill) {
+		if (!xIsFill)
+		{
 			std::fprintf(stderr, "Please enter first equation argument!\n");
-			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+			/*
+			 *  Делаем ожидание для корректного вывода текстовый полей в консоль иначе текст может поехать
+			 */
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+			_sleep(100);
+#endif
 			continue;
 		}
-		if (!operationIsFill) {
+		if (!operationIsFill)
+		{
 			std::fprintf(stderr, "Please specify the permissible action on the arguments!\n"
-				"('+','-','*','/','**')\n");
-			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+								 "('+','-','*','/','**')\n");
+			/*
+			 *  Делаем ожидание для корректного вывода текстовый полей в консоль иначе текст может поехать
+			 */
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+			_sleep(100);
+#endif
 			continue;
 		}
-		if (!yIsFill) {
+		if (!yIsFill)
+		{
 			std::fprintf(stderr, "Please enter last equation argument!\n");
-			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+			/*
+			 *  Делаем ожидание для корректного вывода текстовый полей в консоль иначе текст может поехать
+			 */
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+			_sleep(100);
+#endif
 			continue;
 		}
 		// Определяем функцию которая будет выполнять действия над аргументами
-		switch (operationChar) {
+		switch (operationChar)
+		{
 		case OPERATION_SUM:
 			operation = Sum;
 			break;
@@ -235,8 +288,10 @@ void calculator() {
 			break;
 		default:
 			std::fprintf(stderr, "Please specify the permissible action on the arguments!\n"
-				"('+','-','*','/','**')\n");
-			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+								 "('+','-','*','/','**')\n");
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+			_sleep(100);
+#endif
 			continue;
 		}
 
@@ -251,59 +306,63 @@ void calculator() {
 	}
 }
 
-void Sort(char* pcFirst, int nNumber, int size,
-	void(*Swap)(void*, void*), int(*Compare)(void*, void*))
+void Sort(char *pcFirst, int nNumber, int size,
+		  void (*Swap)(void *, void *), int (*Compare)(void *, void *))
 {
 	int i;
 	for (i = 1; i < nNumber; i++)
 		for (int j = nNumber - 1; j >= i; j--)
 		{
-			char* pCurrent = pcFirst + j * size;
-			char* pPrevious = pcFirst + (j - 1)*size;
+			char *pCurrent = pcFirst + j * size;
+			char *pPrevious = pcFirst + (j - 1) * size;
 			if ((*Compare)(pPrevious, pCurrent) > 0) //требуется переставить
 				(*Swap)(pPrevious, pCurrent);
 		}
 }
 
-void SwapInt(void* p1, void* p2)
+void SwapInt(void *p1, void *p2)
 {
-	int *p1Int = static_cast<int*>(p1);
-	int *p2Int = static_cast<int*>(p2);
+	int *p1Int = static_cast<int *>(p1);
+	int *p2Int = static_cast<int *>(p2);
 	int buff = *p2Int;
 	*p2Int = *p1Int;
 	*p1Int = buff;
 }
 
-int CmpInt(void* p1, void* p2)
+int CmpInt(void *p1, void *p2)
 {
-	int *p1Int = static_cast<int*>(p1);
-	int *p2Int = static_cast<int*>(p2);
-	if (*p1Int < *p2Int) {
+	int *p1Int = static_cast<int *>(p1);
+	int *p2Int = static_cast<int *>(p2);
+	if (*p1Int < *p2Int)
+	{
 		return -1;
 	}
-	else if (*p1Int == *p2Int) {
+	else if (*p1Int == *p2Int)
+	{
 		return 0;
 	}
 	return 1;
 }
 
-void SwapDouble(void * p1, void * p2)
+void SwapDouble(void *p1, void *p2)
 {
-	double *p1Double = static_cast<double*>(p1);
-	double *p2Double = static_cast<double*>(p2);
+	double *p1Double = static_cast<double *>(p1);
+	double *p2Double = static_cast<double *>(p2);
 	double buff = *p2Double;
 	*p2Double = *p1Double;
 	*p1Double = buff;
 }
 
-int CmpDouble(void * p1, void * p2)
+int CmpDouble(void *p1, void *p2)
 {
-	double *p1Double = static_cast<double*>(p1);
-	double *p2Double = static_cast<double*>(p2);
-	if (*p1Double < *p2Double) {
+	double *p1Double = static_cast<double *>(p1);
+	double *p2Double = static_cast<double *>(p2);
+	if (*p1Double < *p2Double)
+	{
 		return -1;
 	}
-	else if (*p1Double == *p2Double) {
+	else if (*p1Double == *p2Double)
+	{
 		return 0;
 	}
 	return 1;
@@ -311,43 +370,49 @@ int CmpDouble(void * p1, void * p2)
 
 void SwapChar(void *p1, void *p2)
 {
-	char **p1Char = static_cast<char**>(p1);
-	char **p2Char = static_cast<char**>(p2);
+	char **p1Char = static_cast<char **>(p1);
+	char **p2Char = static_cast<char **>(p2);
 	char *buff = *p1Char;
 	*p1Char = *p2Char;
 	*p2Char = buff;
 }
 
-int CmpChar(void * p1, void * p2)
+int CmpChar(void *p1, void *p2)
 {
-	char *p1Char = *static_cast<char**>(p1);
-	char *p2Char = *static_cast<char**>(p2);
-	
+	char *p1Char = *static_cast<char **>(p1);
+	char *p2Char = *static_cast<char **>(p2);
+
 	// Для проверки можно использовать
 	//return std::strcmp(p1Char, p2Char);
 
 	size_t size1 = sizeof(p1Char) / sizeof(p1Char[0]);
 	size_t size2 = sizeof(p2Char) / sizeof(p2Char[0]);
 	size_t max = size1;
-	if (size2 > max) {
+	if (size2 > max)
+	{
 		max = size2;
 	}
-	
+
 	int res = 0;
-	for (size_t i = 0; i < max;i++) {
-		if ((i+1) > size1) {
+	for (size_t i = 0; i < max; i++)
+	{
+		if ((i + 1) > size1)
+		{
 			res = -1;
 			break;
 		}
-		if ((i+1) > size2) {
+		if ((i + 1) > size2)
+		{
 			res = 1;
 			break;
 		}
-		if (p1Char[i] < p2Char[i]) {
+		if (p1Char[i] < p2Char[i])
+		{
 			res = -1;
 			break;
 		}
-		if (p1Char[i] > p2Char[i]) {
+		if (p1Char[i] > p2Char[i])
+		{
 			res = 1;
 			break;
 		}
@@ -355,39 +420,41 @@ int CmpChar(void * p1, void * p2)
 	return res;
 }
 
-const char * GetString0()
+const char *GetString0()
 {
 	return "Zero";
 }
 
-const char * GetString1()
+const char *GetString1()
 {
 	return "One";
 }
 
-const char * GetString2()
+const char *GetString2()
 {
 	return "Two";
 }
 
-const char * GetString3()
+const char *GetString3()
 {
 	return "Three";
 }
 
-const char * GetString4()
+const char *GetString4()
 {
 	return "Four";
 }
 
-const char * GetString5()
+const char *GetString5()
 {
 	return "Five";
 }
 
-std::string BOOK::getBookCategory() {
+std::string getBookCategory(struct BOOK *&book)
+{
 	std::string category = BOOK_CATEGORY_ERROR_STRING;
-	switch (bookCategory) {
+	switch (book->bookCategory)
+	{
 	case BOOK_CATEGORY_HIST:
 		category = BOOK_CATEGORY_HIST_STRING;
 		break;
@@ -403,150 +470,170 @@ std::string BOOK::getBookCategory() {
 	case BOOK_CATEGORY_TRAVEL:
 		category = BOOK_CATEGORY_TRAVEL_STRING;
 		break;
+	case BOOK_CATEGORY_ERROR:
+		break;
 	}
+
 	return category;
 }
 
-BookCategoryEnum BOOK::getBookCategory(std::string category) {
-	if (!category.compare(BOOK_CATEGORY_HIST_STRING)) {
+BookCategoryEnum getBookCategory(struct BOOK *&book, std::string category)
+{
+	if (!category.compare(BOOK_CATEGORY_HIST_STRING))
+	{
 		return BOOK_CATEGORY_HIST;
 	}
-	else if (!category.compare(BOOK_CATEGORY_MIDEVAL_STRING)) {
+	else if (!category.compare(BOOK_CATEGORY_MIDEVAL_STRING))
+	{
 		return BOOK_CATEGORY_MIDEVAL;
 	}
-	else if (!category.compare(BOOK_CATEGORY_DETECT_STRING)) {
+	else if (!category.compare(BOOK_CATEGORY_DETECT_STRING))
+	{
 		return BOOK_CATEGORY_DETECT;
 	}
-	else if (!category.compare(BOOK_CATEGORY_ACTION_STRING)) {
+	else if (!category.compare(BOOK_CATEGORY_ACTION_STRING))
+	{
 		return BOOK_CATEGORY_ACTION;
 	}
-	else if (!category.compare(BOOK_CATEGORY_TRAVEL_STRING)) {
+	else if (!category.compare(BOOK_CATEGORY_TRAVEL_STRING))
+	{
 		return BOOK_CATEGORY_TRAVEL;
 	}
 	return BOOK_CATEGORY_ERROR;
 }
 
-void BOOK::print() {
+void printBook(struct BOOK *&book)
+{
 	std::printf("Books{\n"
-		"\tauthorFirstName (string):%s\n"
-		"\tauthorLastName (string): %s\n"
-		"\tbookTitle (string): %s\n"
-		"\tbookYear (short int): %d\n"
-		"\tbookPrice (float): %f\n"
-		"\tbookCategory (enum): %s\n}\n",
-		this->authorFirstName.c_str(),
-		this->authorLastName.c_str(),
-		this->bookTitle.c_str(),
-		this->bookYear,
-		this->bookPrice,
-		this->getBookCategory().c_str());
+				"\tauthorFirstName (string):%s\n"
+				"\tauthorLastName (string): %s\n"
+				"\tbookTitle (string): %s\n"
+				"\tbookYear (short int): %d\n"
+				"\tbookPrice (float): %f\n"
+				"\tbookCategory (enum): %s\n}\n",
+				book->authorFirstName.c_str(),
+				book->authorLastName.c_str(),
+				book->bookTitle.c_str(),
+				book->bookYear,
+				book->bookPrice,
+				getBookCategory(book).c_str());
 };
 
-void fillBookFields(BOOK &book) {
+void fillBookFields(BOOK *&book)
+{
 	const int YEAR_OF_WRITING = 988;
 
 	std::fprintf(stdout, "Please enter fields\n");
-	while (true) {
+	while (true)
+	{
 		std::fprintf(stdout, "authorFirstName (string): ");
 
-		std::getline(std::cin, book.authorFirstName);
-		if (book.authorFirstName.size() == 0) {
+		std::getline(std::cin, book->authorFirstName);
+		if (book->authorFirstName.size() == 0)
+		{
 			std::fprintf(stderr, "The field 'authorFirstName' can not be empty!\n");
-			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+			_sleep(100);
+#endif
 			continue;
 		}
 		break;
 	}
 
-	while (true) {
+	while (true)
+	{
 		std::fprintf(stdout, "authorLastName (string): ");
-		std::getline(std::cin, book.authorLastName);
-		if (book.authorLastName.size() == 0) {
+		std::getline(std::cin, book->authorLastName);
+		if (book->authorLastName.size() == 0)
+		{
 			std::fprintf(stderr, "The field 'authorLastName' can not be empty!\n");
-			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+			_sleep(100);
+#endif
 			continue;
 		}
 		break;
 	}
 
-	while (true) {
+	while (true)
+	{
 		std::fprintf(stdout, "bookTitle (string): ");
-		std::getline(std::cin, book.bookTitle);
-		if (book.bookTitle.size() == 0) {
+		std::getline(std::cin, book->bookTitle);
+		if (book->bookTitle.size() == 0)
+		{
 			std::fprintf(stderr, "The field 'bookTitle' can not be empty!\n");
-			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+			_sleep(100);
+#endif
 			continue;
 		}
 		break;
 	}
 
-	while (true) {
+	while (true)
+	{
 		std::fprintf(stdout, "bookYear (short int): ");
-		std::scanf("%hu", &book.bookYear);
+		std::scanf("%hu", &book->bookYear);
 		std::cin.ignore();
-		if (book.bookYear < YEAR_OF_WRITING) {
+		if (book->bookYear < YEAR_OF_WRITING)
+		{
 			std::fprintf(stderr, "The date of writing the book can not be less "
-				"than %d!\n", YEAR_OF_WRITING);
-			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+								 "than %d!\n",
+						 YEAR_OF_WRITING);
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+			_sleep(100);
+#endif
 			continue;
 		}
 		break;
 	}
 
-	while (true) {
+	while (true)
+	{
 		std::fprintf(stdout, "bookPrice (float): ");
-		std::scanf("%f", &book.bookPrice);
+		std::scanf("%f", &book->bookPrice);
 		std::cin.ignore();
-		if (book.bookPrice < 0) {
+		if (book->bookPrice < 0)
+		{
 			std::fprintf(stderr, "The cost of the book can not be less than %d!\n", 0);
-			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+			_sleep(100);
+#endif
 			continue;
 		}
 		break;
 	}
 
-	while (true) {
+	while (true)
+	{
 		std::fprintf(stdout, "bookCategory (strings): ");
 		std::string category;
 		std::getline(std::cin, category);
-		if (category.size() == 0) {
+		if (category.size() == 0)
+		{
 			std::fprintf(stderr, "The field 'bookCategory' can not be empty!\n");
-			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+			_sleep(100);
+#endif
 			continue;
 		}
 
 		std::printf("Input category: %s\n", category.c_str());
-		std::printf("Get category number: %d\n", book.getBookCategory(category));
+		std::printf("Get category number: %d\n", getBookCategory(book, category));
 
-		BookCategoryEnum bookCategoryEnum = book.getBookCategory(category);
-		if (bookCategoryEnum == BOOK_CATEGORY_ERROR) {
+		BookCategoryEnum bookCategoryEnum = getBookCategory(book, category);
+		if (bookCategoryEnum == BOOK_CATEGORY_ERROR)
+		{
 			std::fprintf(stderr, "The field 'bookCategory' may contain only next values "
-				"('hist','mideval', 'detect', 'action', 'travel')"
-				"!\n");
-			_sleep(100);// делаем ожидание для корректного вывода текстовый полей в консоль
+								 "('hist','mideval', 'detect', 'action', 'travel')"
+								 "!\n");
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+			_sleep(100);
+#endif
 			continue;
 		}
-		book.bookCategory = bookCategoryEnum;
+		book->bookCategory = bookCategoryEnum;
 		break;
 	}
 	std::cout << std::endl;
-}
-
-MyBook::MyBook(std::string authorFirstName,
-	std::string authorLastName,
-	std::string bookTitle,
-	short int bookYear,
-	float bookPrice,
-	BookCategoryEnum bookCategory) {
-
-	this->authorFirstName = authorFirstName;
-	this->authorLastName = authorLastName;
-	this->bookTitle = bookTitle;
-	this->bookYear = bookYear;
-	this->bookPrice = bookPrice;
-	this->bookCategory = bookCategory;
-}
-
-void MyBook::print() {
-	super::print();
 }
